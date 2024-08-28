@@ -1,0 +1,21 @@
+<p-card header="Detalle de Androide" subheader="Informacion del Androide" [style]="{'width': '360px'}">
+  <ng-template pTemplate="header">
+    <img [src]="androide?.avatar" [alt]="androide?.nombre">
+  </ng-template>
+
+  <p><b>Apellido:</b> {{androide?.apellido}}</p>
+  <p><b>Nombre:</b> {{androide?.nombre}}</p>
+  <p><b>Fabricacion:</b> {{androide?.fechaFabricacion}}</p>
+
+  <div> @if (androide?.amigo) {
+        <img src="assets/img/amistad.png" alt="Amistad">
+        }
+      </div>
+
+  <ng-template pTemplate="footer">
+    <div class="flex gap-3 mt-1">
+       <p-button label="Volver" [routerLink]="['/androides']" icon="pi pi-arrow-left"></p-button>
+    </div>
+  </ng-template>
+
+</p-card>

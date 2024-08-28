@@ -1,0 +1,21 @@
+<h1>Buscando: {{termino}} </h1>
+<hr>
+  @if(androides.length == 0){
+    <div class="col-md-12">
+      <div class="alert alert-info" role="alert"> No existen resultados con el termino: {{termino}} </div>
+    </div>
+  }
+  <div class="card-columns">
+    @for (androideAux of androides; track androideAux; let i = $index) {
+      <div class="card animated fadeIn fast">
+        <img class="card-img-top" src="{{androideAux.avatar}}" [alt]="androideAux">
+        <div class="card-body">
+          <h5 class="card-title">{{androideAux.nombre}}</h5>
+          <p class="card-text">{{androideAux.apellido}}</p>
+          <p class="card-text"> <small class="text-muted">{{androideAux.fechaFabricacion}}</small> </p>
+          <button (click)="verAndroide(androideAux.id)" type="button" class="btn btn-outline-primary btn-block">Ver
+          Mas</button>
+        </div>
+      </div>
+    }
+  </div>
