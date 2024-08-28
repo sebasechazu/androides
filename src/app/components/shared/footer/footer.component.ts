@@ -6,11 +6,9 @@ import { Component } from '@angular/core';
   standalone: true,
   imports: [DatePipe],
   templateUrl: './footer.component.html',
-  styleUrl: './footer.component.css'
+  styleUrls: ['./footer.component.css']
 })
 export class FooterComponent {
-
   title = 'footer';
-  date = new Date();
-  time = this.date.toLocaleTimeString();
+  date = new Date(); 
 }

@@ -22,7 +22,7 @@ export class NavbarComponent {
   ngOnInit() {
 
     this.items = [
-      { label: 'home', routerLink: '/', icon: 'pi pi-home' },
+      { label: 'home', routerLink: '/home', icon: 'pi pi-home' },
       { label: 'androides', routerLink: '/androides', icon: 'pi pi-list'   },
       { label: 'About'  , routerLink: '/about' , icon: 'pi pi-user'}
     ];

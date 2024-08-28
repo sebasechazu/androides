@@ -89,7 +89,6 @@ export class AndroidesService {
     }
 
   ]
-  constructor(){ console.log("servicio listo!!!"); }
   public getAndroides(): Androide[]{
     return this.androides;
   }
