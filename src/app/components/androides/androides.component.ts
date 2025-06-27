@@ -11,8 +11,7 @@ import { ButtonModule } from 'primeng/button';
     selector: 'app-androides',
     templateUrl: './androides.component.html',
     styleUrls: ['./androides.component.css'],
-    imports: [TableModule , ButtonModule ],
-    standalone: true
+    imports: [TableModule, ButtonModule]
 })
 export class AndroidesComponent implements OnInit {
 

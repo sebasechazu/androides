@@ -8,11 +8,10 @@ import { CardModule } from 'primeng/card';
 import { ButtonModule } from 'primeng/button';
 
 @Component({
-  selector: 'app-androide',
-  templateUrl: './androide.component.html',
-  styleUrls: ['./androide.component.css'],
-  standalone: true,
-  imports: [RouterLink, UpperCasePipe, TableModule, CardModule, ButtonModule]
+    selector: 'app-androide',
+    templateUrl: './androide.component.html',
+    styleUrls: ['./androide.component.css'],
+    imports: [RouterLink, UpperCasePipe, TableModule, CardModule, ButtonModule]
 })
 export class AndroideComponent implements OnInit {
 

@@ -7,8 +7,7 @@ import { FooterComponent } from './components/shared/footer/footer.component';
     selector: 'app-root',
     templateUrl: './app.component.html',
     styleUrls: ['./app.component.css'],
-    standalone: true,
-    imports: [RouterOutlet, NavbarComponent,FooterComponent] 
+    imports: [RouterOutlet, NavbarComponent, FooterComponent]
 })
 export class AppComponent {
   title = 'AndroidApp';

@@ -5,8 +5,7 @@ import { FieldsetModule } from 'primeng/fieldset';
     selector: 'app-home',
     templateUrl: './home.component.html',
     styleUrls: ['./home.component.css'],
-    imports: [FieldsetModule],
-    standalone: true
+    imports: [FieldsetModule]
 })
 export class HomeComponent  {
 

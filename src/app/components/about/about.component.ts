@@ -10,8 +10,7 @@ import {DividerModule} from 'primeng/divider';
     selector: 'app-about',
     templateUrl: './about.component.html',
     styleUrls: ['./about.component.css'],
-    imports: [FieldsetModule, AvatarModule, AccordionModule, DividerModule],
-    standalone: true
+    imports: [FieldsetModule, AvatarModule, AccordionModule, DividerModule]
 })
 export class AboutComponent{
 
