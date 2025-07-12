@@ -67,6 +67,22 @@ src/
 
 ---
 
+## 🚀 Despliegue en GitHub Pages
+
+Este proyecto está configurado para desplegarse fácilmente en [GitHub Pages](https://pages.github.com/).
+
+### 📋 Pasos para desplegar
+
+1️⃣ Asegúrate de que tus cambios estén `commiteados` y `pusheados` en la rama principal (`main` o `master`).
+
+2️⃣ Ejecuta el comando de despliegue, indicando el `base-href` correcto (normalmente `/nombre-del-repo/`):
+
+```bash
+npx ng deploy --base-href=/androides/
+
+
+---
+
 ## 📑 Autor
 
 👨‍💻 **Sebastián Echazú**
