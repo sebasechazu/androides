@@ -1,21 +1,31 @@
-<p-card header="Detalle de Androide" subheader="Informacion del Androide" [style]="{'width': '360px'}">
-  <ng-template pTemplate="header">
-    <img [src]="androide?.avatar" [alt]="androide?.nombre">
-  </ng-template>
+<div class="max-w-sm mx-auto mt-8 bg-white shadow rounded overflow-hidden">
+  <div class="bg-blue-600 text-white text-center py-2">
+    <h2 class="text-lg font-bold">Detalle de Androide</h2>
+    <p class="text-sm">Información del Androide</p>
+  </div>
 
-  <p><b>Apellido:</b> {{androide?.apellido}}</p>
-  <p><b>Nombre:</b> {{androide?.nombre}}</p>
-  <p><b>Fabricacion:</b> {{androide?.fechaFabricacion}}</p>
+  <div class="flex justify-center mt-4">
+    <img class="w-32 h-32 rounded-full shadow" [src]="androide()?.avatar" [alt]="androide()?.nombre" />
+  </div>
 
-  <div> @if (androide?.amigo) {
-        <img src="assets/img/amistad.png" alt="Amistad">
-        }
+  <div class="p-4 space-y-2">
+    <p><b>Apellido:</b> {{ androide()?.apellido }}</p>
+    <p><b>Nombre:</b> {{ androide()?.nombre }}</p>
+    <p><b>Fabricación:</b> {{ androide()?.fechaFabricacion }}</p>
+
+    <div>
+      @if (androide()?.amigo) {
+      <div class="flex justify-center mt-2">
+        <img src="assets/img/amistad.png" alt="Amistad" class="w-8 h-8" />
       </div>
-
-  <ng-template pTemplate="footer">
-    <div class="flex gap-3 mt-1">
-       <p-button label="Volver" [routerLink]="['/androides']" icon="pi pi-arrow-left"></p-button>
+      }
     </div>
-  </ng-template>
+  </div>
 
-</p-card>
+  <div class="p-4 flex justify-center">
+    <a routerLink="/androides"
+      class="inline-flex items-center gap-1 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">
+      ⬅ Volver
+    </a>
+  </div>
+</div>

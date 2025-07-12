@@ -1,5 +1,5 @@
-<footer>
-    {{ date | date:'short' }} <!-- Muestra la fecha y hora -->
-    {{ date | date:'shortTime' }} <!-- Muestra solo la hora -->
-  </footer>
-  
+<footer class="bg-gray-800 text-white text-center py-4">
+  <div>
+    {{ now() | date: 'short' }} — {{ now() | date: 'shortTime' }}
+  </div>
+</footer>

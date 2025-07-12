@@ -1,37 +1,23 @@
-import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
-import { MenuItem } from 'primeng/api';
-import { MenubarModule } from 'primeng/menubar';
-
+import { Component, computed, signal } from '@angular/core';
+import { Router, RouterLink } from '@angular/router';
 
 @Component({
-    selector: 'app-navbar',
-    templateUrl: './navbar.component.html',
-    styleUrls: ['./navbar.component.css'],
-    imports: [MenubarModule]
+  selector: 'app-navbar',
+  templateUrl: './navbar.component.html',
+  imports: [RouterLink],
 })
 export class NavbarComponent {
 
-  items: MenuItem[] | undefined;
-
-  home: MenuItem | undefined;
+  // Usamos signals modernos en vez de OnInit
+  items = signal([
+    { label: 'Home', link: '/home', icon: '🏠' },
+    { label: 'Androides', link: '/androides', icon: '🤖' },
+    { label: 'About', link: '/about', icon: '👤' }
+  ]);
 
   constructor(private router: Router) { }
-
-  ngOnInit() {
-
-    this.items = [
-      { label: 'home', routerLink: '/home', icon: 'pi pi-home' },
-      { label: 'androides', routerLink: '/androides', icon: 'pi pi-list'   },
-      { label: 'About'  , routerLink: '/about' , icon: 'pi pi-user'}
-    ];
-
-    this.home = { icon: 'pi pi-home', routerLink: '/' };
-
-  }
 
   buscarAndroides(textoBusqueda: string) {
     this.router.navigate(['/buscar', textoBusqueda]);
   }
-
 }

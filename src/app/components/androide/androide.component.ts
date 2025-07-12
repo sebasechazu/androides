@@ -1,28 +1,25 @@
-import { Component, OnInit } from '@angular/core';
-import { Androide } from '../../interface/androide';
+import { Component, computed, inject, signal } from '@angular/core';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { AndroidesService } from '../../service/androides.service';
-import { UpperCasePipe } from '@angular/common';
-import { TableModule } from 'primeng/table';
-import { CardModule } from 'primeng/card';
-import { ButtonModule } from 'primeng/button';
+import { AsyncPipe, UpperCasePipe } from '@angular/common';
 
 @Component({
-    selector: 'app-androide',
-    templateUrl: './androide.component.html',
-    styleUrls: ['./androide.component.css'],
-    imports: [RouterLink, UpperCasePipe, TableModule, CardModule, ButtonModule]
+  selector: 'app-androide',
+  templateUrl: './androide.component.html',
+  imports: [RouterLink],
 })
-export class AndroideComponent implements OnInit {
+export class AndroideComponent {
+  private route = inject(ActivatedRoute);
+  private androidesService = inject(AndroidesService);
 
-  androide: Androide | undefined;
+  id = signal<number | null>(null);
+  androide = computed(() =>
+    this.id() != null ? this.androidesService.getAndroideXId(this.id()!) : undefined
+  );
 
-  constructor(private activatedRouted: ActivatedRoute, private _androidesService: AndroidesService) {
-    this.activatedRouted.params.subscribe(params => {
-      this.androide = this._androidesService.getAndroideXId(params['id'])
-    })
+  constructor() {
+    this.route.params.subscribe(params => {
+      this.id.set(+params['id']);
+    });
   }
-  ngOnInit() {
-  }
-
 }

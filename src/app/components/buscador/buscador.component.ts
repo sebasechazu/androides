@@ -1,28 +1,26 @@
-import { Component, OnInit } from '@angular/core';
-import { Androide } from '../../interface/androide';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Component, inject, signal, computed } from '@angular/core';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { AndroidesService } from '../../service/androides.service';
 
 @Component({
-    selector: 'app-buscador',
-    templateUrl: './buscador.component.html',
-    styleUrls: ['./buscador.component.css'],
-    standalone: true
+  selector: 'app-buscador',
+  templateUrl: './buscador.component.html'
 })
-export class BuscadorComponent implements OnInit {
+export class BuscadorComponent {
+  private route = inject(ActivatedRoute);
+  private router = inject(Router);
+  private androidesService = inject(AndroidesService);
 
-  androides: Androide[] = []
-  termino: string | undefined;
+  termino = signal<string>('');
+  androides = computed(() => this.androidesService.buscarAndroide(this.termino()));
 
-  constructor(private activatedRoute: ActivatedRoute, private router: Router, private _AndroidesService: AndroidesService) { }
-
-  ngOnInit() {
-    this.activatedRoute.params.subscribe(params => {
-      this.termino = params['termino'];
-      this.androides = this._AndroidesService.buscarAndroide(params['termino']);
+  constructor() {
+    this.route.params.subscribe(params => {
+      this.termino.set(params['termino']);
     });
   }
 
-  public verAndroide(idx:number){ this.router.navigate(['/androide', idx]) }
-
+  verAndroide(id: number) {
+    this.router.navigate(['/androide', id]);
+  }
 }

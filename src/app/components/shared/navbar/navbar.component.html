@@ -1,3 +1,14 @@
-<div class="card flex justify-content-center">
-    <p-menubar [model]="items"></p-menubar>
-</div>
+<nav class="bg-blue-600 text-white px-4 py-2 flex justify-between items-center">
+    <div class="text-lg font-bold">AndroidApp</div>
+
+    <ul class="flex gap-4">
+        @for (item of items(); track item.label) {
+        <li>
+            <a [routerLink]="item.link" class="hover:underline flex items-center gap-1">
+                <span>{{ item.icon }}</span>
+                {{ item.label }}
+            </a>
+        </li>
+        }
+    </ul>
+</nav>

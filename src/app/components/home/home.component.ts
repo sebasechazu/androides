@@ -1,12 +1,7 @@
 import { Component } from '@angular/core';
-import { FieldsetModule } from 'primeng/fieldset';
 
 @Component({
     selector: 'app-home',
-    templateUrl: './home.component.html',
-    styleUrls: ['./home.component.css'],
-    imports: [FieldsetModule]
+    templateUrl: './home.component.html'
 })
-export class HomeComponent  {
-
-}
+export class HomeComponent { }

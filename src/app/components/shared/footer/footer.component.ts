@@ -1,13 +1,21 @@
 import { DatePipe } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, effect, signal } from '@angular/core';
 
 @Component({
-    selector: 'app-footer',
-    imports: [DatePipe],
-    templateUrl: './footer.component.html',
-    styleUrls: ['./footer.component.css']
+  selector: 'app-footer',
+  imports: [DatePipe],
+  templateUrl: './footer.component.html',
 })
 export class FooterComponent {
-  title = 'footer';
-  date = new Date(); 
+  now = signal(new Date());
+
+  constructor() {
+    effect(() => {
+      const interval = setInterval(() => {
+        this.now.set(new Date());
+      }, 1000);
+
+      return () => clearInterval(interval);
+    });
+  }
 }

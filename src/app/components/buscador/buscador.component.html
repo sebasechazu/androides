@@ -1,21 +1,28 @@
-<h1>Buscando: {{termino}} </h1>
-<hr>
-  @if(androides.length == 0){
-    <div class="col-md-12">
-      <div class="alert alert-info" role="alert"> No existen resultados con el termino: {{termino}} </div>
+<h1 class="text-2xl font-bold mb-4">
+  Buscando: <span class="text-blue-600">{{ termino() }}</span>
+</h1>
+
+<hr class="my-4" />
+
+@if(androides().length === 0) {
+<div class="text-center bg-blue-100 text-blue-800 p-4 rounded">
+  No existen resultados con el término: <b>{{ termino() }}</b>
+</div>
+}
+
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-4">
+  @for (androide of androides(); track androide.id) {
+  <div class="bg-white shadow rounded overflow-hidden flex flex-col">
+    <img [src]="androide.avatar" alt="{{androide.nombre}}" class="w-full h-48 object-cover" />
+    <div class="p-4 flex-1 flex flex-col">
+      <h5 class="text-lg font-bold">{{ androide.nombre }}</h5>
+      <p class="text-gray-600">{{ androide.apellido }}</p>
+      <p class="text-sm text-gray-400">{{ androide.fechaFabricacion }}</p>
+      <button (click)="verAndroide(androide.id)"
+        class="mt-auto bg-blue-600 text-white px-3 py-1 rounded hover:bg-blue-700 w-full mt-4">
+        Ver Más
+      </button>
     </div>
-  }
-  <div class="card-columns">
-    @for (androideAux of androides; track androideAux; let i = $index) {
-      <div class="card animated fadeIn fast">
-        <img class="card-img-top" src="{{androideAux.avatar}}" [alt]="androideAux">
-        <div class="card-body">
-          <h5 class="card-title">{{androideAux.nombre}}</h5>
-          <p class="card-text">{{androideAux.apellido}}</p>
-          <p class="card-text"> <small class="text-muted">{{androideAux.fechaFabricacion}}</small> </p>
-          <button (click)="verAndroide(androideAux.id)" type="button" class="btn btn-outline-primary btn-block">Ver
-          Mas</button>
-        </div>
-      </div>
-    }
   </div>
+  }
+</div>

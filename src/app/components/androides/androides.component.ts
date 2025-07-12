@@ -1,28 +1,19 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, inject } from '@angular/core';
+import { RouterLink, Router } from '@angular/router';
 import { AndroidesService } from '../../service/androides.service';
-import { Router } from '@angular/router';
-// service
 import { Androide } from '../../interface/androide';
-//  prime ng
-import { TableModule } from 'primeng/table';
-import { ButtonModule } from 'primeng/button';
 
 @Component({
-    selector: 'app-androides',
-    templateUrl: './androides.component.html',
-    styleUrls: ['./androides.component.css'],
-    imports: [TableModule, ButtonModule]
+  selector: 'app-androides',
+  templateUrl: './androides.component.html'
 })
-export class AndroidesComponent implements OnInit {
+export class AndroidesComponent {
+  private androidesService = inject(AndroidesService);
+  private router = inject(Router);
 
-  androides : Androide[] = [];
+  androides: Androide[] = this.androidesService.getAndroides();
 
-  constructor(private _androideService:AndroidesService,private router:Router) { }
-
-  ngOnInit() {
-    this.androides = this._androideService.getAndroides();
-
+  verAndroide(id: number) {
+    this.router.navigate(['/androide', id]);
   }
-
-  public verAndroide(idx:string){ this.router.navigate(['/androide', idx]) }
 }
