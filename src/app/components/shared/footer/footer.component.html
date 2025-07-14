@@ -1,5 +1,10 @@
-<footer class="bg-gray-800 text-white text-center py-4">
-  <div>
-    {{ now() | date: 'short' }} — {{ now() | date: 'shortTime' }}
+<footer class="bg-neutral text-base-100 py-4 border-t border-base-100/10">
+  <div class="container mx-auto text-center text-sm">
+    <p>
+      {{ now() | date: 'medium' }}
+    </p>
+    <p class="opacity-75 mt-1">
+      &copy; {{ now() | date: 'yyyy' }} Android App — Todos los derechos reservados.
+    </p>
   </div>
 </footer>

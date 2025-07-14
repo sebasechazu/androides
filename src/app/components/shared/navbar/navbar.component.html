@@ -1,14 +1,50 @@
-<nav class="bg-blue-600 text-white px-4 py-2 flex justify-between items-center">
-    <div class="text-lg font-bold">AndroidApp</div>
+<nav class="bg-primary text-base-100 px-4 py-3">
+    <div class="container mx-auto flex justify-between items-center">
+        <!-- Logo -->
+        <a [routerLink]="'/home'" class="text-xl font-bold hover:text-accent transition-colors duration-200">
+            Android App
+        </a>
 
-    <ul class="flex gap-4">
+        <!-- Botón hamburguesa -->
+        <button (click)="isOpen.set(!isOpen())" class="md:hidden text-base-100 focus:outline-none"
+            aria-label="Toggle menu">
+            @if (!isOpen()) {
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"
+                class="w-6 h-6">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+            </svg>
+            } @else {
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"
+                class="w-6 h-6">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+            }
+        </button>
+
+        <!-- Menú desktop -->
+        <ul class="hidden md:flex gap-6">
+            @for (item of items(); track item.label) {
+            <li>
+                <a [routerLink]="item.link"
+                    class="flex items-center gap-1 px-2 py-1 rounded transition-colors duration-200 hover:text-accent hover:bg-base-100/10">
+                    <span>{{ item.icon }}</span>
+                    {{ item.label }}
+                </a>
+            </li>
+            }
+        </ul>
+    </div>
+
+    <!-- Menú móvil -->
+    @if (isOpen()) {
+    <div class="md:hidden mt-3 space-y-2 px-4">
         @for (item of items(); track item.label) {
-        <li>
-            <a [routerLink]="item.link" class="hover:underline flex items-center gap-1">
-                <span>{{ item.icon }}</span>
-                {{ item.label }}
-            </a>
-        </li>
+        <a [routerLink]="item.link"
+            class="block flex items-center gap-1 px-2 py-1 rounded transition-colors duration-200 hover:text-accent hover:bg-base-100/10">
+            <span>{{ item.icon }}</span>
+            {{ item.label }}
+        </a>
         }
-    </ul>
+    </div>
+    }
 </nav>

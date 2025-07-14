@@ -1,82 +1,90 @@
-<section class="border rounded p-4 mt-8 relative">
-    <legend class="absolute -top-3 left-3 bg-white px-2 text-sm text-gray-500">
-        Sebastián Echazú
-    </legend>
-
-    <div class="flex items-center gap-4 mb-4">
-        <img src="assets/img/sebastianechazu.png" alt="Sebastián Echazú" class="w-24 h-24 rounded-full border shadow" />
-        <span class="text-lg font-bold">Sebastián Echazú</span>
+<section class="max-w-3xl mx-auto mt-10 bg-base-100 rounded-xl shadow-lg p-6 animate-fade-in-up space-y-6">
+    <!-- Header -->
+    <div class="flex flex-col md:flex-row items-center gap-6">
+        <img src="assets/img/sebastianechazu.png" alt="Sebastián Echazú"
+            class="w-24 h-24 rounded-full border-4 border-accent shadow-lg animate-fade-in-up" />
+        <div class="text-center md:text-left">
+            <h2 class="text-3xl font-bold text-neutral animate-slide-in-up">
+                Sebastián Echazú
+            </h2>
+            <p class="text-sm text-neutral/70 animate-slide-in-up">
+                Desarrollador Web & Angular Enthusiast
+            </p>
+        </div>
     </div>
 
+    <!-- Sections -->
     <div class="space-y-4">
-        <details open class="border rounded">
-            <summary class="bg-gray-100 px-4 py-2 cursor-pointer font-medium">
-                About
-            </summary>
-            <div class="p-4 space-y-4 text-gray-700">
-                <p>I’m interested in the latest technological trends, especially in Angular and web development. I
-                    actively participate in online communities and attend related events.</p>
-                <hr />
-                <p>I’m currently learning advanced Angular techniques and exploring new web development tools to enhance
-                    my skill set.</p>
-                <hr />
-                <p>I’m looking to collaborate on innovative web development projects that require robust and efficient
-                    solutions. I have a strong background in Angular, TypeScript, and JavaScript, and I’m passionate
-                    about delivering high-quality software.</p>
-            </div>
-        </details>
+        <!-- About -->
+        <div class="bg-base-100 rounded shadow p-4 animate-fade-in-up">
+            <h3 class="text-lg font-semibold text-accent mb-2 flex gap-2 items-center">
+                📝 About
+            </h3>
+            <p class="text-neutral">
+                I’m interested in the latest technological trends, especially in Angular and web development. I actively
+                participate in online communities and attend related events.
+            </p>
+            <p class="text-neutral mt-2">
+                I’m currently learning advanced Angular techniques and exploring new web development tools to enhance my
+                skill set.
+            </p>
+            <p class="text-neutral mt-2">
+                I’m looking to collaborate on innovative web development projects that require robust and efficient
+                solutions. I have a strong background in Angular, TypeScript, and JavaScript, and I’m passionate about
+                delivering high-quality software.
+            </p>
+        </div>
 
-        <details class="border rounded">
-            <summary class="bg-gray-100 px-4 py-2 cursor-pointer font-medium">
-                Skills
-            </summary>
-            <div class="p-4 text-gray-700 space-y-4">
-                <h5 class="font-semibold">Languages</h5>
-                <ul class="list-disc list-inside">
-                    <li>TypeScript</li>
-                    <li>JavaScript</li>
-                    <li>Git</li>
-                    <li>Bootstrap</li>
-                    <li>C#</li>
-                    <li>HTML</li>
-                    <li>CSS</li>
-                </ul>
-                <hr />
-                <h5 class="font-semibold">Frameworks</h5>
-                <ul class="list-disc list-inside">
-                    <li>Angular</li>
-                    <li>PrimeNG</li>
-                    <li>React</li>
-                </ul>
+        <!-- Skills -->
+        <div class="bg-base-100 rounded shadow p-4 animate-fade-in-up" style="animation-delay: 100ms">
+            <h3 class="text-lg font-semibold text-accent mb-2 flex gap-2 items-center">
+                🛠 Skills
+            </h3>
+            <div class="flex flex-col md:flex-row gap-4">
+                <div>
+                    <h5 class="font-semibold text-neutral">Languages</h5>
+                    <ul class="list-disc list-inside text-neutral">
+                        <li>TypeScript</li>
+                        <li>JavaScript</li>
+                        <li>Git</li>
+                        <li>Bootstrap</li>
+                        <li>C#</li>
+                        <li>HTML</li>
+                        <li>CSS</li>
+                    </ul>
+                </div>
+                <div>
+                    <h5 class="font-semibold text-neutral">Frameworks</h5>
+                    <ul class="list-disc list-inside text-neutral">
+                        <li>Angular</li>
+                        <li>PrimeNG</li>
+                        <li>React</li>
+                    </ul>
+                </div>
             </div>
-        </details>
+        </div>
 
-        <details class="border rounded">
-            <summary class="bg-gray-100 px-4 py-2 cursor-pointer font-medium">
-                Contact
-            </summary>
-            <div class="p-4 text-gray-700 space-y-2">
-                <p>Feel free to reach out to me if you have any questions or would like to collaborate on a project.</p>
-                <hr />
-                <ul class="space-y-1">
-                    <li>
-                        📧 <a href="mailto:sebastianechazu@gmail.com" class="text-blue-600 hover:underline"> sebastianechazu&#64;gmail.com
-
-                        </a>
-                    </li>
-                    <li>
-                        🔗 <a href="https://www.linkedin.com/in/sebastian-echazu/" target="_blank"
-                            class="text-blue-600 hover:underline">
-                            LinkedIn — Sebastián Echazú
-                        </a>
-                    </li>
-                    <li>
-                        📞 <a href="tel:+54 2615564713" class="text-blue-600 hover:underline">
-                            +54 261 556 4713
-                        </a>
-                    </li>
-                </ul>
-            </div>
-        </details>
+        <!-- Contact -->
+        <div class="bg-base-100 rounded shadow p-4 animate-fade-in-up" style="animation-delay: 200ms">
+            <h3 class="text-lg font-semibold text-accent mb-2 flex gap-2 items-center">
+                📞 Contact
+            </h3>
+            <p class="text-neutral">
+                Feel free to reach out to me if you have any questions or would like to collaborate on a project.
+            </p>
+            <ul class="mt-2 space-y-1 text-neutral">
+                <li>
+                    📧 <a href="mailto:sebastianechazu@gmail.com"
+                        class="text-accent hover:underline">sebastianechazu&#64;gmail.com</a>
+                </li>
+                <li>
+                    🔗 <a href="https://www.linkedin.com/in/sebastian-echazu/" target="_blank"
+                        class="text-accent hover:underline">LinkedIn — Sebastián Echazú</a>
+                </li>
+                <li>
+                    📞 <a href="tel:+54 2615564713" class="text-accent hover:underline">+54 261 556 4713</a>
+                </li>
+            </ul>
+        </div>
     </div>
 </section>

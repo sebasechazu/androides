@@ -1,9 +1,21 @@
-<section class="border rounded p-4 mt-8 relative">
-    <legend class="absolute -top-3 left-3 bg-white px-2 text-sm text-gray-500">
-        Lista de Androides
-    </legend>
+<section class="bg-base-100 rounded-xl shadow-md p-6 mt-10 relative overflow-hidden animate-fade-in">
+    <!-- Contenido -->
+    <div class="text-center space-y-4">
+        <p class="m-0 text-neutral text-lg animate-slide-in-up" style="animation-delay: 100ms">
+            Bienvenido a la
+            <span class="font-semibold text-accent">Android App</span>
+        </p>
+        <p class="mt-2 text-sm text-neutral/80 animate-slide-in-up" style="animation-delay: 200ms">
+            Esta aplicación te permite gestionar y visualizar una lista de androides
+            de manera sencilla y atractiva.
+        </p>
 
-    <p class="m-0 text-gray-700">
-        Ejemplo de una app que muestra una lista de Androides
-    </p>
+        <!-- Botón -->
+        <div class="mt-4 animate-slide-in-up" style="animation-delay: 300ms">
+            <a [routerLink]="'/androides'"
+                class="inline-block bg-accent text-base-100 px-4 py-2 rounded-full text-sm font-medium shadow hover:bg-accent/90 hover:scale-105 transition-transform duration-200">
+                Ver Androides
+            </a>
+        </div>
+    </div>
 </section>
