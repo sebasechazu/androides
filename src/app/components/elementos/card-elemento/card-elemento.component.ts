@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { Elemento } from '../../interface/elemento';
+import { Elemento } from '../../../interface/elemento';
 import { CommonModule } from '@angular/common';
 
 @Component({
