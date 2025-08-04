@@ -1,6 +1,6 @@
 import { Component, Input } from '@angular/core';
 import { CommonModule, NgClass } from '@angular/common';
-import { Character } from '../../interface/character';
+import { Character } from '../../../interface/character';
 import { ModalCharacterComponent } from '../modal-character/modal-character.component';
 
 @Component({

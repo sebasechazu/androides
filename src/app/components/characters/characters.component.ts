@@ -1,7 +1,7 @@
 import { Component, OnInit, inject, signal } from '@angular/core';
-import { CharacterService } from '../../service/charater.service';
+import { CharacterService } from '../../services/charater.service';
 import { Character } from '../../interface/character';
-import { CardCharacterComponent } from '../card-character/card-character.component';
+import { CardCharacterComponent } from './card-character/card-character.component';
 
 @Component({
   selector: 'app-characters',

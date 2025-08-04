@@ -1,8 +1,8 @@
 import { Component, OnInit, inject, signal } from '@angular/core';
-import { CardElementoComponent } from '../card-elemento/card-elemento.component';
+import { CardElementoComponent } from './card-elemento/card-elemento.component';
 import { CdkDragDrop, DragDropModule, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
 import { CommonModule } from '@angular/common';
-import { ElementosService } from '../../service/elementos.service';
+import { ElementosService } from '../../services/elementos.service';
 import { Elemento } from '../../interface/elemento';
 
 @Component({
@@ -24,7 +24,6 @@ export class ElementosComponent implements OnInit {
   elementoSeleccionado: Elemento | null = null;
 
   ngOnInit() {
-    // Cargamos los elementos al inicializar el componente
     this.cargarElementos();
   }
 
@@ -36,7 +35,7 @@ export class ElementosComponent implements OnInit {
       this.actualizarElementos(datos);
       this.isLoading.set(false);
     } else {
-      // Si no hay datos disponibles aún, intentamos nuevamente después de un breve retardo
+      
       setTimeout(() => {
         const nuevosDatos = this.elementosService.getElementos();
         if (nuevosDatos.length > 0) {
@@ -56,29 +55,24 @@ export class ElementosComponent implements OnInit {
 
   moverElemento(event: CdkDragDrop<Elemento[]>, grupoDestino: number) {
     if (event.previousContainer === event.container) {
-      // Si se mueve dentro del mismo grupo
+
       const arrayActual = [...this.obtenerArrayPorGrupo(grupoDestino)];
       moveItemInArray(arrayActual, event.previousIndex, event.currentIndex);
       
-      // Actualizar la señal del grupo
       this.actualizarGrupo(grupoDestino, arrayActual);
     } else {
-      // Si se mueve entre grupos
+
       const grupoOrigen = this.obtenerNumeroGrupo(event.previousContainer.id);
       const arrayOrigen = [...this.obtenerArrayPorGrupo(grupoOrigen)];
       const arrayDestino = [...this.obtenerArrayPorGrupo(grupoDestino)];
       
-      // Obtener el elemento antes de eliminarlo
       const elemento = arrayOrigen[event.previousIndex];
       
-      // Eliminar del origen y añadir al destino
       arrayOrigen.splice(event.previousIndex, 1);
       arrayDestino.splice(event.currentIndex, 0, elemento);
       
-      // Actualizar el grupo del elemento
       elemento.grupo = grupoDestino;
       
-      // Actualizar las señales
       this.actualizarGrupo(grupoOrigen, arrayOrigen);
       this.actualizarGrupo(grupoDestino, arrayDestino);
     }
@@ -96,7 +90,7 @@ export class ElementosComponent implements OnInit {
   private obtenerNumeroGrupo(containerId: string): number {
     if (containerId.includes('listaGrupo1')) return 1;
     if (containerId.includes('listaGrupo2')) return 2;
-    return 3; // Grupo 3 por defecto
+    return 3;
   }
   
   private actualizarGrupo(numeroGrupo: number, array: Elemento[]): void {
