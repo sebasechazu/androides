@@ -1,6 +1,6 @@
 import { Component, inject, signal, computed } from '@angular/core';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
-import { AndroidesService } from '../../service/androides.service';
+import { ElementosService } from '../../service/elementos.service';
 
 @Component({
   selector: 'app-buscador',
@@ -9,10 +9,10 @@ import { AndroidesService } from '../../service/androides.service';
 export class BuscadorComponent {
   private route = inject(ActivatedRoute);
   private router = inject(Router);
-  private androidesService = inject(AndroidesService);
+  private elementosService = inject(ElementosService);
 
   termino = signal<string>('');
-  androides = computed(() => this.androidesService.buscarAndroide(this.termino()));
+  elementos = computed(() => this.elementosService.buscarElemento(this.termino()));
 
   constructor() {
     this.route.params.subscribe(params => {
@@ -20,7 +20,7 @@ export class BuscadorComponent {
     });
   }
 
-  verAndroide(id: number) {
-    this.router.navigate(['/androide', id]);
+  verElemento(id: number) {
+    this.router.navigate(['/elemento', id]);
   }
 }

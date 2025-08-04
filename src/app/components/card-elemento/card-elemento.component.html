@@ -1,0 +1,22 @@
+<div class="bg-base-100 p-4 rounded shadow border-2 border-primary md:grid md:grid-cols-4 md:gap-4 md:items-center hover:bg-base-100/50 hover:scale-[1.01] hover:shadow-lg transition-all duration-300 animate-fade-in">
+  <!-- Avatar -->
+  <div class="flex justify-center md:justify-start">
+    <img [src]="elemento.avatar" alt="img" class="w-24 shadow rounded animate-fade-in" />
+  </div>
+  <!-- Apellido -->
+  <div class="mt-2 md:mt-0 text-center md:text-left animate-slide-in-left">
+    <span class="font-medium text-neutral">
+      {{ elemento.apellido }}
+    </span>
+  </div>
+  <!-- Nombre -->
+  <div class="mt-2 md:mt-0 text-center md:text-left animate-slide-in-right">
+    <span class="text-neutral">
+      {{ elemento.nombre }}
+    </span>
+  </div>
+  <!-- Botón -->
+  <div class="mt-4 md:mt-0 flex justify-center md:justify-end animate-fade-in">
+    <ng-content></ng-content>
+  </div>
+</div>

@@ -1,13 +1,14 @@
-import { Androide } from "../interface/androide"
+import { Elemento } from "../interface/elemento"
 
-export const  ANDROIDES: Androide[] = [
+export const ELEMENTOS: Elemento[] = [
     {
         id: 1,
         nombre: "Jorrie",
         apellido: "Beckley",
         amigo: true,
         fechaFabricacion: "7/29/1986",
-        avatar: "https://robohash.org/voluptatumestsint.jpg?size=250x250&set=set1"
+        avatar: "https://robohash.org/voluptatumestsint.jpg?size=250x250&set=set1",
+        grupo: 1
     },
     {
         id: 2,
@@ -15,7 +16,8 @@ export const  ANDROIDES: Androide[] = [
         apellido: "Roiz",
         amigo: false,
         fechaFabricacion: "6/22/1985",
-        avatar: "https://robohash.org/magnamfugaminima.bmp?size=250x250&set=set1"
+        avatar: "https://robohash.org/magnamfugaminima.bmp?size=250x250&set=set1",
+        grupo: 1
     },
     {
         id: 3,
@@ -23,7 +25,8 @@ export const  ANDROIDES: Androide[] = [
         apellido: "Clinnick",
         amigo: true,
         fechaFabricacion: "1/23/1976",
-        avatar: "https://robohash.org/impeditquislaborum.bmp?size=250x250&set=set1"
+        avatar: "https://robohash.org/impeditquislaborum.bmp?size=250x250&set=set1",
+        grupo: 1
     },
     {
         id: 4,
@@ -31,7 +34,8 @@ export const  ANDROIDES: Androide[] = [
         apellido: "Coulter",
         amigo: false,
         fechaFabricacion: "6/25/1977",
-        avatar: "https://robohash.org/repellatadvel.bmp?size=250x250&set=set1"
+        avatar: "https://robohash.org/repellatadvel.bmp?size=250x250&set=set1",
+        grupo: 1
     },
     {
         id: 5,
@@ -39,7 +43,8 @@ export const  ANDROIDES: Androide[] = [
         apellido: "Dyneley",
         amigo: true,
         fechaFabricacion: "4/4/1989",
-        avatar: "https://robohash.org/rerumveniamsit.jpg?size=250x250&set=set1"
+        avatar: "https://robohash.org/rerumveniamsit.jpg?size=250x250&set=set1",
+        grupo: 1
     },
     {
         id: 6,
@@ -47,7 +52,8 @@ export const  ANDROIDES: Androide[] = [
         apellido: "Hayhoe",
         amigo: false,
         fechaFabricacion: "11/27/1986",
-        avatar: "https://robohash.org/atinventoremaxime.bmp?size=250x250&set=set1"
+        avatar: "https://robohash.org/atinventoremaxime.bmp?size=250x250&set=set1",
+        grupo: 2
     },
     {
         id: 7,
@@ -55,7 +61,8 @@ export const  ANDROIDES: Androide[] = [
         apellido: "Moreby",
         amigo: true,
         fechaFabricacion: "11/11/1980",
-        avatar: "https://robohash.org/laborumvoluptatemet.bmp?size=250x250&set=set1"
+        avatar: "https://robohash.org/laborumvoluptatemet.bmp?size=250x250&set=set1",
+        grupo: 2
     },
     {
         id: 8,
@@ -63,7 +70,8 @@ export const  ANDROIDES: Androide[] = [
         apellido: "Hagart",
         amigo: false,
         fechaFabricacion: "3/30/1985",
-        avatar: "https://robohash.org/iureinut.jpg?size=250x250&set=set1"
+        avatar: "https://robohash.org/iureinut.jpg?size=250x250&set=set1",
+        grupo: 2
     },
     {
         id: 9,
@@ -71,7 +79,8 @@ export const  ANDROIDES: Androide[] = [
         apellido: "Vasyukhin",
         amigo: true,
         fechaFabricacion: "3/12/1971",
-        avatar: "https://robohash.org/velitetsunt.png?size=250x250&set=set1"
+        avatar: "https://robohash.org/velitetsunt.png?size=250x250&set=set1",
+        grupo: 2
     },
     {
         id: 10,
@@ -79,7 +88,7 @@ export const  ANDROIDES: Androide[] = [
         apellido: "de la Tremoille",
         amigo: false,
         fechaFabricacion: "7/11/1982",
-        avatar: "https://robohash.org/quiadebitisvoluptate.bmp?size=250x250&set=set1"
+        avatar: "https://robohash.org/quiadebitisvoluptate.bmp?size=250x250&set=set1",
+        grupo: 2
     }
-
 ]

@@ -10,7 +10,7 @@ export class NavbarComponent {
   isOpen = signal(false);
 
   items = signal([
-    { label: 'Androides', link: '/androides', icon: '🤖' },
+    { label: 'Elementos', link: '/elementos', icon: '🤖' },
     { label: 'About', link: '/about', icon: '👤' }
   ]);
 }

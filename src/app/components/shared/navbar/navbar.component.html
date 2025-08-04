@@ -2,7 +2,7 @@
     <div class="container mx-auto flex justify-between items-center">
         <!-- Logo -->
         <a [routerLink]="'/home'" class="text-xl font-bold hover:text-accent transition-colors duration-200">
-            Android App
+            Elementos App
         </a>
 
         <!-- Botón hamburguesa -->
@@ -40,7 +40,7 @@
     <div class="md:hidden mt-3 space-y-2 px-4">
         @for (item of items(); track item.label) {
         <a [routerLink]="item.link"
-            class="block flex items-center gap-1 px-2 py-1 rounded transition-colors duration-200 hover:text-accent hover:bg-base-100/10">
+            class="flex items-center gap-1 px-2 py-1 rounded transition-colors duration-200 hover:text-accent hover:bg-base-100/10">
             <span>{{ item.icon }}</span>
             {{ item.label }}
         </a>

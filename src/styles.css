@@ -1,5 +1,7 @@
 @import "tailwindcss";
 
+
+
 @theme {
     /* Colores */
     --color-primary: #1E40AF;
@@ -64,4 +66,21 @@
     .animate-slide-in-up {
         animation: slide-in-up 0.5s ease-out both;
     }
+}
+
+/* Estilos para Angular CDK Drag & Drop */
+.cdk-drag-preview {
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+  transform: rotate(2deg);
+  z-index: 9999;
+}
+
+.cdk-drag-placeholder {
+  opacity: 0.3 !important;
+  filter: grayscale(100%) blur(2px) !important;
+  background-color: rgba(229, 231, 235, 0.7) !important;
+}
+
+.cdk-drop-list-dragging .cdk-drag:not(.cdk-drag-placeholder) {
+  transition: transform 50ms cubic-bezier(0, 0, 0.2, 1);
 }

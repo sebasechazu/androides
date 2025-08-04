@@ -1,0 +1,28 @@
+<div class="max-w-sm w-full bg-base-100 shadow-lg rounded-xl overflow-hidden animate-fade-in">
+  <!-- Header -->
+  <div class="bg-primary text-base-100 text-center py-3">
+    <h2 class="text-xl font-bold">Detalle de Elemento</h2>
+    <p class="text-sm opacity-80">Información del Elemento</p>
+  </div>
+
+  <!-- Avatar -->
+  <div class="flex justify-center mt-4">
+    <img class="w-32 h-32 rounded-full shadow-lg border-4 border-accent" [src]="elemento()?.avatar"
+      [alt]="elemento()?.nombre" />
+  </div>
+
+  <!-- Info -->
+  <div class="p-6 space-y-2 text-center">
+    <p><span class="font-semibold text-neutral">Apellido:</span> {{ elemento()?.apellido }}</p>
+    <p><span class="font-semibold text-neutral">Nombre:</span> {{ elemento()?.nombre }}</p>
+    <p><span class="font-semibold text-neutral">Fabricación:</span> {{ elemento()?.fechaFabricacion }}</p>
+
+    @if (elemento()?.amigo) {
+    <div class="flex justify-center mt-4">
+      <img src="assets/img/amistad.png" alt="Amistad" class="w-8 h-8 animate-bounce" />
+    </div>
+    }
+  </div>
+
+  <!-- Botón (eliminado para modal) -->
+</div>
