@@ -1,29 +1,32 @@
 import { Component, OnInit, inject, signal } from '@angular/core';
-import { CommonModule } from '@angular/common';
 import { CharacterService } from '../../service/charater.service';
 import { Character } from '../../interface/character';
-import { FormsModule } from '@angular/forms';
 import { CardCharacterComponent } from '../card-character/card-character.component';
 
 @Component({
   selector: 'app-characters',
   standalone: true,
-  imports: [CommonModule, FormsModule, CardCharacterComponent],
+  imports: [CardCharacterComponent],
   templateUrl: './characters.component.html'
 })
 export class CharactersComponent implements OnInit {
   private characterService = inject(CharacterService);
-  
+
   characters = signal<Character[]>([]);
   isLoading = signal<boolean>(true);
   error = signal<string | null>(null);
   currentPage = signal<number>(1);
   totalPages = signal<number>(0);
-  
+
   // Filtros
   statusFilter = signal<string>('');
   speciesFilter = signal<string>('');
   genderFilter = signal<string>('');
+
+  // Listas únicas para los selects
+  uniqueStatuses = signal<string[]>([]);
+  uniqueSpecies = signal<string[]>([]);
+  uniqueGenders = signal<string[]>([]);
 
   ngOnInit(): void {
     this.loadCharacters();
@@ -32,33 +35,37 @@ export class CharactersComponent implements OnInit {
   onStatusChange(event: Event): void {
     const value = (event.target as HTMLSelectElement).value;
     this.statusFilter.set(value);
+    this.applyFilters();
   }
 
   onSpeciesChange(event: Event): void {
-    const value = (event.target as HTMLInputElement).value;
+    const value = (event.target as HTMLSelectElement).value;
     this.speciesFilter.set(value);
+    this.applyFilters();
   }
 
   onGenderChange(event: Event): void {
     const value = (event.target as HTMLSelectElement).value;
     this.genderFilter.set(value);
+    this.applyFilters();
   }
 
   loadCharacters(page: number = 1): void {
     this.isLoading.set(true);
     this.error.set(null);
     this.currentPage.set(page);
-    
     this.characterService.getCharacters(page).subscribe({
       next: (response) => {
         this.characters.set(response.results);
         this.totalPages.set(response.info.pages);
         this.isLoading.set(false);
+        this.uniqueStatuses.set(this.characterService.getUniqueStatuses(response.results));
+        this.uniqueSpecies.set(this.characterService.getUniqueSpecies(response.results));
+        this.uniqueGenders.set(this.characterService.getUniqueGenders(response.results));
       },
-      error: (err) => {
+      error: () => {
         this.error.set('Error al cargar los personajes. Intenta de nuevo más tarde.');
         this.isLoading.set(false);
-        console.error('Error cargando personajes:', err);
       }
     });
   }
@@ -84,21 +91,22 @@ export class CharactersComponent implements OnInit {
   applyFilters(): void {
     this.isLoading.set(true);
     this.error.set(null);
-    
     const filters: {[key: string]: string} = {};
     if (this.statusFilter()) filters["status"] = this.statusFilter();
     if (this.speciesFilter()) filters["species"] = this.speciesFilter();
     if (this.genderFilter()) filters["gender"] = this.genderFilter();
-
     this.characterService.filterCharacters(filters).subscribe({
       next: (characters) => {
         this.characters.set(characters);
         this.isLoading.set(false);
+        // Actualizar opciones únicas pero NO modificar el valor actual de los filtros
+        this.uniqueStatuses.set(this.characterService.getUniqueStatuses(characters));
+        this.uniqueSpecies.set(this.characterService.getUniqueSpecies(characters));
+        this.uniqueGenders.set(this.characterService.getUniqueGenders(characters));
       },
-      error: (err) => {
+      error: () => {
         this.error.set('Error al aplicar los filtros. Intenta de nuevo más tarde.');
         this.isLoading.set(false);
-        console.error('Error aplicando filtros:', err);
       }
     });
   }

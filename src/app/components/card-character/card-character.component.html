@@ -1,9 +1,9 @@
 <div class="bg-white shadow-lg rounded-lg overflow-hidden hover:shadow-xl transition-shadow border-2 border-blue-500" style="height: 480px; width: 300px; position: relative;">
   <img [src]="character.image" [alt]="character.name" class="w-full h-64 object-cover border-b-2 border-blue-500" />
-  <div class="p-4 pb-16"> <!-- Añadimos padding-bottom para dejar espacio al botón -->
+  <div class="p-4 pb-16 text-center"> <!-- Añadimos text-center para centrar todo el contenido -->
     <div class="overflow-auto" style="max-height: 140px;"> <!-- Altura máxima fija para el contenido -->
       <h3 class="text-xl font-bold truncate" title="{{ character.name }}">{{ character.name }}</h3>
-      <div class="flex items-center mt-2">
+      <div class="flex items-center justify-center mt-2"> <!-- Añadimos justify-center -->
         <span 
           class="inline-block w-4 h-4 rounded-full mr-2 border-2 border-gray-400" 
           [ngClass]="{
@@ -18,19 +18,20 @@
         <p class="text-gray-600 text-sm">
           <span class="font-semibold">Género:</span> {{ character.gender }}
         </p>
-        <p class="text-gray-600 text-sm mt-1">
-          <span class="font-semibold">Origen:</span> {{ character.origin.name }}
-        </p>
-        <p class="text-gray-600 text-sm mt-1">
-          <span class="font-semibold">Ubicación:</span> {{ character.location.name }}
-        </p>
       </div>
     </div>
   </div>
   <!-- Botón fijo en la parte inferior -->
   <div class="absolute bottom-0 left-0 right-0 p-4 border-t-2 border-blue-500 bg-white">
-    <a [routerLink]="['/character', character.id]" class="block w-full bg-blue-600 text-white text-center py-2 px-4 rounded-md hover:bg-blue-700 transition-colors border-2 border-blue-700 font-bold shadow">
+    <button (click)="openModal()" class="block w-full bg-blue-600 text-white text-center py-2 px-4 rounded-md hover:bg-blue-700 transition-colors border-2 border-blue-700 font-bold shadow">
       Ver detalles
-    </a>
+    </button>
   </div>
 </div>
+
+<!-- Modal de detalles del personaje -->
+<app-modal-character 
+  [character]="character" 
+  [show]="showModal" 
+  (close)="closeModal()">
+</app-modal-character>

@@ -72,6 +72,21 @@ export class CharacterService {
       );
   }
 
+  // Obtener valores únicos de status
+  getUniqueStatuses(characters: Character[]): string[] {
+    return Array.from(new Set(characters.map(c => c.status)));
+  }
+
+  // Obtener valores únicos de species
+  getUniqueSpecies(characters: Character[]): string[] {
+    return Array.from(new Set(characters.map(c => c.species).filter(s => s)));
+  }
+
+  // Obtener valores únicos de gender
+  getUniqueGenders(characters: Character[]): string[] {
+    return Array.from(new Set(characters.map(c => c.gender)));
+  }
+
   // Manejador de errores genérico
   private handleError<T>(operation = 'operation', result?: T) {
     return (error: any): Observable<T> => {
