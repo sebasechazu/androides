@@ -1,74 +1,95 @@
 <div class="mt-8">
+  <!-- Estado de carga -->
+  @if (isLoading()) {
+    <div class="flex justify-center my-12">
+      <div class="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary"></div>
+    </div>
+  }
 
-  <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-    <div class="flex flex-col items-center">
-      <h3 class="text-lg font-bold mb-2 text-primary text-center">Grupo 1</h3>
-      <div cdkDropList 
-           #listaGrupo1="cdkDropList"
-           [cdkDropListData]="elementosGrupo1" 
-           [cdkDropListConnectedTo]="[listaGrupo2]"
-           (cdkDropListDropped)="moverElemento($event, 1)" 
-           class="flex flex-col gap-2 w-full min-h-32 p-2 border-2 border-dashed border-transparent hover:border-primary/50 transition-colors"
-      >
-        <ng-template cdkDropListPlaceholder>
-          <div class="bg-red-200 border-4 border-dashed border-red-500 rounded-xl p-4 text-center">
-            <div class="text-red-600 font-bold text-xl animate-bounce">
-              ⬇ SOLTAR AQUÍ ⬇
+  @if (!isLoading()) {
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 p-4">
+      <div class="flex flex-col items-center bg-base-100/30 p-4 rounded-lg shadow-sm">
+        <h3 class="text-xl font-bold mb-3 text-primary text-center">Grupo 1</h3>
+        <div cdkDropList 
+             #listaGrupo1="cdkDropList"
+             [cdkDropListData]="elementosGrupo1()" 
+             [cdkDropListConnectedTo]="['listaGrupo2', 'listaGrupo3']"
+             id="listaGrupo1"
+             (cdkDropListDropped)="moverElemento($event, 1)" 
+             class="flex flex-col gap-2 w-full min-h-40 p-4 rounded-lg bg-base-200/50 border-2 border-dashed border-transparent hover:border-primary/70 transition-colors"
+        >
+          <ng-template cdkDropListPlaceholder>
+            <div class="bg-primary/10 border-4 border-dashed border-primary rounded-xl p-4 text-center my-4">
+              <div class="text-primary font-bold text-xl animate-pulse">
+                ⬇ SOLTAR AQUÍ ⬇
+              </div>
             </div>
-          </div>
-        </ng-template>
-        @for (elemento of elementosGrupo1; track elemento.id) {
-          <div cdkDrag class="w-full" [cdkDragData]="elemento">
-            <div class="cdk-drag-placeholder opacity-30 grayscale blur-sm"></div>
-            <app-card-elemento [elemento]="elemento" class="max-w-xs w-full mx-auto">
-              <button (click)="verElemento(elemento.id)"
-                class="px-2 py-1 text-sm bg-accent text-base-100 rounded hover:bg-accent/90 hover:scale-105 transition-transform duration-200">
-                Ver Más
-              </button>
-            </app-card-elemento>
-          </div>
-        }
+          </ng-template>
+          @for (elemento of elementosGrupo1(); track elemento.id) {
+            <div cdkDrag class="w-full my-3" [cdkDragData]="elemento">
+              <div class="cdk-drag-placeholder opacity-30 grayscale blur-sm"></div>
+              <app-card-elemento [elemento]="elemento" class="max-w-xs w-full mx-auto">
+              </app-card-elemento>
+            </div>
+          }
+        </div>
+      </div>
+
+      <div class="flex flex-col items-center bg-base-100/30 p-4 rounded-lg shadow-sm">
+        <h3 class="text-xl font-bold mb-3 text-accent text-center">Grupo 2</h3>
+        <div cdkDropList 
+             #listaGrupo2="cdkDropList"
+             [cdkDropListData]="elementosGrupo2()" 
+             [cdkDropListConnectedTo]="['listaGrupo1', 'listaGrupo3']"
+             id="listaGrupo2"
+             (cdkDropListDropped)="moverElemento($event, 2)" 
+             class="flex flex-col gap-2 w-full min-h-40 p-4 rounded-lg bg-base-200/50 border-2 border-dashed border-transparent hover:border-accent/70 transition-colors"
+        >
+          <ng-template cdkDropListPlaceholder>
+            <div class="bg-accent/10 border-4 border-dashed border-accent rounded-xl p-4 text-center my-4">
+              <div class="text-accent font-bold text-xl animate-pulse">
+                ⬇ SOLTAR AQUÍ ⬇
+              </div>
+            </div>
+          </ng-template>
+          @for (elemento of elementosGrupo2(); track elemento.id) {
+            <div cdkDrag class="w-full my-3" [cdkDragData]="elemento">
+              <div class="cdk-drag-placeholder opacity-30 grayscale blur-sm"></div>
+              <app-card-elemento [elemento]="elemento" class="max-w-xs w-full mx-auto">
+              </app-card-elemento>
+            </div>
+          }
+        </div>
+      </div>
+
+      <div class="flex flex-col items-center bg-base-100/30 p-4 rounded-lg shadow-sm">
+        <h3 class="text-xl font-bold mb-3 text-primary text-center">Grupo 3</h3>
+        <div cdkDropList 
+             #listaGrupo3="cdkDropList"
+             [cdkDropListData]="elementosGrupo3()" 
+             [cdkDropListConnectedTo]="['listaGrupo1', 'listaGrupo2']"
+             id="listaGrupo3"
+             (cdkDropListDropped)="moverElemento($event, 3)" 
+             class="flex flex-col gap-2 w-full min-h-40 p-4 rounded-lg bg-base-200/50 border-2 border-dashed border-transparent hover:border-primary/70 transition-colors"
+        >
+          <ng-template cdkDropListPlaceholder>
+            <div class="bg-primary/10 border-4 border-dashed border-primary rounded-xl p-4 text-center my-4">
+              <div class="text-primary font-bold text-xl animate-pulse">
+                ⬇ SOLTAR AQUÍ ⬇
+              </div>
+            </div>
+          </ng-template>
+          @for (elemento of elementosGrupo3(); track elemento.id) {
+            <div cdkDrag class="w-full my-3" [cdkDragData]="elemento">
+              <div class="cdk-drag-placeholder opacity-30 grayscale blur-sm"></div>
+              <app-card-elemento [elemento]="elemento" class="max-w-xs w-full mx-auto">
+              </app-card-elemento>
+            </div>
+          }
+        </div>
       </div>
     </div>
-    <div class="flex flex-col items-center">
-      <h3 class="text-lg font-bold mb-2 text-primary text-center">Grupo 2</h3>
-      <div cdkDropList 
-           #listaGrupo2="cdkDropList"
-           [cdkDropListData]="elementosGrupo2" 
-           [cdkDropListConnectedTo]="[listaGrupo1]"
-           (cdkDropListDropped)="moverElemento($event, 2)" 
-           class="flex flex-col gap-2 w-full min-h-32 p-2 border-2 border-dashed border-transparent hover:border-accent/50 transition-colors"
-      >
-        <ng-template cdkDropListPlaceholder>
-          <div class="bg-red-200 border-4 border-dashed border-red-500 rounded-xl p-4 text-center">
-            <div class="text-red-600 font-bold text-xl animate-bounce">
-              ⬇ SOLTAR AQUÍ ⬇
-            </div>
-          </div>
-        </ng-template>
-        @for (elemento of elementosGrupo2; track elemento.id) {
-          <div cdkDrag class="w-full" [cdkDragData]="elemento">
-            <div class="cdk-drag-placeholder opacity-30 grayscale blur-sm"></div>
-            <app-card-elemento [elemento]="elemento" class="max-w-xs w-full mx-auto">
-              <button (click)="verElemento(elemento.id)"
-                class="px-2 py-1 text-sm bg-accent text-base-100 rounded hover:bg-accent/90 hover:scale-105 transition-transform duration-200">
-                Ver Más
-              </button>
-            </app-card-elemento>
-          </div>
-        }
-      </div>
-    </div>
-  </div>
+  }
 </div>
-<!-- Modal Detalle Elemento -->
-@if (modalVisible) 
-{
-<div class="fixed inset-0 z-50 flex items-center justify-center bg-black/30 animate-fade-in" (click)="cerrarModal()">
-  <div class="max-w-sm w-full bg-base-100 shadow-lg rounded-xl overflow-hidden animate-fade-in relative" (click)="$event.stopPropagation()">
-    <!-- Cerrar -->
-    <button (click)="cerrarModal()" class="absolute top-2 right-2 text-xl bg-accent text-base-100 rounded-full px-2 py-1 hover:bg-accent/90">×</button>
-    <app-elemento [id]="elementoSeleccionado?.id"></app-elemento>
-  </div>
-</div>
-}
+
+

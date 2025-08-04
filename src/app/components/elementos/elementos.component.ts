@@ -1,9 +1,7 @@
-import { Component, inject } from '@angular/core';
-import { ElementoComponent } from '../elemento/elemento.component';
+import { Component, OnInit, inject, signal } from '@angular/core';
 import { CardElementoComponent } from '../card-elemento/card-elemento.component';
 import { CdkDragDrop, DragDropModule, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
 import { CommonModule } from '@angular/common';
-import { RouterLink, Router } from '@angular/router';
 import { ElementosService } from '../../service/elementos.service';
 import { Elemento } from '../../interface/elemento';
 
@@ -11,35 +9,109 @@ import { Elemento } from '../../interface/elemento';
   selector: 'app-elementos',
   templateUrl: './elementos.component.html',
   standalone: true,
-  imports: [CommonModule, ElementoComponent, CardElementoComponent, DragDropModule]
+  imports: [CommonModule, CardElementoComponent, DragDropModule]
 })
-export class ElementosComponent {
-  moverElemento(event: CdkDragDrop<Elemento[]>, grupoDestino: number) {
-    if (event.previousContainer === event.container) {
-      // Si se mueve dentro del mismo grupo
-      moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
-    } else {
-      // Si se mueve entre grupos
-      transferArrayItem(
-        event.previousContainer.data,
-        event.container.data,
-        event.previousIndex,
-        event.currentIndex
-      );
-      
-      // Actualizar el grupo del elemento
-      const elemento = event.container.data[event.currentIndex];
-      elemento.grupo = grupoDestino;
-    }
-  }
+export class ElementosComponent implements OnInit {
   private elementosService = inject(ElementosService);
 
-  elementos: Elemento[] = this.elementosService.getElementos();
-  elementosGrupo1: Elemento[] = this.elementos.filter(a => a.grupo === 1);
-  elementosGrupo2: Elemento[] = this.elementos.filter(a => a.grupo === 2);
+  elementos = signal<Elemento[]>([]);
+  elementosGrupo1 = signal<Elemento[]>([]);
+  elementosGrupo2 = signal<Elemento[]>([]);
+  elementosGrupo3 = signal<Elemento[]>([]);
+  isLoading = signal<boolean>(true);
 
   modalVisible = false;
   elementoSeleccionado: Elemento | null = null;
+
+  ngOnInit() {
+    // Cargamos los elementos al inicializar el componente
+    this.cargarElementos();
+  }
+
+  cargarElementos() {
+    this.isLoading.set(true);
+    const datos = this.elementosService.getElementos();
+    
+    if (datos.length > 0) {
+      this.actualizarElementos(datos);
+      this.isLoading.set(false);
+    } else {
+      // Si no hay datos disponibles aún, intentamos nuevamente después de un breve retardo
+      setTimeout(() => {
+        const nuevosDatos = this.elementosService.getElementos();
+        if (nuevosDatos.length > 0) {
+          this.actualizarElementos(nuevosDatos);
+        }
+        this.isLoading.set(false);
+      }, 1000);
+    }
+  }
+
+  actualizarElementos(datos: Elemento[]) {
+    this.elementos.set(datos);
+    this.elementosGrupo1.set(datos.filter(a => a.grupo === 1));
+    this.elementosGrupo2.set(datos.filter(a => a.grupo === 2));
+    this.elementosGrupo3.set(datos.filter(a => a.grupo === 3));
+  }
+
+  moverElemento(event: CdkDragDrop<Elemento[]>, grupoDestino: number) {
+    if (event.previousContainer === event.container) {
+      // Si se mueve dentro del mismo grupo
+      const arrayActual = [...this.obtenerArrayPorGrupo(grupoDestino)];
+      moveItemInArray(arrayActual, event.previousIndex, event.currentIndex);
+      
+      // Actualizar la señal del grupo
+      this.actualizarGrupo(grupoDestino, arrayActual);
+    } else {
+      // Si se mueve entre grupos
+      const grupoOrigen = this.obtenerNumeroGrupo(event.previousContainer.id);
+      const arrayOrigen = [...this.obtenerArrayPorGrupo(grupoOrigen)];
+      const arrayDestino = [...this.obtenerArrayPorGrupo(grupoDestino)];
+      
+      // Obtener el elemento antes de eliminarlo
+      const elemento = arrayOrigen[event.previousIndex];
+      
+      // Eliminar del origen y añadir al destino
+      arrayOrigen.splice(event.previousIndex, 1);
+      arrayDestino.splice(event.currentIndex, 0, elemento);
+      
+      // Actualizar el grupo del elemento
+      elemento.grupo = grupoDestino;
+      
+      // Actualizar las señales
+      this.actualizarGrupo(grupoOrigen, arrayOrigen);
+      this.actualizarGrupo(grupoDestino, arrayDestino);
+    }
+  }
+  
+  private obtenerArrayPorGrupo(grupo: number): Elemento[] {
+    switch (grupo) {
+      case 1: return this.elementosGrupo1();
+      case 2: return this.elementosGrupo2();
+      case 3: return this.elementosGrupo3();
+      default: return [];
+    }
+  }
+  
+  private obtenerNumeroGrupo(containerId: string): number {
+    if (containerId.includes('listaGrupo1')) return 1;
+    if (containerId.includes('listaGrupo2')) return 2;
+    return 3; // Grupo 3 por defecto
+  }
+  
+  private actualizarGrupo(numeroGrupo: number, array: Elemento[]): void {
+    switch (numeroGrupo) {
+      case 1:
+        this.elementosGrupo1.set(array);
+        break;
+      case 2:
+        this.elementosGrupo2.set(array);
+        break;
+      case 3:
+        this.elementosGrupo3.set(array);
+        break;
+    }
+  }
 
   verElemento(id: number) {
     this.elementoSeleccionado = this.elementosService.getElementoXId(id);

@@ -1,22 +1,29 @@
-<div class="bg-base-100 p-4 rounded shadow border-2 border-primary md:grid md:grid-cols-4 md:gap-4 md:items-center hover:bg-base-100/50 hover:scale-[1.01] hover:shadow-lg transition-all duration-300 animate-fade-in">
-  <!-- Avatar -->
-  <div class="flex justify-center md:justify-start">
-    <img [src]="elemento.avatar" alt="img" class="w-24 shadow rounded animate-fade-in" />
-  </div>
-  <!-- Apellido -->
-  <div class="mt-2 md:mt-0 text-center md:text-left animate-slide-in-left">
-    <span class="font-medium text-neutral">
-      {{ elemento.apellido }}
-    </span>
-  </div>
-  <!-- Nombre -->
-  <div class="mt-2 md:mt-0 text-center md:text-left animate-slide-in-right">
-    <span class="text-neutral">
-      {{ elemento.nombre }}
-    </span>
-  </div>
-  <!-- Botón -->
-  <div class="mt-4 md:mt-0 flex justify-center md:justify-end animate-fade-in">
-    <ng-content></ng-content>
+<div class="bg-gradient-to-br from-base-100 to-base-200 p-5 rounded-xl shadow-md border border-primary/30 hover:shadow-xl hover:scale-[1.03] transition-all duration-300 animate-fade-in group">
+  <div class="flex flex-col md:flex-row items-center gap-4">
+    <!-- Avatar con efecto de brillo -->
+    <div class="relative">
+      <div class="absolute -inset-0.5 bg-gradient-to-r from-primary to-accent opacity-0 group-hover:opacity-100 rounded-full blur-sm transition-opacity duration-300"></div>
+      <img [src]="elemento.avatar" alt="Personaje" class="w-20 h-20 object-cover rounded-full border-2 border-primary/50 shadow-md relative z-10" />
+      
+      <!-- Indicador de estado -->
+      <div class="absolute bottom-0 right-0 z-20 w-5 h-5 rounded-full shadow-md border-2 border-white"
+           [ngClass]="{'bg-green-500': elemento.amigo, 'bg-red-500': !elemento.amigo}">
+      </div>
+    </div>
+
+    <!-- Información -->
+    <div class="flex-1 text-center md:text-left">
+      <h3 class="text-lg font-bold text-primary mb-1 group-hover:text-accent transition-colors duration-300">
+        {{ elemento.nombre }}
+      </h3>
+      <p class="text-neutral-content/70">{{ elemento.apellido }}</p>
+      
+      <!-- Fecha -->
+      <div class="text-xs text-neutral-content/50 mt-2 font-mono">
+        <span class="inline-block bg-primary/10 px-2 py-1 rounded-md">
+          {{ elemento.fechaFabricacion }}
+        </span>
+      </div>
+    </div>
   </div>
 </div>

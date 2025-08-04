@@ -11,6 +11,7 @@ export class NavbarComponent {
 
   items = signal([
     { label: 'Elementos', link: '/elementos', icon: '🤖' },
+    { label: 'Personajes', link: '/characters', icon: '👽' },
     { label: 'About', link: '/about', icon: '👤' }
   ]);
 }
