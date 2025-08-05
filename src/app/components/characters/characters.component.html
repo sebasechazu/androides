@@ -1,38 +1,39 @@
-<div class="container mx-auto px-4 py-8">
+<div class="container mx-auto px-4 py-4">
   <!-- Filtros -->
-  <div class="bg-white shadow rounded-lg p-4 mb-4">
+  <div class="bg-white shadow rounded-lg p-4 mb-4 max-w-7xl mx-auto">
     <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
       <div>
         <label for="status" class="block text-sm font-medium text-gray-700 mb-1">Estado</label>
-        <select id="status" [value]="statusFilter()" (change)="onStatusChange($event)" class="w-full p-2 border rounded">
-          <option value="">Todos</option>
-          @for (status of uniqueStatuses(); track status) {
-            <option [value]="status">{{ status }}</option>
-          }
-        </select>
+        <app-dropdown
+          [options]="statusOptions()"
+          [value]="statusFilter() || 'Todos'"
+          placeholder="Estado"
+          (valueChange)="onStatusChange($event)"
+          class="w-full"
+        ></app-dropdown>
       </div>
       <div>
         <label for="species" class="block text-sm font-medium text-gray-700 mb-1">Especie</label>
-        <select id="species" [value]="speciesFilter()" (change)="onSpeciesChange($event)" class="w-full p-2 border rounded">
-          <option value="">Todas</option>
-          @for (species of uniqueSpecies(); track species) {
-            <option [value]="species">{{ species }}</option>
-          }
-        </select>
+        <app-dropdown
+          [options]="speciesOptions()"
+          [value]="speciesFilter() || 'Todas'"
+          placeholder="Especie"
+          (valueChange)="onSpeciesChange($event)"
+          class="w-full"
+        ></app-dropdown>
       </div>
       <div>
         <label for="gender" class="block text-sm font-medium text-gray-700 mb-1">Género</label>
-        <select id="gender" [value]="genderFilter()" (change)="onGenderChange($event)" class="w-full p-2 border rounded">
-          <option value="">Todos</option>
-          @for (gender of uniqueGenders(); track gender) {
-            <option [value]="gender">{{ gender }}</option>
-          }
-        </select>
+        <app-dropdown
+          [options]="genderOptions()"
+          [value]="genderFilter() || 'Todos'"
+          placeholder="Género"
+          (valueChange)="onGenderChange($event)"
+          class="w-full"
+        ></app-dropdown>
       </div>
     </div>
-    <div class="flex justify-end gap-2 mt-4">
-      <!-- Botones eliminados, los filtros se aplican automáticamente -->
-    </div>
+    
   </div>
 
   <!-- Estado de carga -->
@@ -47,8 +48,8 @@
     <div class="bg-red-100 text-red-700 p-4 rounded mb-6">{{ error() }}</div>
   }
 
-  <!-- Listado de personajes -->
-  @if (!isLoading() && !error() && characters().length > 0) {
+  <div>
+    @if (!isLoading() && !error() && characters().length > 0) {
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8 justify-items-center">
       @for (character of characters(); track character.id) {
         <app-card-character [character]="character"></app-card-character>
@@ -71,6 +72,10 @@
         class="px-4 py-2 bg-blue-600 text-white rounded-r hover:bg-blue-700">Siguiente</button>
     </div>
   }
+  </div>
+
+  <!-- Listado de personajes -->
+  
 
   <!-- Sin resultados -->
   @if (!isLoading() && !error() && characters().length === 0) {

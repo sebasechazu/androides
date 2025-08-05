@@ -1,6 +1,9 @@
 <!-- Overlay del modal (fondo difuminado) -->
 @if (show) {
-<div class="fixed inset-0 bg-black/20 backdrop-blur-sm z-40 flex items-center justify-center p-4">
+<div
+  @modalAnim
+  class="fixed inset-0 bg-black/20 backdrop-blur-sm z-40 flex items-center justify-center p-4"
+>
   <!-- Contenedor del modal -->
   <div class="bg-white rounded-lg shadow-xl max-w-xl w-full max-h-[90vh] overflow-auto">
     <!-- Cabecera del modal -->

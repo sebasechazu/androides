@@ -26,7 +26,6 @@ export class CharacterService {
   getCharacters(page: number = 1): Observable<ApiResponse<Character>> {
     return this.http.get<ApiResponse<Character>>(`${this.apiUrl}/character/?page=${page}`)
       .pipe(
-        tap(response => console.log('Characters fetched', response)),
         catchError(this.handleError<ApiResponse<Character>>('getCharacters', { info: { count: 0, pages: 0, next: null, prev: null }, results: [] }))
       );
   }
@@ -35,7 +34,6 @@ export class CharacterService {
   getCharacter(id: number): Observable<Character> {
     return this.http.get<Character>(`${this.apiUrl}/character/${id}`)
       .pipe(
-        tap(character => console.log(`Fetched character id=${id}`, character)),
         catchError(this.handleError<Character>(`getCharacter id=${id}`))
       );
   }
@@ -48,7 +46,6 @@ export class CharacterService {
     return this.http.get<ApiResponse<Character>>(`${this.apiUrl}/character/?name=${name}`)
       .pipe(
         map(response => response.results),
-        tap(characters => console.log(`Found characters matching "${name}"`, characters)),
         catchError(this.handleError<Character[]>('searchCharacters', []))
       );
   }
@@ -67,7 +64,6 @@ export class CharacterService {
     return this.http.get<ApiResponse<Character>>(`${this.apiUrl}/character/${queryParams}`)
       .pipe(
         map(response => response.results),
-        tap(characters => console.log('Filtered characters', characters)),
         catchError(this.handleError<Character[]>('filterCharacters', []))
       );
   }

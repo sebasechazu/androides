@@ -1,0 +1,23 @@
+<div class="relative w-full">
+  <button type="button"
+    class="w-full text-left p-2 border rounded bg-white shadow focus:outline-none flex justify-between items-center"
+    (click)="toggle()"
+    [attr.aria-expanded]="open"
+  >
+    <span>{{ value || placeholder }}</span>
+    <svg class="w-4 h-4 ml-2 transition-transform duration-200" [class.rotate-180]="open" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+    </svg>
+  </button>
+  @if (open) {
+    <ul @dropdownAnim class="absolute left-0 right-0 mt-1 bg-white border rounded shadow z-10 max-h-60 overflow-auto">
+      @for (option of options; track option) {
+        <li
+          (click)="select(option)"
+          class="p-2 hover:bg-blue-100 cursor-pointer"
+          [class.bg-blue-50]="option === value"
+        >{{ option }}</li>
+      }
+    </ul>
+  }
+</div>
