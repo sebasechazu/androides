@@ -41,10 +41,11 @@ export class NavbarComponent {
   isOpen = signal(false);
 
   items = signal([
-    { label: 'Elementos', link: '/elementos' },
+
     { label: 'Personajes', link: '/characters' },
-    { label: 'Juego', link: '/memory-game' },
-    { label: 'About', link: '/about' },
+        { label: 'Juego de Estado', link: '/status-game' },
+    { label: 'Juego de Memoria', link: '/memory-game' },
+    { label: 'Acerca de', link: '/about' },
   ]);
 
   constructor(private navigationService: NavigationService) {}

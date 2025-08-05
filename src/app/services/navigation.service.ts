@@ -12,8 +12,8 @@ export class NavigationService {
   pageTitle = computed(() => {
     const route = this.currentRoute();
     switch (route) {
-      case '/elementos':
-        return 'Elementos';
+      case '/status-game':
+        return 'Juego de Estado';
       case '/characters':
         return 'Personajes';
       case '/about':

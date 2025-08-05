@@ -3,11 +3,11 @@ import { Elemento } from '../../../interfaces/elemento';
 import { CommonModule } from '@angular/common';
 
 @Component({
-  selector: 'app-card-elemento',
-  templateUrl: './card-elemento.component.html',
+  selector: 'app-card-status',
+  templateUrl: './card-status.component.html',
   standalone: true,
   imports: [CommonModule]
 })
-export class CardElementoComponent {
+export class CardStatusComponent {
   @Input() elemento!: Elemento;
 }
