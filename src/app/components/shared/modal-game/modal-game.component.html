@@ -30,6 +30,9 @@
     
     <!-- Contenido del modal -->
     <div class="p-6">
+      @if (content) {
+        <p class="text-center text-lg font-medium mb-4">{{ content }}</p>
+      }
       <ng-content></ng-content>
     </div>
   </div>

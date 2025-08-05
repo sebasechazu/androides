@@ -20,6 +20,8 @@ export class NavigationService {
         return 'Acerca de';
       case '/memory-game':
         return 'Juego de Memoria';
+      case '/chess-game':
+        return 'Juego de Ajedrez';
       case '/home':
       default:
         return '';

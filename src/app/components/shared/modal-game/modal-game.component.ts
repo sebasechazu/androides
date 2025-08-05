@@ -47,6 +47,7 @@ import { trigger, state, style, transition, animate } from '@angular/animations'
 export class ModalGameComponent {
   @Input() isOpen = signal(false);
   @Input() title: string = '';
+  @Input() content: string = '';
   @Input() showCloseButton: boolean = true;
   @Output() closeModal = new EventEmitter<void>();
 
