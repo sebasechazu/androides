@@ -1,4 +1,4 @@
-import { Component, OnInit, inject, signal } from '@angular/core';
+import { Component, OnInit, inject, signal, computed } from '@angular/core';
 import { CardElementoComponent } from './card-elemento/card-elemento.component';
 import { CdkDragDrop, DragDropModule, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
 import { CommonModule } from '@angular/common';
@@ -14,68 +14,76 @@ import { Elemento } from '../../interface/elemento';
 export class ElementosComponent implements OnInit {
   private elementosService = inject(ElementosService);
 
-  elementos = signal<Elemento[]>([]);
-  elementosGrupo1 = signal<Elemento[]>([]);
-  elementosGrupo2 = signal<Elemento[]>([]);
-  elementosGrupo3 = signal<Elemento[]>([]);
-  isLoading = signal<boolean>(true);
+  // Usar directamente los signals del servicio
+  elementos = this.elementosService.elementos;
+  isLoading = this.elementosService.isLoading;
+  error = this.elementosService.error;
+  
+  // Computed signals para los grupos
+  elementosGrupo1 = computed(() => 
+    this.elementos().filter(elemento => elemento.grupo === 1)
+  );
+  elementosGrupo2 = computed(() => 
+    this.elementos().filter(elemento => elemento.grupo === 2)
+  );
+  elementosGrupo3 = computed(() => 
+    this.elementos().filter(elemento => elemento.grupo === 3)
+  );
 
-  modalVisible = false;
-  elementoSeleccionado: Elemento | null = null;
-
-  ngOnInit() {
-    this.cargarElementos();
-  }
-
-  cargarElementos() {
-    this.isLoading.set(true);
-    const datos = this.elementosService.getElementos();
-    
-    if (datos.length > 0) {
-      this.actualizarElementos(datos);
-      this.isLoading.set(false);
-    } else {
-      
-      setTimeout(() => {
-        const nuevosDatos = this.elementosService.getElementos();
-        if (nuevosDatos.length > 0) {
-          this.actualizarElementos(nuevosDatos);
-        }
-        this.isLoading.set(false);
-      }, 1000);
+  // Estadísticas de grupos
+  grupoStats = computed(() => ({
+    grupo1: {
+      total: this.elementosGrupo1().length,
+      amigos: this.elementosGrupo1().filter(e => e.amigo).length
+    },
+    grupo2: {
+      total: this.elementosGrupo2().length,
+      amigos: this.elementosGrupo2().filter(e => e.amigo).length
+    },
+    grupo3: {
+      total: this.elementosGrupo3().length,
+      amigos: this.elementosGrupo3().filter(e => e.amigo).length
     }
+  }));
+
+  // Signals para el modal
+  modalVisible = signal<boolean>(false);
+  elementoSeleccionado = signal<Elemento | null>(null);
+
+  ngOnInit(): void {
+    this.elementosService.init();
   }
 
-  actualizarElementos(datos: Elemento[]) {
-    this.elementos.set(datos);
-    this.elementosGrupo1.set(datos.filter(a => a.grupo === 1));
-    this.elementosGrupo2.set(datos.filter(a => a.grupo === 2));
-    this.elementosGrupo3.set(datos.filter(a => a.grupo === 3));
-  }
-
-  moverElemento(event: CdkDragDrop<Elemento[]>, grupoDestino: number) {
+  // Métodos para el drag & drop
+  moverElemento(event: CdkDragDrop<Elemento[]>, grupoDestino: number): void {
     if (event.previousContainer === event.container) {
-
-      const arrayActual = [...this.obtenerArrayPorGrupo(grupoDestino)];
-      moveItemInArray(arrayActual, event.previousIndex, event.currentIndex);
-      
-      this.actualizarGrupo(grupoDestino, arrayActual);
+      // Mover dentro del mismo grupo
+      const elementosActuales = [...this.obtenerArrayPorGrupo(grupoDestino)];
+      moveItemInArray(elementosActuales, event.previousIndex, event.currentIndex);
+      // No necesitamos actualizar nada porque es solo reordenamiento visual
     } else {
-
+      // Mover entre grupos diferentes
       const grupoOrigen = this.obtenerNumeroGrupo(event.previousContainer.id);
-      const arrayOrigen = [...this.obtenerArrayPorGrupo(grupoOrigen)];
-      const arrayDestino = [...this.obtenerArrayPorGrupo(grupoDestino)];
+      const elementosOrigen = [...this.obtenerArrayPorGrupo(grupoOrigen)];
+      const elementosDestino = [...this.obtenerArrayPorGrupo(grupoDestino)];
       
-      const elemento = arrayOrigen[event.previousIndex];
+      const elemento = elementosOrigen[event.previousIndex];
       
-      arrayOrigen.splice(event.previousIndex, 1);
-      arrayDestino.splice(event.currentIndex, 0, elemento);
+      // Crear nuevo elemento con el grupo actualizado
+      const elementoActualizado = { ...elemento, grupo: grupoDestino };
       
-      elemento.grupo = grupoDestino;
+      // Actualizar la lista principal de elementos
+      const todosLosElementos = this.elementos().map(e => 
+        e.id === elemento.id ? elementoActualizado : e
+      );
       
-      this.actualizarGrupo(grupoOrigen, arrayOrigen);
-      this.actualizarGrupo(grupoDestino, arrayDestino);
+      // Actualizar el signal del servicio (esto actualizará automáticamente los computed signals)
+      this.actualizarElementosEnServicio(todosLosElementos);
     }
+  }
+
+  private actualizarElementosEnServicio(elementos: Elemento[]): void {
+    this.elementosService.updateElementos(elementos);
   }
   
   private obtenerArrayPorGrupo(grupo: number): Elemento[] {
@@ -92,28 +100,29 @@ export class ElementosComponent implements OnInit {
     if (containerId.includes('listaGrupo2')) return 2;
     return 3;
   }
-  
-  private actualizarGrupo(numeroGrupo: number, array: Elemento[]): void {
-    switch (numeroGrupo) {
-      case 1:
-        this.elementosGrupo1.set(array);
-        break;
-      case 2:
-        this.elementosGrupo2.set(array);
-        break;
-      case 3:
-        this.elementosGrupo3.set(array);
-        break;
-    }
+
+  // Métodos para el modal
+  verElemento(id: number): void {
+    const elemento = this.elementosService.getElementoXId(id);
+    this.elementoSeleccionado.set(elemento || null);
+    this.modalVisible.set(true);
   }
 
-  verElemento(id: number) {
-    this.elementoSeleccionado = this.elementosService.getElementoXId(id);
-    this.modalVisible = true;
+  cerrarModal(): void {
+    this.modalVisible.set(false);
+    this.elementoSeleccionado.set(null);
   }
 
-  cerrarModal() {
-    this.modalVisible = false;
-    this.elementoSeleccionado = null;
+  // Métodos adicionales
+  recargarElementos(): void {
+    this.elementosService.recargarElementos();
+  }
+
+  filtrarPorAmigos(soloAmigos: boolean): Elemento[] {
+    return this.elementosService.filtrarPorAmigos(soloAmigos);
+  }
+
+  buscarElemento(termino: string): Elemento[] {
+    return this.elementosService.buscarElemento(termino);
   }
 }

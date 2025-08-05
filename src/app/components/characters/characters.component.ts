@@ -1,118 +1,107 @@
-import { Component, OnInit, inject, signal } from '@angular/core';
+import { Component, OnInit, inject, computed, signal } from '@angular/core';
 import { CharacterService } from '../../services/charater.service';
-import { Character } from '../../interface/character';
 import { CardCharacterComponent } from './card-character/card-character.component';
 import { DropdownComponent } from '../shared/dropdown/dropdown.component';
 
 @Component({
   selector: 'app-characters',
   standalone: true,
-  imports: [CardCharacterComponent,DropdownComponent],
+  imports: [CardCharacterComponent, DropdownComponent],
   templateUrl: './characters.component.html'
 })
 export class CharactersComponent implements OnInit {
   private characterService = inject(CharacterService);
 
-  characters = signal<Character[]>([]);
-  isLoading = signal<boolean>(true);
-  error = signal<string | null>(null);
-  currentPage = signal<number>(1);
-  totalPages = signal<number>(0);
+  // Usar directamente los signals del servicio
+  characters = this.characterService.characters;
+  isLoading = this.characterService.isLoading;
+  error = this.characterService.error;
+  currentPage = this.characterService.currentPage;
+  totalPages = this.characterService.totalPages;
+  totalCount = this.characterService.totalCount;
+  hasNextPage = this.characterService.hasNextPage;
+  hasPrevPage = this.characterService.hasPrevPage;
 
-  // Filtros
+  // Filtros locales (solo para la UI)
   statusFilter = signal<string>('');
   speciesFilter = signal<string>('');
   genderFilter = signal<string>('');
 
-  // Opciones para los dropdowns
-  statusOptions = signal<string[]>(['Todos']);
-  speciesOptions = signal<string[]>(['Todas']);
-  genderOptions = signal<string[]>(['Todos']);
+  // Opciones para los dropdowns usando computed signals
+  statusOptions = computed(() => 
+    ['Todos', ...this.characterService.uniqueStatuses()]
+  );
+  
+  speciesOptions = computed(() => 
+    ['Todas', ...this.characterService.uniqueSpecies()]
+  );
+  
+  genderOptions = computed(() => 
+    ['Todos', ...this.characterService.uniqueGenders()]
+  );
+
+  // Computed para mostrar información de paginación
+  pageInfo = computed(() => {
+    const current = this.currentPage();
+    const total = this.totalPages();
+    const count = this.totalCount();
+    return {
+      current,
+      total,
+      count,
+      start: ((current - 1) * 20) + 1,
+      end: Math.min(current * 20, count)
+    };
+  });
 
   ngOnInit(): void {
-    this.loadCharacters();
+    this.characterService.init();
   }
 
+  // Métodos para manejar cambios en los filtros
   onStatusChange(value: string): void {
-    this.statusFilter.set(value === 'Todos' ? '' : value);
-    this.applyFilters();
+    const statusValue = value === 'Todos' ? '' : value;
+    this.statusFilter.set(statusValue);
+    this.characterService.updateFilter('status', statusValue);
   }
 
   onSpeciesChange(value: string): void {
-    this.speciesFilter.set(value === 'Todas' ? '' : value);
-    this.applyFilters();
+    const speciesValue = value === 'Todas' ? '' : value;
+    this.speciesFilter.set(speciesValue);
+    this.characterService.updateFilter('species', speciesValue);
   }
 
   onGenderChange(value: string): void {
-    this.genderFilter.set(value === 'Todos' ? '' : value);
-    this.applyFilters();
+    const genderValue = value === 'Todos' ? '' : value;
+    this.genderFilter.set(genderValue);
+    this.characterService.updateFilter('gender', genderValue);
   }
 
-  loadCharacters(page: number = 1): void {
-    this.isLoading.set(true);
-    this.error.set(null);
-    this.currentPage.set(page);
-    this.characterService.getCharacters(page).subscribe({
-      next: (response) => {
-        this.characters.set(response.results);
-        this.totalPages.set(response.info.pages);
-        this.isLoading.set(false);
-        this.statusOptions.set(['Todos', ...this.characterService.getUniqueStatuses(response.results)]);
-        this.speciesOptions.set(['Todas', ...this.characterService.getUniqueSpecies(response.results)]);
-        this.genderOptions.set(['Todos', ...this.characterService.getUniqueGenders(response.results)]);
-      },
-      error: () => {
-        this.error.set('Error al cargar los personajes. Intenta de nuevo más tarde.');
-        this.isLoading.set(false);
-      }
-    });
-  }
-
+  // Métodos de navegación
   goToPage(page: number): void {
     if (page >= 1 && page <= this.totalPages()) {
-      this.loadCharacters(page);
+      this.characterService.setPage(page);
     }
   }
 
   nextPage(): void {
-    if (this.currentPage() < this.totalPages()) {
-      this.goToPage(this.currentPage() + 1);
-    }
+    this.characterService.nextPage();
   }
 
   prevPage(): void {
-    if (this.currentPage() > 1) {
-      this.goToPage(this.currentPage() - 1);
-    }
+    this.characterService.prevPage();
   }
 
-  applyFilters(): void {
-    this.isLoading.set(true);
-    this.error.set(null);
-    const filters: {[key: string]: string} = {};
-    if (this.statusFilter()) filters["status"] = this.statusFilter();
-    if (this.speciesFilter()) filters["species"] = this.speciesFilter();
-    if (this.genderFilter()) filters["gender"] = this.genderFilter();
-    this.characterService.filterCharacters(filters).subscribe({
-      next: (characters) => {
-        this.characters.set(characters);
-        this.isLoading.set(false);
-        // Actualizar opciones únicas pero NO modificar el valor actual de los filtros
-        this.statusOptions.set(['Todos', ...this.characterService.getUniqueStatuses(characters)]);
-        this.speciesOptions.set(['Todas', ...this.characterService.getUniqueSpecies(characters)]);
-        this.genderOptions.set(['Todos', ...this.characterService.getUniqueGenders(characters)]);
-      },
-      error: () => {
-        this.error.set('Error al aplicar los filtros. Intenta de nuevo más tarde.');
-        this.isLoading.set(false);
-      }
-    });
-  }
-
+  // Resetear filtros
   resetFilters(): void {
     this.statusFilter.set('');
     this.speciesFilter.set('');
     this.genderFilter.set('');
-    this.loadCharacters(1);
+    this.characterService.clearFilters();
+  }
+
+  // Buscar por nombre
+  searchByName(name: string): void {
+    this.characterService.searchCharacters(name);
   }
 }

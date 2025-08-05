@@ -1,6 +1,7 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject, signal, computed } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable, catchError, map, of, tap } from 'rxjs';
+import { toSignal } from '@angular/core/rxjs-interop';
+import { Observable, catchError, of } from 'rxjs';
 import { Character } from '../interface/character';
 
 // Interfaz para la respuesta paginada de la API
@@ -14,23 +15,137 @@ interface ApiResponse<T> {
   results: T[];
 }
 
+// Interfaz para filtros de búsqueda
+interface CharacterFilters {
+  name?: string;
+  status?: string;
+  species?: string;
+  gender?: string;
+  page?: number;
+}
+
 @Injectable({
   providedIn: 'root'
 })
 export class CharacterService {
-  private apiUrl = 'https://rickandmortyapi.com/api';
+  private readonly http = inject(HttpClient);
+  private readonly apiUrl = 'https://rickandmortyapi.com/api';
   
-  constructor(private http: HttpClient) { }
+  // Signals para el estado del servicio
+  private readonly _currentPage = signal<number>(1);
+  private readonly _filters = signal<CharacterFilters>({});
+  private readonly _isLoading = signal<boolean>(false);
+  private readonly _error = signal<string | null>(null);
 
-  // Obtener todos los personajes con paginación
-  getCharacters(page: number = 1): Observable<ApiResponse<Character>> {
-    return this.http.get<ApiResponse<Character>>(`${this.apiUrl}/character/?page=${page}`)
-      .pipe(
-        catchError(this.handleError<ApiResponse<Character>>('getCharacters', { info: { count: 0, pages: 0, next: null, prev: null }, results: [] }))
-      );
+  // Computed signals
+  readonly currentPage = this._currentPage.asReadonly();
+  readonly filters = this._filters.asReadonly();
+  readonly isLoading = this._isLoading.asReadonly();
+  readonly error = this._error.asReadonly();
+
+  // Signal que contiene los datos de caracteres
+  private readonly charactersData = signal<ApiResponse<Character>>({
+    info: { count: 0, pages: 0, next: null, prev: null },
+    results: []
+  });
+
+  // Computed signals derivados
+  readonly characters = computed(() => this.charactersData().results);
+  readonly totalPages = computed(() => this.charactersData().info.pages);
+  readonly totalCount = computed(() => this.charactersData().info.count);
+  readonly hasNextPage = computed(() => !!this.charactersData().info.next);
+  readonly hasPrevPage = computed(() => !!this.charactersData().info.prev);
+
+  // Computed signals para valores únicos
+  readonly uniqueStatuses = computed(() => 
+    Array.from(new Set(this.characters().map((c: Character) => c.status)))
+  );
+  
+  readonly uniqueSpecies = computed(() => 
+    Array.from(new Set(this.characters().map((c: Character) => c.species).filter((s: string) => s)))
+  );
+  
+  readonly uniqueGenders = computed(() => 
+    Array.from(new Set(this.characters().map((c: Character) => c.gender)))
+  );
+
+  // Métodos públicos para actualizar el estado
+  setPage(page: number): void {
+    this._currentPage.set(page);
+    this.loadCharacters();
   }
 
-  // Obtener un personaje por ID
+  setFilters(filters: CharacterFilters): void {
+    this._filters.set(filters);
+    this._currentPage.set(1); // Reset a la primera página cuando cambian los filtros
+    this.loadCharacters();
+  }
+
+  updateFilter(key: keyof CharacterFilters, value: string | number): void {
+    this._filters.update(current => ({ ...current, [key]: value }));
+    this._currentPage.set(1);
+    this.loadCharacters();
+  }
+
+  clearFilters(): void {
+    this._filters.set({});
+    this._currentPage.set(1);
+    this.loadCharacters();
+  }
+
+  nextPage(): void {
+    if (this.hasNextPage()) {
+      this.setPage(this._currentPage() + 1);
+    }
+  }
+
+  prevPage(): void {
+    if (this.hasPrevPage()) {
+      this.setPage(this._currentPage() - 1);
+    }
+  }
+
+  // Método para cargar personajes
+  private loadCharacters(): void {
+    this._isLoading.set(true);
+    this._error.set(null);
+
+    const page = this._currentPage();
+    const filters = this._filters();
+
+    this.getCharactersObservable(page, filters).subscribe({
+      next: (data) => {
+        this.charactersData.set(data);
+        this._isLoading.set(false);
+      },
+      error: (error) => {
+        this._error.set('Error al cargar personajes');
+        this._isLoading.set(false);
+        console.error('Error loading characters:', error);
+      }
+    });
+  }
+
+  // Observable interno para obtener personajes
+  private getCharactersObservable(page: number, filters: CharacterFilters): Observable<ApiResponse<Character>> {
+    let url = `${this.apiUrl}/character/?page=${page}`;
+    
+    // Agregar filtros a la URL
+    Object.entries(filters).forEach(([key, value]) => {
+      if (value && key !== 'page') {
+        url += `&${key}=${encodeURIComponent(value)}`;
+      }
+    });
+
+    return this.http.get<ApiResponse<Character>>(url).pipe(
+      catchError(this.handleError<ApiResponse<Character>>('getCharacters', {
+        info: { count: 0, pages: 0, next: null, prev: null },
+        results: []
+      }))
+    );
+  }
+
+  // Obtener un personaje por ID (mantiene Observable para casos específicos)
   getCharacter(id: number): Observable<Character> {
     return this.http.get<Character>(`${this.apiUrl}/character/${id}`)
       .pipe(
@@ -38,49 +153,23 @@ export class CharacterService {
       );
   }
 
-  // Buscar personajes por nombre
-  searchCharacters(name: string): Observable<Character[]> {
+  // Obtener personaje por ID como Signal
+  getCharacterAsSignal(id: number) {
+    return toSignal(this.getCharacter(id), { initialValue: null });
+  }
+
+  // Buscar personajes por nombre y actualizar el estado
+  searchCharacters(name: string): void {
     if (!name.trim()) {
-      return of([]);
+      this.clearFilters();
+      return;
     }
-    return this.http.get<ApiResponse<Character>>(`${this.apiUrl}/character/?name=${name}`)
-      .pipe(
-        map(response => response.results),
-        catchError(this.handleError<Character[]>('searchCharacters', []))
-      );
+    this.setFilters({ name: name.trim() });
   }
 
-  // Filtrar personajes por status, species, gender, etc.
-  filterCharacters(filters: { [key: string]: string }): Observable<Character[]> {
-    let queryParams = '';
-    
-    Object.keys(filters).forEach((key, index) => {
-      if (filters[key]) {
-        queryParams += index === 0 ? '?' : '&';
-        queryParams += `${key}=${filters[key]}`;
-      }
-    });
-    
-    return this.http.get<ApiResponse<Character>>(`${this.apiUrl}/character/${queryParams}`)
-      .pipe(
-        map(response => response.results),
-        catchError(this.handleError<Character[]>('filterCharacters', []))
-      );
-  }
-
-  // Obtener valores únicos de status
-  getUniqueStatuses(characters: Character[]): string[] {
-    return Array.from(new Set(characters.map(c => c.status)));
-  }
-
-  // Obtener valores únicos de species
-  getUniqueSpecies(characters: Character[]): string[] {
-    return Array.from(new Set(characters.map(c => c.species).filter(s => s)));
-  }
-
-  // Obtener valores únicos de gender
-  getUniqueGenders(characters: Character[]): string[] {
-    return Array.from(new Set(characters.map(c => c.gender)));
+  // Método de inicialización
+  init(): void {
+    this.loadCharacters();
   }
 
   // Manejador de errores genérico
