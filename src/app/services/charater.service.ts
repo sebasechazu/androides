@@ -2,7 +2,7 @@ import { Injectable, inject, signal, computed } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { Observable, catchError, of } from 'rxjs';
-import { Character } from '../interface/character';
+import { Character } from '../interfaces/character';
 
 // Interfaz para la respuesta paginada de la API
 interface ApiResponse<T> {

@@ -1,9 +1,14 @@
 <nav class="bg-primary text-base-100 px-4 py-3 relative">
     <div class="container mx-auto flex justify-between items-center">
-        <!-- Logo -->
-        <a [routerLink]="'/home'" class="flex items-center hover:opacity-80 transition-opacity duration-200">
-            <img src="assets/img/logo.png" alt="Elementos App" class="h-8 w-auto">
-        </a>
+        <!-- Logo y título -->
+        <div class="flex items-center gap-4">
+            <a [routerLink]="'/home'" class="flex items-center hover:opacity-80 transition-opacity duration-200">
+                <img src="assets/img/logo.png" alt="Elementos App" class="h-8 w-auto">
+            </a>
+            @if (pageTitle) {
+                <h1 class="text-xl md:text-2xl font-bold text-white">{{ pageTitle }}</h1>
+            }
+        </div>
 
         <!-- Botón hamburguesa -->
         <button (click)="isOpen.set(!isOpen())" class="md:hidden text-base-100 focus:outline-none relative z-20"

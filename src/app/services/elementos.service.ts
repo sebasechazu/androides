@@ -1,7 +1,7 @@
 import { Injectable, signal, computed, inject } from '@angular/core';
-import { Elemento } from '../interface/elemento';
+import { Elemento } from '../interfaces/elemento';
 import { CharacterService } from './charater.service';
-import { Character } from '../interface/character';
+import { Character } from '../interfaces/character';
 
 @Injectable({ providedIn: 'root' })
 export class ElementosService {

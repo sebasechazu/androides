@@ -1,7 +1,7 @@
 import { Component, Input } from '@angular/core';
 import { trigger, state, style, animate, transition } from '@angular/animations';
 import { CommonModule, NgClass } from '@angular/common';
-import { Character } from '../../../interface/character';
+import { Character } from '../../../interfaces/character';
 import { ModalCharacterComponent } from '../modal-character/modal-character.component';
 
 @Component({

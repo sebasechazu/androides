@@ -1,7 +1,7 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { trigger, transition, style, animate } from '@angular/animations';
 import { CommonModule } from '@angular/common';
-import { Character } from '../../../interface/character';
+import { Character } from '../../../interfaces/character';
 
 @Component({
   selector: 'app-modal-character',

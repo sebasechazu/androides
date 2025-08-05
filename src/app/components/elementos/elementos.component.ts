@@ -3,7 +3,7 @@ import { CardElementoComponent } from './card-elemento/card-elemento.component';
 import { CdkDragDrop, DragDropModule, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
 import { CommonModule } from '@angular/common';
 import { ElementosService } from '../../services/elementos.service';
-import { Elemento } from '../../interface/elemento';
+import { Elemento } from '../../interfaces/elemento';
 
 @Component({
   selector: 'app-elementos',

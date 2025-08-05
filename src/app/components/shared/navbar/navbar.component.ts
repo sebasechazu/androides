@@ -1,6 +1,7 @@
 import { Component, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { trigger, state, style, transition, animate } from '@angular/animations';
+import { NavigationService } from '../../../services/navigation.service';
 
 @Component({
   selector: 'app-navbar',
@@ -42,7 +43,14 @@ export class NavbarComponent {
   items = signal([
     { label: 'Elementos', link: '/elementos' },
     { label: 'Personajes', link: '/characters' },
-    { label: 'About', link: '/about' },
     { label: 'Juego', link: '/memory-game' },
+    { label: 'About', link: '/about' },
   ]);
+
+  constructor(private navigationService: NavigationService) {}
+
+  // Getter para acceder al título desde el servicio
+  get pageTitle() {
+    return this.navigationService.pageTitle();
+  }
 }
