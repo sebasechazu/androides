@@ -6,7 +6,8 @@
     "start": "ng serve",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
-    "test": "ng test"
+    "test": "ng test",
+    "deploy": "ng build --base-href=/androides/ && npx angular-cli-ghpages --dir=dist/androides/browser --repo=https://github.com/sebasechazu/androides.git --name=\"sebasechazu\""
   },
   "private": true,
   "dependencies": {
