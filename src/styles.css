@@ -3,7 +3,7 @@
 
 @theme {
     /* Colores */
-    --color-primary: #1E40AF;
+    --color-primary: #1F2937;
     --color-secondary: #F59E0B;
     --color-accent: #10B981;
     --color-neutral: #374151;
@@ -56,6 +56,26 @@
   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
   transform: rotate(2deg);
   z-index: 9999;
+  cursor: grabbing !important; /* Mano cerrada mientras arrastra */
+  /* Forzar dimensiones consistentes en mobile */
+  max-width: 230px !important;
+  width: 230px !important;
+}
+
+/* Forzar dimensiones para todos los elementos dentro del preview */
+.cdk-drag-preview * {
+  max-width: 230px !important;
+}
+
+.cdk-drag-preview .mobile-compact-card {
+  max-width: 230px !important;
+  width: 230px !important;
+  transform: scale(0.9) !important;
+}
+
+.cdk-drag-preview app-card-status {
+  max-width: 230px !important;
+  width: 230px !important;
 }
 
 .cdk-drag-placeholder {
@@ -65,7 +85,282 @@
 }
 
 .cdk-drop-list-dragging .cdk-drag:not(.cdk-drag-placeholder) {
-  transition: transform 50ms cubic-bezier(0, 0, 0.2, 1);
+  transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+}
+
+/* Cursor personalizado para elementos arrastrables */
+.cdk-drag {
+  cursor: grab; /* Mano abierta por defecto */
+  transition: transform 0.2s ease-out, box-shadow 0.2s ease-out;
+}
+
+.cdk-drag:hover {
+  cursor: grab; /* Mano abierta al hacer hover */
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.cdk-drag:active {
+  cursor: grabbing !important; /* Mano cerrada al hacer clic */
+}
+
+.cdk-drag.cdk-drag-dragging {
+  cursor: grabbing !important; /* Mano cerrada mientras arrastra */
+}
+
+/* Estilos adicionales para las cartas del status game */
+.status-card {
+  transition: all 0.2s ease-out;
+}
+
+.status-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+}
+
+.status-card.dragging {
+  transform: rotate(5deg) scale(1.05);
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.25);
+  z-index: 1000;
+}
+
+/* Efectos para las zonas de drop */
+.drop-zone-hover {
+  background-color: rgba(59, 130, 246, 0.05) !important;
+  border-color: rgba(59, 130, 246, 0.3) !important;
+  transform: scale(1.02);
+  transition: all 0.2s ease-out;
+}
+
+/* Mejoras para dispositivos táctiles - comportamiento nativo */
+@media (hover: none) and (pointer: coarse) {
+  .cdk-drag {
+    cursor: default; /* En móviles no mostrar cursor de mano */
+  }
+  
+  .cdk-drag:active {
+    transform: scale(1.05);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+  }
+  
+  .status-card:active {
+    transform: scale(1.05) translateY(-2px);
+  }
+}
+
+/* Indicador visual cuando se está arrastrando (para todos los dispositivos) */
+.cdk-drop-list.cdk-drop-list-dragging {
+  background-color: rgba(59, 130, 246, 0.02);
+  border-color: rgba(59, 130, 246, 0.2);
+}
+
+/* ========================================
+   OPTIMIZACIONES PARA MOBILE
+   ======================================== */
+
+@media (max-width: 768px) {
+  /* Estilos específicos para tarjetas en mobile */
+  .status-card {
+    margin: 0.5rem 0 !important;
+    width: auto !important;
+    max-width: 230px !important;
+    min-height: 80px;
+    cursor: grab;
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    transform: translateZ(0);
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+    transition: opacity 0.1s ease;
+    touch-action: auto !important;
+  }
+  
+  .status-card:active {
+    cursor: grabbing;
+    will-change: transform;
+  }
+  
+  /* Hacer las tarjetas más compactas */
+  .mobile-compact-card {
+    max-width: 230px !important;
+    width: 100% !important;
+    transform: scale(0.9);
+    margin: 0.25rem auto !important;
+  }
+  
+  /* Dimensiones para drag preview */
+  .cdk-drag-preview {
+    max-width: 230px !important;
+    width: 230px !important;
+    box-sizing: border-box;
+    border-radius: 12px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+    transform: rotate(-5deg) translateZ(0);
+    transition: transform 0.1s ease-out;
+    will-change: transform;
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+  }
+  
+  .cdk-drag-preview .status-card {
+    max-width: 230px !important;
+    width: 230px !important;
+  }
+  
+  .cdk-drag-preview .mobile-compact-card {
+    max-width: 230px !important;
+    width: 230px !important;
+    transform: scale(0.9) !important;
+  }
+  
+  .cdk-drag-placeholder {
+    max-width: 230px;
+    width: 230px;
+    transform: translateZ(0);
+    height: 60px !important;
+  }
+  
+  /* Layout optimizations */
+  .mobile-column {
+    padding: 0.75rem !important;
+    margin-bottom: 1rem;
+  }
+  
+  .mobile-drop-zone {
+    min-height: 120px !important;
+    padding: 0.75rem !important;
+    gap: 0.5rem !important;
+    scroll-snap-align: none;
+    contain: layout;
+    touch-action: auto !important;
+  }
+  
+  .mobile-column-title {
+    font-size: 1rem !important;
+    margin-bottom: 0.5rem !important;
+  }
+  
+  .mobile-grid {
+    gap: 0.75rem !important;
+    padding: 0.5rem !important;
+  }
+  
+  .mobile-grid-container {
+    overscroll-behavior: auto !important;
+    scroll-behavior: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+    contain: layout style;
+    transform: translateZ(0);
+    will-change: scroll-position;
+    touch-action: auto !important;
+  }
+  
+  .mobile-grid-container * {
+    touch-action: inherit !important;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+  
+  /* Drag elements optimization */
+  .cdk-drag {
+    cursor: default;
+    transform: translateZ(0);
+    will-change: transform;
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+    -webkit-perspective: 1000;
+    perspective: 1000;
+    touch-action: none;
+  }
+  
+  .cdk-drag:active {
+    cursor: grabbing;
+  }
+  
+  /* Drop zones optimization */
+  .cdk-drop-list {
+    scroll-behavior: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+    overscroll-behavior: auto !important;
+    touch-action: auto !important;
+  }
+  
+  /* Visual feedback for disabled drag */
+  [data-drag-disabled="true"] .status-card {
+    opacity: 0.8;
+    cursor: default !important;
+  }
+
+  [data-drag-disabled="true"] {
+    pointer-events: none !important;
+  }
+  
+  /* Hardware acceleration for containers */
+  .mobile-grid, .mobile-column, .mobile-drop-zone {
+    transform: translateZ(0);
+    will-change: scroll-position;
+    contain: layout style;
+    -webkit-overflow-scrolling: touch !important;
+    scroll-behavior: auto !important;
+    overscroll-behavior: auto !important;
+  }
+  
+  .cdk-drag-animating {
+    transition: none !important;
+  }
+  
+  /* Base mobile optimizations */
+  body, html {
+    -webkit-overflow-scrolling: touch !important;
+    overscroll-behavior: auto !important;
+    touch-action: manipulation !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Estilos ultra compactos para pantallas muy pequeñas */
+@media (max-width: 480px) {
+  .mobile-compact-card {
+    transform: scale(0.8);
+    max-width: 230px !important;
+  }
+  
+  .cdk-drag-preview {
+    max-width: 230px !important;
+    width: 230px !important;
+  }
+  
+  .cdk-drag-preview .mobile-compact-card {
+    max-width: 230px !important;
+    width: 230px !important;
+    transform: scale(0.8) !important;
+  }
+  
+  .cdk-drag-preview .status-card {
+    max-width: 230px !important;
+    width: 230px !important;
+  }
+  
+  .mobile-column {
+    padding: 0.5rem !important;
+  }
+  
+  .mobile-drop-zone {
+    min-height: 100px !important;
+    padding: 0.5rem !important;
+    gap: 0.25rem !important;
+  }
+  
+  .mobile-grid {
+    gap: 0.5rem !important;
+    padding: 0.25rem !important;
+  }
+  
+  .status-card {
+    max-width: 230px !important;
+    margin: 0.25rem 0 !important;
+  }
 }
 
 /* Elementos 3D y animaciones de cartas */
@@ -180,16 +475,6 @@
   }
 }
 
-/* Animación para errores */
-.errors-animate {
-  animation: errorsPop 0.4s;
-}
-@keyframes errorsPop {
-  0% { transform: scale(1); }
-  50% { transform: scale(1.3); color: #dc2626; }
-  100% { transform: scale(1); }
-}
-
 /* ========================================
    EFECTOS ESPECIALES Y PARTÍCULAS
    ======================================== */
@@ -259,19 +544,60 @@
   animation: fade-in-up 0.6s ease-out forwards;
 }
 
+/* Animaciones específicas para status-game */
+.status-column-0 {
+  animation-delay: 0ms;
+}
+
+.status-column-1 {
+  animation-delay: 200ms;
+}
+
+.status-column-2 {
+  animation-delay: 400ms;
+}
+
+.status-card-delay-0 { animation-delay: 600ms; }
+.status-card-delay-1 { animation-delay: 700ms; }
+.status-card-delay-2 { animation-delay: 800ms; }
+.status-card-delay-3 { animation-delay: 900ms; }
+.status-card-delay-4 { animation-delay: 1000ms; }
+.status-card-delay-5 { animation-delay: 1100ms; }
+.status-card-delay-6 { animation-delay: 1200ms; }
+.status-card-delay-7 { animation-delay: 1300ms; }
+.status-card-delay-8 { animation-delay: 1400ms; }
+.status-card-delay-9 { animation-delay: 1500ms; }
+
+.status-stats {
+  animation-delay: 1600ms;
+}
+
 /* ========================================
    RESPONSIVE Y ACCESIBILIDAD
    ======================================== */
 
 /* Reducir animaciones para usuarios con preferencias de accesibilidad */
 @media (prefers-reduced-motion: reduce) {
-  * {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
+  /* Solo afectar animaciones específicas que puedan causar mareos */
+  .animate-spin,
+  .animate-bounce,
+  .animate-pulse {
+    animation: none !important;
   }
   
   .flip-card:hover {
     transform: none !important;
   }
+  
+  /* Reducir duración de transiciones suaves */
+  .flip-card,
+  .card-inner {
+    transition-duration: 0.1s !important;
+  }
 }
+
+/* ========================================
+   MOBILE DRAG & DROP OPTIMIZATIONS
+   ======================================== */
+
+/* Las optimizaciones móviles ya están incluidas en la sección OPTIMIZACIONES PARA MOBILE */

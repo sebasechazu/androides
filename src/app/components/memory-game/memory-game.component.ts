@@ -2,6 +2,7 @@ import { Component, inject, signal, computed, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { CharacterService } from '../../services/charater.service';
 import { TooltipComponent } from '../shared/tooltip/tooltip.component';
+import { ModalGameComponent } from '../shared/modal-game/modal-game.component';
 import { 
   trigger, 
   style, 
@@ -24,7 +25,7 @@ interface GameCard {
   selector: 'app-memory-game',
   standalone: true,
   templateUrl: './memory-game.component.html',
-  imports: [CommonModule, TooltipComponent],
+  imports: [CommonModule, TooltipComponent, ModalGameComponent],
   animations: [
     // Animación para cartas que coinciden
     trigger('matchSuccess', [
@@ -149,6 +150,7 @@ export class MemoryGameComponent implements OnInit {
   isLoading = signal<boolean>(true);
   animateScore = signal<boolean>(false);
   animateErrors = signal<boolean>(false);
+  showVictoryModal = signal<boolean>(false);
   
   // Signals para animaciones
   showMatchSuccess = signal<string[]>([]);
@@ -157,7 +159,15 @@ export class MemoryGameComponent implements OnInit {
   // Computed signals
   totalPairs = computed(() => this.cards().length / 2);
   matchedPairs = computed(() => this.cards().filter(card => card.matched).length / 2);
-  isGameComplete = computed(() => this.matchedPairs() === this.totalPairs() && this.totalPairs() > 0);
+  isGameComplete = computed(() => {
+    const matched = this.matchedPairs();
+    const total = this.totalPairs();
+    const complete = matched === total && total > 0;
+    if (complete) {
+      console.log(`Game complete detected: ${matched}/${total} pairs matched`);
+    }
+    return complete;
+  });
   canFlipCards = computed(() => this.flippedCards().length < 2 && !this.isLoading());
   
   // Estadísticas del juego
@@ -291,12 +301,17 @@ export class MemoryGameComponent implements OnInit {
         this.score.update(s => s + 1);
         this.animateScore.set(true);
         
+        // Verificar si el juego está completo después de este match
+        setTimeout(() => this.checkGameCompletion(), 200);
+        
         // Limpiar animación de éxito
         setTimeout(() => {
           this.showMatchSuccess.update(current => 
             current.filter(key => key !== cardA.key.toString() && key !== cardB.key.toString())
           );
         }, 800);
+        
+        setTimeout(() => this.animateScore.set(false), 500);
         
         setTimeout(() => this.animateScore.set(false), 500);
       }, 400);
@@ -339,7 +354,22 @@ export class MemoryGameComponent implements OnInit {
     this.animateErrors.set(false);
     this.showMatchSuccess.set([]);
     this.showMatchError.set([]);
+    this.showVictoryModal.set(false);
     this.loadCharacters();
+  }
+
+  closeVictoryModal(): void {
+    this.showVictoryModal.set(false);
+  }
+
+  private checkGameCompletion(): void {
+    // Usar un pequeño delay para asegurar que el estado se ha actualizado completamente
+    setTimeout(() => {
+      if (this.isGameComplete() && !this.showVictoryModal()) {
+        console.log('Game completed! Opening victory modal');
+        this.showVictoryModal.set(true);
+      }
+    }, 100);
   }
 
   // Métodos para animaciones

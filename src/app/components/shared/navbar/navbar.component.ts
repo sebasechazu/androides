@@ -1,4 +1,4 @@
-import { Component, signal } from '@angular/core';
+import { Component, signal, HostListener } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { trigger, state, style, transition, animate } from '@angular/animations';
 import { NavigationService } from '../../../services/navigation.service';
@@ -39,12 +39,19 @@ import { NavigationService } from '../../../services/navigation.service';
 })
 export class NavbarComponent {
   isOpen = signal(false);
+  gamesOpen = signal(false);
 
   items = signal([
-
     { label: 'Personajes', link: '/characters' },
+    { 
+      label: 'Juegos', 
+      link: '#',
+      hasSubmenu: true,
+      submenu: [
         { label: 'Juego de Estado', link: '/status-game' },
-    { label: 'Juego de Memoria', link: '/memory-game' },
+        { label: 'Juego de Memoria', link: '/memory-game' }
+      ]
+    },
     { label: 'Acerca de', link: '/about' },
   ]);
 
@@ -53,5 +60,22 @@ export class NavbarComponent {
   // Getter para acceder al título desde el servicio
   get pageTitle() {
     return this.navigationService.pageTitle();
+  }
+
+  toggleGamesMenu() {
+    this.gamesOpen.set(!this.gamesOpen());
+  }
+
+  closeAllMenus() {
+    this.isOpen.set(false);
+    this.gamesOpen.set(false);
+  }
+
+  @HostListener('document:click', ['$event'])
+  onDocumentClick(event: Event) {
+    const target = event.target as HTMLElement;
+    if (!target.closest('.relative')) {
+      this.gamesOpen.set(false);
+    }
   }
 }

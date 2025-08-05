@@ -1,4 +1,4 @@
-<div class="max-w-6xl mx-auto text-center py-6">
+<div class="max-w-6xl mx-auto text-center py-6 px-2 md:px-6">
   <!-- Estado de carga -->
   @if (isLoading()) {
     <div class="flex items-center justify-center min-h-96">
@@ -10,7 +10,7 @@
   } @else {
     @if (gameInitialized()) {
       <!-- Botón de reiniciar con tooltip -->
-      <div class="flex items-center justify-center gap-2 md:gap-6 mb-6 px-2">
+      <div class="flex items-center justify-center gap-2 md:gap-6 mb-4 md:mb-6 px-2">
         <div class="flex items-center gap-2 flex-shrink-0">
           <!-- Tooltip de información -->
           <app-tooltip width="20rem">
@@ -45,15 +45,16 @@
           <button 
             (click)="resetGame()" 
             class="bg-blue-500 text-white px-3 py-2 md:px-4 rounded-lg hover:bg-blue-600 transition duration-200 flex items-center gap-2 text-sm md:text-base whitespace-nowrap">
-            🔄 Reiniciar Juego
+            Reiniciar Juego
           </button>
         </div>
       </div>
 
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 p-4">
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 p-4 mobile-grid mobile-grid-container">
       <!-- Columna de personajes vivos -->
-      <div class="flex flex-col items-center bg-base-100/30 p-4 rounded-lg shadow-sm">
-        <h3 class="text-xl font-bold mb-3 text-green-600 text-center flex items-center gap-2">
+      <div class="flex flex-col items-center bg-base-100/30 p-4 rounded-lg shadow-sm mobile-column"
+           [ngClass]="getColumnAnimationClass(0)">
+        <h3 class="text-xl font-bold mb-3 text-green-600 text-center flex items-center gap-2 mobile-column-title">
           <span class="w-4 h-4 bg-green-500 rounded-full"></span>
           Vivos ({{ aliveElements().length }})
         </h3>
@@ -62,8 +63,10 @@
              [cdkDropListData]="aliveElements()" 
              [cdkDropListConnectedTo]="['listaMuertos', 'listaDesconocidos']"
              id="listaVivos"
-             (cdkDropListDropped)="moverElemento($event, 1)" 
-             class="flex flex-col gap-2 w-full min-h-40 p-4 rounded-lg bg-base-200/50 border-2 border-dashed border-transparent hover:border-green-500/70 transition-colors"
+             (cdkDropListDropped)="moverElemento($event, 1)"
+             (cdkDropListEntered)="onDragEntered($event)"
+             (cdkDropListExited)="onDragExited($event)" 
+             class="flex flex-col gap-2 w-full min-h-40 p-4 rounded-lg bg-base-200/50 border-2 border-dashed border-transparent hover:border-green-500/70 transition-colors mobile-drop-zone"
         >
           <ng-template cdkDropListPlaceholder>
             <div class="bg-green-500/10 border-4 border-dashed border-green-500 rounded-xl p-4 text-center my-4">
@@ -72,11 +75,16 @@
               </div>
             </div>
           </ng-template>
-          @for (elemento of aliveElements(); track elemento.id) {
-            <div cdkDrag class="w-full my-3" [cdkDragData]="elemento">
-              <div class="cdk-drag-placeholder opacity-30 grayscale blur-sm"></div>
-              <div [class]="getElementBorderClass(elemento, 1)" class="rounded-lg overflow-hidden">
-                <app-card-status [elemento]="elemento" class="max-w-xs w-full mx-auto">
+          @for (elemento of aliveElements(); track elemento.id; let i = $index) {
+            <div cdkDrag 
+                 class="w-full my-2 status-card mx-auto" 
+                 [cdkDragData]="elemento"
+                 (cdkDragStarted)="onDragStarted($event)"
+                 (cdkDragEnded)="onDragEnded($event)">
+              <div class="cdk-drag-placeholder"></div>
+              <div [class]="getElementBorderClass(elemento, 1)" 
+                   [ngClass]="getCardDelayClass(0, i)">
+                <app-card-status [elemento]="elemento" class="w-full mobile-compact-card">
                 </app-card-status>
               </div>
             </div>
@@ -85,8 +93,9 @@
       </div>
 
       <!-- Columna de personajes muertos -->
-      <div class="flex flex-col items-center bg-base-100/30 p-4 rounded-lg shadow-sm">
-        <h3 class="text-xl font-bold mb-3 text-red-600 text-center flex items-center gap-2">
+      <div class="flex flex-col items-center bg-base-100/30 p-4 rounded-lg shadow-sm mobile-column"
+           [ngClass]="getColumnAnimationClass(1)">
+        <h3 class="text-xl font-bold mb-3 text-red-600 text-center flex items-center gap-2 mobile-column-title">
           <span class="w-4 h-4 bg-red-500 rounded-full"></span>
           Muertos ({{ deadElements().length }})
         </h3>
@@ -95,8 +104,10 @@
              [cdkDropListData]="deadElements()" 
              [cdkDropListConnectedTo]="['listaVivos', 'listaDesconocidos']"
              id="listaMuertos"
-             (cdkDropListDropped)="moverElemento($event, 2)" 
-             class="flex flex-col gap-2 w-full min-h-40 p-4 rounded-lg bg-base-200/50 border-2 border-dashed border-transparent hover:border-red-500/70 transition-colors"
+             (cdkDropListDropped)="moverElemento($event, 2)"
+             (cdkDropListEntered)="onDragEntered($event)"
+             (cdkDropListExited)="onDragExited($event)" 
+             class="flex flex-col gap-2 w-full min-h-40 p-4 rounded-lg bg-base-200/50 border-2 border-dashed border-transparent hover:border-red-500/70 transition-colors mobile-drop-zone"
         >
           <ng-template cdkDropListPlaceholder>
             <div class="bg-red-500/10 border-4 border-dashed border-red-500 rounded-xl p-4 text-center my-4">
@@ -105,11 +116,16 @@
               </div>
             </div>
           </ng-template>
-          @for (elemento of deadElements(); track elemento.id) {
-            <div cdkDrag class="w-full my-3" [cdkDragData]="elemento">
-              <div class="cdk-drag-placeholder opacity-30 grayscale blur-sm"></div>
-              <div [class]="getElementBorderClass(elemento, 2)" class="rounded-lg overflow-hidden">
-                <app-card-status [elemento]="elemento" class="max-w-xs w-full mx-auto">
+          @for (elemento of deadElements(); track elemento.id; let i = $index) {
+            <div cdkDrag 
+                 class="w-full my-2 status-card mx-auto" 
+                 [cdkDragData]="elemento"
+                 (cdkDragStarted)="onDragStarted($event)"
+                 (cdkDragEnded)="onDragEnded($event)">
+              <div class="cdk-drag-placeholder"></div>
+              <div [class]="getElementBorderClass(elemento, 2)" 
+                   [ngClass]="getCardDelayClass(1, i)">
+                <app-card-status [elemento]="elemento" class="w-full mobile-compact-card">
                 </app-card-status>
               </div>
             </div>
@@ -118,8 +134,9 @@
       </div>
 
       <!-- Columna de personajes con estado desconocido -->
-      <div class="flex flex-col items-center bg-base-100/30 p-4 rounded-lg shadow-sm">
-        <h3 class="text-xl font-bold mb-3 text-gray-600 text-center flex items-center gap-2">
+      <div class="flex flex-col items-center bg-base-100/30 p-4 rounded-lg shadow-sm mobile-column"
+           [ngClass]="getColumnAnimationClass(2)">
+        <h3 class="text-xl font-bold mb-3 text-gray-600 text-center flex items-center gap-2 mobile-column-title">
           <span class="w-4 h-4 bg-gray-500 rounded-full"></span>
           Desconocido ({{ unknownElements().length }})
         </h3>
@@ -128,8 +145,10 @@
              [cdkDropListData]="unknownElements()" 
              [cdkDropListConnectedTo]="['listaVivos', 'listaMuertos']"
              id="listaDesconocidos"
-             (cdkDropListDropped)="moverElemento($event, 3)" 
-             class="flex flex-col gap-2 w-full min-h-40 p-4 rounded-lg bg-base-200/50 border-2 border-dashed border-transparent hover:border-gray-500/70 transition-colors"
+             (cdkDropListDropped)="moverElemento($event, 3)"
+             (cdkDropListEntered)="onDragEntered($event)"
+             (cdkDropListExited)="onDragExited($event)" 
+             class="flex flex-col gap-2 w-full min-h-40 p-4 rounded-lg bg-base-200/50 border-2 border-dashed border-transparent hover:border-gray-500/70 transition-colors mobile-drop-zone"
         >
           <ng-template cdkDropListPlaceholder>
             <div class="bg-gray-500/10 border-4 border-dashed border-gray-500 rounded-xl p-4 text-center my-4">
@@ -138,11 +157,16 @@
               </div>
             </div>
           </ng-template>
-          @for (elemento of unknownElements(); track elemento.id) {
-            <div cdkDrag class="w-full my-3" [cdkDragData]="elemento">
-              <div class="cdk-drag-placeholder opacity-30 grayscale blur-sm"></div>
-              <div [class]="getElementBorderClass(elemento, 3)" class="rounded-lg overflow-hidden">
-                <app-card-status [elemento]="elemento" class="max-w-xs w-full mx-auto">
+          @for (elemento of unknownElements(); track elemento.id; let i = $index) {
+            <div cdkDrag 
+                 class="w-full my-2 status-card mx-auto" 
+                 [cdkDragData]="elemento"
+                 (cdkDragStarted)="onDragStarted($event)"
+                 (cdkDragEnded)="onDragEnded($event)">
+              <div class="cdk-drag-placeholder"></div>
+              <div [class]="getElementBorderClass(elemento, 3)" 
+                   [ngClass]="getCardDelayClass(2, i)">
+                <app-card-status [elemento]="elemento" class="w-full mobile-compact-card">
                 </app-card-status>
               </div>
             </div>
@@ -152,7 +176,8 @@
     </div>
 
     <!-- Estadísticas del juego -->
-    <div class="bg-white rounded-lg shadow-md p-2 md:p-4 mb-6 max-w-4xl mx-auto">
+    <div class="bg-white rounded-lg shadow-md p-2 md:p-4 mb-4 md:mb-6 max-w-4xl mx-auto"
+         [ngClass]="getStatsAnimationClass()">
       <div class="grid grid-cols-3 gap-1 md:gap-4 text-center">
         <div class="bg-blue-50 rounded-lg p-1 md:p-3">
           <div class="text-lg md:text-2xl font-bold text-blue-600">{{ totalMovements() }}</div>
@@ -190,20 +215,33 @@
     </div>
     }
 
-    <!-- Mensaje de victoria -->
-    @if (isGameComplete()) {
-      <div class="bg-gradient-to-r from-green-400 to-blue-500 text-white rounded-lg p-6 mb-6 max-w-md mx-auto">
+    <!-- Modal de victoria -->
+    <app-modal-game 
+      [isOpen]="showVictoryModal"
+      [showCloseButton]="true"
+      (closeModal)="closeVictoryModal()">
+      
+      <div class="text-center">
         <div class="text-6xl mb-4 animate-bounce">🎉</div>
-        <h3 class="text-2xl font-bold mb-3 animate-pulse">¡Felicitaciones!</h3>
-        <p class="mb-3 text-lg">Completaste el juego con {{ incorrectMovements() }} errores</p>
-        <p class="text-sm opacity-90">Precisión: {{ accuracy() }}%</p>
-        <div class="mt-4 flex justify-center space-x-2">
+        <h3 class="text-2xl font-bold mb-3 text-gray-800 animate-pulse">¡Felicitaciones!</h3>
+        <div class="bg-gradient-to-r from-green-400 to-blue-500 text-white rounded-lg p-4 mb-4">
+          <p class="mb-2 text-lg">Completaste el juego con {{ incorrectMovements() }} errores</p>
+          <p class="text-sm opacity-90">Precisión: {{ accuracy() }}%</p>
+        </div>
+        
+        <div class="flex justify-center space-x-2 mb-4">
           <span class="animate-spin text-2xl">⭐</span>
           <span class="animate-pulse text-2xl">🌟</span>
           <span class="animate-bounce text-2xl">✨</span>
         </div>
+        
+        <button 
+          (click)="resetGame()" 
+          class="bg-blue-500 text-white px-6 py-3 rounded-lg hover:bg-blue-600 transition duration-200 flex items-center gap-2 mx-auto">
+          Jugar de Nuevo
+        </button>
       </div>
-    }
+    </app-modal-game>
   }
 </div>
 
