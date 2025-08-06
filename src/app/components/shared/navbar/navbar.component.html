@@ -1,12 +1,23 @@
 <nav class="bg-primary text-base-100 px-4 py-3 relative">
-    <div class="container mx-auto flex justify-between items-center min-h-[60px]">
-        <!-- Logo y título -->
-        <div class="flex items-center gap-4">
+    <div class="container mx-auto flex justify-between items-center min-h-[60px] relative">
+        <!-- Logo a la izquierda -->
+        <div class="flex items-center">
             <a [routerLink]="'/home'" class="flex items-center hover:opacity-80 transition-opacity duration-200">
                 <img src="assets/img/logo.png" alt="Elementos App" class="h-10 w-auto">
             </a>
+        </div>
+
+        <!-- Título centrado (absolutamente posicionado en la versión de escritorio) -->
+        <div class="absolute left-1/2 transform -translate-x-1/2 hidden md:block">
             @if (pageTitle) {
-                <h1 class="text-xl md:text-2xl font-bold text-white leading-none">{{ pageTitle }}</h1>
+                <h1 class="text-xl md:text-2xl font-bold text-white leading-none whitespace-nowrap">{{ pageTitle }}</h1>
+            }
+        </div>
+
+        <!-- Título visible en móvil (después del logo) -->
+        <div class="flex md:hidden ml-4">
+            @if (pageTitle) {
+                <h1 class="text-xl font-bold text-white leading-none">{{ pageTitle }}</h1>
             }
         </div>
 
@@ -32,17 +43,17 @@
             <li class="relative flex items-center">
                 @if (item.hasSubmenu) {
                 <div class="relative">
-                    <button (click)="toggleGamesMenu()"
+                    <button (click)="item.label === 'Juegos' ? toggleGamesMenu() : toggleProfileMenu()"
                         class="px-3 py-2 rounded-lg font-medium text-white transition-colors duration-200 hover:text-accent hover:bg-white/10 flex items-center gap-2 h-10">
                         {{ item.label }}
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"
                             class="w-4 h-4 transition-transform duration-200"
-                            [class.rotate-180]="gamesOpen()">
+                            [class.rotate-180]="item.label === 'Juegos' ? gamesOpen() : profileOpen()">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
                         </svg>
                     </button>
                     
-                    @if (gamesOpen()) {
+                    @if ((item.label === 'Juegos' && gamesOpen()) || (item.label === 'Perfil' && profileOpen())) {
                     <div class="absolute top-full left-0 mt-1 bg-white shadow-lg rounded-lg py-2 min-w-48 z-20"
                          [@fadeInOut]>
                         @for (subitem of item.submenu; track subitem.label) {
@@ -74,19 +85,19 @@
                 @for (item of items(); track item.label) {
                 <div class="border-b border-blue-700/30 last:border-b-0">
                     @if (item.hasSubmenu) {
-                    <button (click)="toggleGamesMenu()"
+                    <button (click)="item.label === 'Juegos' ? toggleGamesMenu() : toggleProfileMenu()"
                             class="w-full text-left px-4 py-4 text-white font-medium transition-colors duration-200 
                                    hover:bg-white/10 hover:text-accent rounded-lg flex justify-between items-center"
                             [@fadeInOut]>
                         {{ item.label }}
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"
                             class="w-4 h-4 transition-transform duration-200"
-                            [class.rotate-180]="gamesOpen()">
+                            [class.rotate-180]="item.label === 'Juegos' ? gamesOpen() : profileOpen()">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
                         </svg>
                     </button>
                     
-                    @if (gamesOpen()) {
+                    @if ((item.label === 'Juegos' && gamesOpen()) || (item.label === 'Perfil' && profileOpen())) {
                     <div class="pl-4 pb-2" [@fadeInOut]>
                         @for (subitem of item.submenu; track subitem.label) {
                         <a [routerLink]="subitem.link" 

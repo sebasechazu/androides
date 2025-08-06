@@ -40,11 +40,12 @@ import { NavigationService } from '../../../services/navigation.service';
 export class NavbarComponent {
   isOpen = signal(false);
   gamesOpen = signal(false);
+  profileOpen = signal(false);
 
   items = signal([
-    { label: 'Personajes', link: '/characters' },
-    { 
-      label: 'Juegos', 
+
+    {
+      label: 'Juegos',
       link: '#',
       hasSubmenu: true,
       submenu: [
@@ -52,10 +53,18 @@ export class NavbarComponent {
         { label: 'Juego de Memoria', link: '/memory-game' }
       ]
     },
-    { label: 'Acerca de', link: '/about' },
+    {
+      label: 'Perfil',
+      link: '#',
+      hasSubmenu: true,
+      submenu: [
+        { label: 'Personajes', link: '/characters' },
+        { label: 'Acerca de', link: '/about' }
+      ]
+    },
   ]);
 
-  constructor(private navigationService: NavigationService) {}
+  constructor(private navigationService: NavigationService) { }
 
   // Getter para acceder al título desde el servicio
   get pageTitle() {
@@ -64,11 +73,24 @@ export class NavbarComponent {
 
   toggleGamesMenu() {
     this.gamesOpen.set(!this.gamesOpen());
+    // Cerrar otros menús desplegables
+    if (this.gamesOpen()) {
+      this.profileOpen.set(false);
+    }
+  }
+
+  toggleProfileMenu() {
+    this.profileOpen.set(!this.profileOpen());
+    // Cerrar otros menús desplegables
+    if (this.profileOpen()) {
+      this.gamesOpen.set(false);
+    }
   }
 
   closeAllMenus() {
     this.isOpen.set(false);
     this.gamesOpen.set(false);
+    this.profileOpen.set(false);
   }
 
   @HostListener('document:click', ['$event'])
@@ -76,6 +98,7 @@ export class NavbarComponent {
     const target = event.target as HTMLElement;
     if (!target.closest('.relative')) {
       this.gamesOpen.set(false);
+      this.profileOpen.set(false);
     }
   }
 }

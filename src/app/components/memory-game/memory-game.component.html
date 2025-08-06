@@ -20,34 +20,51 @@
         <!-- Tooltip de información -->
         <app-tooltip width="18rem">
           <div class="space-y-3">
-            <h4 class="font-semibold text-center mb-2">Cómo jugar:</h4>
-            <div class="space-y-2">
-              <p class="flex items-start gap-2 text-sm">
-                <span class="text-blue-400 font-bold">1.</span>
-                <span>Haz clic en las cartas para voltearlas y revelar los personajes</span>
-              </p>
-              <p class="flex items-start gap-2 text-sm">
-                <span class="text-blue-400 font-bold">2.</span>
-                <span>Encuentra las parejas de personajes idénticos</span>
-              </p>
-              <p class="flex items-start gap-2 text-sm">
-                <span class="text-blue-400 font-bold">3.</span>
-                <span>Completa el juego con la menor cantidad de errores posible</span>
-              </p>
-              <p class="flex items-start gap-2 text-sm">
-                <span class="text-blue-400 font-bold">4.</span>
-                <span>Solo puedes voltear 2 cartas a la vez</span>
-              </p>
+            <h4 class="font-bold text-center text-blue-600 text-sm sm:text-base">Cómo jugar</h4>
+          
+            <div class="bg-blue-50 rounded-lg p-2 sm:p-3">
+              <p class="text-sm sm:text-base font-medium text-blue-800 text-center">Haz clic en las cartas para encontrar parejas idénticas</p>
+            </div>
+          
+            <div class="grid grid-cols-1 gap-2">
+              <div class="flex items-center gap-2 sm:gap-3 bg-green-50 p-2 sm:p-3 rounded-lg">
+                <span class="text-lg sm:text-xl">🎮</span>
+                <span class="text-xs sm:text-sm md:text-base font-medium text-green-800">Voltea las cartas para revelar personajes</span>
+              </div>
+              
+              <div class="flex items-center gap-2 sm:gap-3 bg-purple-50 p-2 sm:p-3 rounded-lg">
+                <span class="text-lg sm:text-xl">👥</span>
+                <span class="text-xs sm:text-sm md:text-base font-medium text-purple-800">Encuentra parejas de personajes idénticos</span>
+              </div>
+              
+              <div class="flex items-center gap-2 sm:gap-3 bg-red-50 p-2 sm:p-3 rounded-lg">
+                <span class="text-lg sm:text-xl">⚠️</span>
+                <span class="text-xs sm:text-sm md:text-base font-medium text-red-800">Solo puedes voltear 2 cartas a la vez</span>
+              </div>
+            </div>
+          
+            <div class="flex justify-center gap-2 sm:gap-4 bg-blue-50 p-2 sm:p-3 rounded-lg">
+              <div class="flex items-center gap-1 sm:gap-2">
+                <span class="text-green-500 font-bold text-base sm:text-lg">✓</span>
+                <span class="text-xs sm:text-sm font-medium text-blue-800">Minimiza los errores para mejor puntuación</span>
+              </div>
             </div>
           </div>
         </app-tooltip>
         
-        <!-- Botón Nuevo Juego -->
+        <!-- Botón Nuevo Juego - Solo visible después del primer movimiento -->
+        @if (errors() > 0 || score() > 0) {
         <button 
           (click)="resetGame()" 
-          class="bg-blue-500 text-white px-3 py-2 md:px-4 rounded-lg hover:bg-blue-600 transition duration-200 flex items-center gap-2 text-sm md:text-base whitespace-nowrap">
-          Nuevo Juego
+          title="Nuevo Juego"
+          class="bg-green-500 hover:bg-green-600 text-white p-2 md:p-3 rounded-lg flex items-center justify-center transition duration-200">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" 
+            class="w-5 h-5 md:w-6 md:h-6">
+            <path stroke-linecap="round" stroke-linejoin="round" 
+              d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0l3.181 3.183a8.25 8.25 0 0013.803-3.7M4.031 9.865a8.25 8.25 0 0113.803-3.7l3.181 3.182m0-4.991v4.99" />
+          </svg>
         </button>
+        }
       </div>
     </div>
     
@@ -172,8 +189,13 @@
         
         <button 
           (click)="resetGame()" 
-          class="bg-blue-500 text-white px-6 py-3 rounded-lg hover:bg-blue-600 transition duration-200 flex items-center gap-2 mx-auto">
-          🔄 Jugar de Nuevo
+          class="bg-green-500 hover:bg-green-600 text-white px-6 py-3 rounded-lg flex items-center justify-center gap-2 mx-auto transition duration-200">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" 
+            class="w-6 h-6">
+            <path stroke-linecap="round" stroke-linejoin="round" 
+              d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0l3.181 3.183a8.25 8.25 0 0013.803-3.7M4.031 9.865a8.25 8.25 0 0113.803-3.7l3.181 3.182m0-4.991v4.99" />
+          </svg>
+          Jugar de Nuevo
         </button>
       </div>
     </app-modal-game>
