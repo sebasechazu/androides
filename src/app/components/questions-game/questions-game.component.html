@@ -1,0 +1,166 @@
+<div class="max-w-4xl mx-auto text-center py-6 px-2 md:px-6">
+  <!-- Indicador de progreso -->
+  <div class="w-full max-w-md mx-auto mb-6" *ngIf="gameStarted() && !gameFinished()" [@slideInFromTop]>
+    <div class="w-full h-3 bg-gray-200 rounded-full overflow-hidden shadow-inner">
+      <div class="h-full bg-gradient-to-r from-green-500 to-green-400 transition-all duration-300 rounded-full" 
+           [style.width]="progress() + '%'" [@progressAnimation]></div>
+    </div>
+    <span class="block text-center mt-3 font-semibold text-gray-600">
+      Pregunta {{ currentQuestionIndex() + 1 }} de {{ totalQuestions() }}
+    </span>
+  </div>
+
+  <!-- Pantalla de inicio -->
+  <div class="flex items-center justify-center mb-6" *ngIf="!gameStarted() && !isLoading()" [@slideInFromTop]>
+    <div class="bg-white p-6 md:p-8 rounded-2xl shadow-xl max-w-md w-full">
+      <h2 class="text-xl md:text-2xl font-bold text-gray-800 mb-4">¿Qué tanto conoces a los personajes?</h2>
+      <p class="text-base md:text-lg text-gray-600 mb-6">Responde 10 preguntas con Verdadero o Falso</p>
+      <div class="bg-gray-50 p-4 rounded-xl mb-6 text-left">
+        <h3 class="text-base font-semibold text-gray-800 mb-3">
+          <svg class="inline w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"/>
+          </svg>
+          Instrucciones:
+        </h3>
+        <ul class="space-y-2 text-sm">
+          <li class="flex items-start">
+            <svg class="w-4 h-4 mr-2 mt-0.5 text-blue-500" fill="currentColor" viewBox="0 0 20 20">
+              <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"/>
+            </svg>
+            <span class="text-gray-700">10 preguntas aleatorias</span>
+          </li>
+          <li class="flex items-start">
+            <svg class="w-4 h-4 mr-2 mt-0.5 text-blue-500" fill="currentColor" viewBox="0 0 20 20">
+              <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"/>
+            </svg>
+            <span class="text-gray-700">Imagen del personaje incluida</span>
+          </li>
+          <li class="flex items-start">
+            <svg class="w-4 h-4 mr-2 mt-0.5 text-blue-500" fill="currentColor" viewBox="0 0 20 20">
+              <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"/>
+            </svg>
+            <span class="text-gray-700">Responde Verdadero o Falso</span>
+          </li>
+          <li class="flex items-start">
+            <svg class="w-4 h-4 mr-2 mt-0.5 text-blue-500" fill="currentColor" viewBox="0 0 20 20">
+              <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"/>
+            </svg>
+            <span class="text-gray-700">Ve tu puntuación final</span>
+          </li>
+        </ul>
+      </div>
+      <button class="w-full bg-gradient-to-r from-purple-600 to-blue-600 text-white px-6 py-3 rounded-full font-semibold hover:from-purple-700 hover:to-blue-700 transform hover:scale-105 transition-all duration-300 shadow-lg" 
+              (click)="startGame()">
+        <svg class="inline w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
+        </svg>
+        Comenzar Juego
+      </button>
+    </div>
+  </div>
+
+  <!-- Pantalla de carga -->
+  <div class="flex flex-col items-center justify-center min-h-96" *ngIf="isLoading()" [@slideInFromTop]>
+    <div class="w-12 h-12 border-4 border-gray-200 border-t-blue-500 rounded-full animate-spin mb-4" 
+         [@pulseAnimation]="pulseState"></div>
+    <p class="text-lg text-gray-600 font-medium">Generando preguntas...</p>
+  </div>
+
+  <!-- Pantalla del juego -->
+  <div class="flex items-center justify-center mb-6" *ngIf="gameStarted() && !gameFinished() && !isLoading() && currentQuestion()" [@questionTransition]>
+    <div class="bg-white rounded-2xl shadow-xl overflow-hidden max-w-lg w-full">
+      <!-- Imagen del personaje -->
+      <div class="bg-gradient-to-r from-purple-600 to-blue-600 text-white text-center py-6 px-4">
+        <img [src]="currentQuestion()!.character.image" 
+             [alt]="currentQuestion()!.character.name"
+             loading="lazy"
+             class="w-24 h-24 md:w-32 md:h-32 rounded-full border-4 border-white shadow-lg object-cover mx-auto">
+        <h3 class="text-lg md:text-xl font-bold mt-3 text-shadow">{{ currentQuestion()!.character.name }}</h3>
+      </div>
+
+      <!-- Pregunta -->
+      <div class="p-6">
+        <h2 class="text-lg md:text-xl font-semibold text-gray-800 text-center mb-6 leading-relaxed">{{ currentQuestion()!.question }}</h2>
+        
+        <!-- Opciones de respuesta -->
+        <div class="flex flex-col sm:flex-row gap-3 justify-center" *ngIf="!currentQuestion()!.answered">
+          <button class="flex-1 max-w-40 bg-gradient-to-r from-green-500 to-green-600 text-white py-3 px-4 rounded-xl font-semibold hover:from-green-600 hover:to-green-700 transform hover:scale-105 transition-all duration-300 shadow-lg" 
+                  (click)="answerQuestion(true)" [@buttonAnimation]>
+            <svg class="inline w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+            </svg>
+            Verdadero
+          </button>
+          <button class="flex-1 max-w-40 bg-gradient-to-r from-red-500 to-red-600 text-white py-3 px-4 rounded-xl font-semibold hover:from-red-600 hover:to-red-700 transform hover:scale-105 transition-all duration-300 shadow-lg" 
+                  (click)="answerQuestion(false)" [@buttonAnimation]>
+            <svg class="inline w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+            </svg>
+            Falso
+          </button>
+        </div>
+
+        <!-- Feedback de respuesta -->
+        <div class="text-center" *ngIf="currentQuestion()!.answered" [@feedbackAnimation]>
+          <div class="p-4 rounded-xl border-2" 
+               [class]="currentQuestion()!.userAnswer === currentQuestion()!.correctAnswer ? 'bg-green-50 border-green-500' : 'bg-red-50 border-red-500'">
+            <span class="text-xl font-bold mb-2 flex items-center justify-center" 
+                  *ngIf="currentQuestion()!.userAnswer === currentQuestion()!.correctAnswer">
+              <svg class="w-8 h-8 mr-2 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+              </svg>
+              ¡Correcto!
+            </span>
+            <span class="text-xl font-bold mb-2 flex items-center justify-center" 
+                  *ngIf="currentQuestion()!.userAnswer !== currentQuestion()!.correctAnswer">
+              <svg class="w-8 h-8 mr-2 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+              </svg>
+              Incorrecto
+            </span>
+            <p class="text-base text-gray-700">
+              La respuesta correcta es: 
+              <strong>{{ currentQuestion()!.correctAnswer ? 'Verdadero' : 'Falso' }}</strong>
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Pantalla de resultados -->
+  <div class="flex items-center justify-center" *ngIf="gameFinished()" [@resultsAnimation]>
+    <div class="bg-white p-6 md:p-8 rounded-2xl shadow-xl max-w-lg w-full text-center">
+      <h2 class="text-2xl md:text-3xl font-bold text-gray-800 mb-6 flex items-center justify-center">
+        <svg class="w-8 h-8 mr-3 text-yellow-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
+        </svg>
+        ¡Juego Terminado!
+      </h2>
+      
+      <div class="mb-6">
+        <div class="inline-flex items-center justify-center w-24 h-24 md:w-32 md:h-32 bg-gradient-to-r from-purple-600 to-blue-600 text-white rounded-full shadow-lg mb-4">
+          <div class="text-center">
+            <span class="text-2xl md:text-3xl font-bold block">{{ score() }}</span>
+            <span class="text-sm md:text-base opacity-80">/ {{ totalQuestions() }}</span>
+          </div>
+        </div>
+        <p class="text-lg md:text-xl font-semibold text-gray-700">{{ ((score() / totalQuestions()) * 100) | number:'1.0-0' }}% correcto</p>
+      </div>
+
+      <div class="bg-gray-50 p-4 rounded-xl mb-6">
+        <p class="text-base md:text-lg font-semibold text-gray-800">{{ getScoreMessage() }}</p>
+      </div>
+
+      <div>
+        <button class="w-full bg-gradient-to-r from-purple-600 to-blue-600 text-white px-6 py-3 rounded-full font-semibold hover:from-purple-700 hover:to-blue-700 transform hover:scale-105 transition-all duration-300 shadow-lg" 
+                (click)="restartGame()">
+          <svg class="inline w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/>
+          </svg>
+          Jugar de Nuevo
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

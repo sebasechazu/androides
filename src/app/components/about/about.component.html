@@ -1,90 +1,121 @@
-<section class="max-w-3xl mx-auto mt-10 bg-base-100 rounded-xl shadow-lg p-6 animate-fade-in-up space-y-6">
-    <!-- Header -->
-    <div class="flex flex-col md:flex-row items-center gap-6">
-        <img src="assets/img/sebastianechazu.png" alt="Sebastián Echazú"
-            class="w-24 h-24 rounded-full border-4 border-accent shadow-lg animate-fade-in-up" />
-        <div class="text-center md:text-left">
-            <h2 class="text-3xl font-bold text-neutral animate-slide-in-up">
-                Sebastián Echazú
-            </h2>
-            <p class="text-sm text-neutral/70 animate-slide-in-up">
-                Desarrollador Web & Angular Enthusiast
-            </p>
+<section class="w-full p-4 md:p-6 space-y-4 md:space-y-6" [@fadeInUp]>
+    <!-- Encabezado -->
+    <div class="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-xl md:rounded-2xl shadow-xl p-3 md:p-4 lg:p-6">
+        <div class="flex flex-col lg:flex-row items-center gap-3 md:gap-4 lg:gap-6">
+            <div [@scaleIn] class="relative">
+                <img src="assets/img/sebastianechazu.png" alt="Sebastián Echazú"
+                    class="w-20 h-20 md:w-24 md:h-24 lg:w-28 lg:h-28 rounded-full border-2 md:border-4 border-blue-400 shadow-2xl object-cover transform hover:scale-105 transition-transform duration-300" />
+                <div class="absolute -bottom-1 -right-1 md:-bottom-2 md:-right-2 w-5 h-5 md:w-6 md:h-6 bg-green-400 rounded-full border-2 md:border-4 border-white"></div>
+            </div>
+            <div class="text-center lg:text-left flex-1" [@slideInRight]>
+                <h1 class="text-xl md:text-2xl lg:text-3xl xl:text-4xl font-bold text-gray-800 mb-1 md:mb-2">
+                    Sebastián Echazú
+                </h1>
+                <p class="text-sm md:text-base lg:text-lg text-blue-600 font-medium mb-2 md:mb-3">
+                    Desarrollador Frontend & Especialista en Angular
+                </p>
+                <div class="flex flex-wrap justify-center lg:justify-start gap-1 md:gap-2">
+                    <span class="px-2 md:px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-xs md:text-sm font-medium">Angular</span>
+                    <span class="px-2 md:px-3 py-1 bg-green-100 text-green-800 rounded-full text-xs md:text-sm font-medium">TypeScript</span>
+                    <span class="px-2 md:px-3 py-1 bg-purple-100 text-purple-800 rounded-full text-xs md:text-sm font-medium">React</span>
+                </div>
+            </div>
         </div>
     </div>
 
-    <!-- Sections -->
-    <div class="space-y-4">
-        <!-- About -->
-        <div class="bg-base-100 rounded shadow p-4 animate-fade-in-up">
-            <h3 class="text-lg font-semibold text-accent mb-2 flex gap-2 items-center">
-                📝 About
-            </h3>
-            <p class="text-neutral">
-                I’m interested in the latest technological trends, especially in Angular and web development. I actively
-                participate in online communities and attend related events.
-            </p>
-            <p class="text-neutral mt-2">
-                I’m currently learning advanced Angular techniques and exploring new web development tools to enhance my
-                skill set.
-            </p>
-            <p class="text-neutral mt-2">
-                I’m looking to collaborate on innovative web development projects that require robust and efficient
-                solutions. I have a strong background in Angular, TypeScript, and JavaScript, and I’m passionate about
-                delivering high-quality software.
-            </p>
+    <!-- Tarjetas de contenido -->
+    <div class="grid gap-3 md:gap-4 grid-cols-1 lg:grid-cols-3" [@staggerCards]>
+        <!-- Acerca de mí -->
+        <div class="lg:col-span-2 bg-white rounded-xl shadow-lg p-3 md:p-4 border-l-4 border-blue-500 card-item hover:shadow-xl transition-shadow duration-300">
+            <h2 class="text-lg md:text-xl font-bold text-gray-800 mb-2 md:mb-3 flex items-center gap-2">
+                <svg class="w-4 h-4 md:w-5 md:h-5 text-blue-600" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M12 2C13.1 2 14 2.9 14 4C14 5.1 13.1 6 12 6C10.9 6 10 5.1 10 4C10 2.9 10.9 2 12 2ZM21 9V7L15 1H5C3.89 1 3 1.89 3 3V19A2 2 0 0 0 5 21H11V19H5V3H13V9H21Z"/>
+                    <path d="M17 13C15.34 13 14 14.34 14 16V19C14 20.66 15.34 22 17 22H19C20.66 22 22 20.66 22 19V16C22 14.34 20.66 13 19 13H17ZM20 19C20 19.55 19.55 20 19 20H17C16.45 20 16 19.55 16 19V16C16 15.45 16.45 15 17 15H19C19.55 15 20 15.45 20 16V19Z"/>
+                </svg>
+                Acerca de Mí
+            </h2>
+            <div class="space-y-2 md:space-y-3 text-gray-600 leading-relaxed text-sm md:text-base">
+                <p>
+                    ¡Hola! Soy Sebastián, un desarrollador que vive en Mendoza, Argentina. 
+                    Lo que más me gusta de la programación es resolver problemas complejos y ver cómo las ideas cobran vida en la pantalla.
+                </p>
+                <p>
+                    Cuando no estoy programando, me encuentras leyendo sobre tecnología, jugando videojuegos, disfrutando de un asado con amigos 
+                    o tocando la guitarra. También creo en el aprendizaje continuo y compartir conocimiento con otros desarrolladores.
+                </p>
+                <p>
+                    Mi objetivo es seguir creciendo profesionalmente y trabajar en proyectos que realmente importen. 
+                    ¡Siempre estoy abierto a nuevas oportunidades y conversaciones interesantes!
+                </p>
+            </div>
         </div>
 
-        <!-- Skills -->
-        <div class="bg-base-100 rounded shadow p-4 animate-fade-in-up" style="animation-delay: 100ms">
-            <h3 class="text-lg font-semibold text-accent mb-2 flex gap-2 items-center">
-                🛠 Skills
-            </h3>
-            <div class="flex flex-col md:flex-row gap-4">
+        <!-- Habilidades -->
+        <div class="bg-white rounded-xl shadow-lg p-3 md:p-4 border-l-4 border-green-500 card-item hover:shadow-xl transition-shadow duration-300">
+            <h2 class="text-lg md:text-xl font-bold text-gray-800 mb-2 md:mb-3 flex items-center gap-2">
+                <svg class="w-4 h-4 md:w-5 md:h-5 text-green-600" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M22.7 19L13.6 9.9C14.5 7.6 14 4.9 12.1 3C10.1 1 7.1 1 5.1 3S1 8.9 3 10.9C4.9 12.8 7.6 13.3 9.9 12.4L19 21.7C19.4 22.1 19.9 22.1 20.3 21.7L22.6 19.4C23.1 19 23.1 18.5 22.7 19ZM5.6 9.4C4.6 8.4 4.6 6.8 5.6 5.8S8.8 4.6 9.8 5.6S10.8 8.8 9.8 9.8S6.6 10.4 5.6 9.4Z"/>
+                </svg>
+                Habilidades
+            </h2>
+            
+            <div class="space-y-3 md:space-y-4">
                 <div>
-                    <h5 class="font-semibold text-neutral">Languages</h5>
-                    <ul class="list-disc list-inside text-neutral">
-                        <li>TypeScript</li>
-                        <li>JavaScript</li>
-                        <li>Git</li>
-                        <li>Bootstrap</li>
-                        <li>C#</li>
-                        <li>HTML</li>
-                        <li>CSS</li>
-                    </ul>
+                    <h3 class="font-semibold text-gray-700 mb-1 md:mb-2 text-sm md:text-base">Lenguajes</h3>
+                    <div class="flex flex-wrap gap-1">
+                        <span *ngFor="let lenguaje of habilidadesLenguajes" 
+                              class="px-2 py-1 bg-blue-50 text-blue-700 rounded-lg text-xs font-medium border border-blue-200 hover:bg-blue-100 transition-colors duration-200">
+                            {{lenguaje}}
+                        </span>
+                    </div>
                 </div>
+                
                 <div>
-                    <h5 class="font-semibold text-neutral">Frameworks</h5>
-                    <ul class="list-disc list-inside text-neutral">
-                        <li>Angular</li>
-                        <li>PrimeNG</li>
-                        <li>React</li>
-                    </ul>
+                    <h3 class="font-semibold text-gray-700 mb-1 md:mb-2 text-sm md:text-base">Frameworks</h3>
+                    <div class="flex flex-wrap gap-1">
+                        <span *ngFor="let framework of frameworks" 
+                              class="px-2 py-1 bg-green-50 text-green-700 rounded-lg text-xs font-medium border border-green-200 hover:bg-green-100 transition-colors duration-200">
+                            {{framework}}
+                        </span>
+                    </div>
                 </div>
             </div>
         </div>
 
-        <!-- Contact -->
-        <div class="bg-base-100 rounded shadow p-4 animate-fade-in-up" style="animation-delay: 200ms">
-            <h3 class="text-lg font-semibold text-accent mb-2 flex gap-2 items-center">
-                📞 Contact
-            </h3>
-            <p class="text-neutral">
-                Feel free to reach out to me if you have any questions or would like to collaborate on a project.
+        <!-- Contacto -->
+        <div class="lg:col-span-3 bg-white rounded-xl shadow-lg p-3 md:p-4 border-l-4 border-purple-500 card-item hover:shadow-xl transition-shadow duration-300">
+            <h2 class="text-lg md:text-xl font-bold text-gray-800 mb-2 md:mb-3 flex items-center gap-2">
+                <svg class="w-4 h-4 md:w-5 md:h-5 text-purple-600" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M20,4H4A2,2 0 0,0 2,6V18A2,2 0 0,0 4,20H20A2,2 0 0,0 22,18V6A2,2 0 0,0 20,4M20,18H4V8L12,13L20,8V18M20,6L12,11L4,6H20Z"/>
+                </svg>
+                Contacto
+            </h2>
+            <p class="text-gray-600 mb-2 md:mb-3 text-sm md:text-base">
+                No dudes en contactarme si tienes alguna pregunta o te gustaría colaborar en un proyecto.
             </p>
-            <ul class="mt-2 space-y-1 text-neutral">
-                <li>
-                    📧 <a href="mailto:sebastianechazu@gmail.com"
-                        class="text-accent hover:underline">sebastianechazu&#64;gmail.com</a>
-                </li>
-                <li>
-                    🔗 <a href="https://www.linkedin.com/in/sebastian-echazu/" target="_blank"
-                        class="text-accent hover:underline">LinkedIn — Sebastián Echazú</a>
-                </li>
-                <li>
-                    📞 <a href="tel:+54 2615564713" class="text-accent hover:underline">+54 261 556 4713</a>
-                </li>
-            </ul>
+            <div class="flex flex-col sm:flex-row gap-2">
+                <a href="mailto:sebastianechazu@gmail.com" 
+                   class="flex items-center justify-center gap-2 p-2 rounded-lg bg-red-50 text-red-700 hover:bg-red-100 transition-colors duration-200 group flex-1 text-xs md:text-sm">
+                    <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M20,4H4A2,2 0 0,0 2,6V18A2,2 0 0,0 4,20H20A2,2 0 0,0 22,18V6A2,2 0 0,0 20,4M20,18H4V8L12,13L20,8V18M20,6L12,11L4,6H20Z"/>
+                    </svg>
+                    <span class="group-hover:underline truncate">sebastianechazu&#64;gmail.com</span>
+                </a>
+                <a href="https://www.linkedin.com/in/sebastian-echazu/" target="_blank"
+                   class="flex items-center justify-center gap-2 p-2 rounded-lg bg-blue-50 text-blue-700 hover:bg-blue-100 transition-colors duration-200 group flex-1 text-xs md:text-sm">
+                    <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M19 3A2 2 0 0 1 21 5V19A2 2 0 0 1 19 21H5A2 2 0 0 1 3 19V5A2 2 0 0 1 5 3H19M18.5 18.5V13.2A3.26 3.26 0 0 0 15.24 9.94C14.39 9.94 13.4 10.46 12.92 11.24V10.13H10.13V18.5H12.92V13.57C12.92 12.8 13.54 12.17 14.31 12.17A1.4 1.4 0 0 1 15.71 13.57V18.5H18.5M6.88 8.56A1.68 1.68 0 0 0 8.56 6.88C8.56 5.95 7.81 5.19 6.88 5.19A1.69 1.69 0 0 0 5.19 6.88C5.19 7.81 5.95 8.56 6.88 8.56M8.27 18.5V10.13H5.5V18.5H8.27Z"/>
+                    </svg>
+                    <span class="group-hover:underline truncate">LinkedIn</span>
+                </a>
+                <a href="tel:+54 2615564713" 
+                   class="flex items-center justify-center gap-2 p-2 rounded-lg bg-green-50 text-green-700 hover:bg-green-100 transition-colors duration-200 group flex-1 text-xs md:text-sm">
+                    <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M6.62,10.79C8.06,13.62 10.38,15.94 13.21,17.38L15.41,15.18C15.69,14.9 16.08,14.82 16.43,14.93C17.55,15.3 18.75,15.5 20,15.5A1,1 0 0,1 21,16.5V20A1,1 0 0,1 20,21A17,17 0 0,1 3,4A1,1 0 0,1 4,3H7.5A1,1 0 0,1 8.5,4C8.5,5.25 8.7,6.45 9.07,7.57C9.18,7.92 9.1,8.31 8.82,8.59L6.62,10.79Z"/>
+                    </svg>
+                    <span class="group-hover:underline truncate">+54 261 556 4713</span>
+                </a>
+            </div>
         </div>
     </div>
 </section>

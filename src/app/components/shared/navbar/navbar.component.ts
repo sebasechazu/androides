@@ -43,23 +43,45 @@ export class NavbarComponent {
   profileOpen = signal(false);
 
   items = signal([
-
     {
       label: 'Juegos',
       link: '#',
       hasSubmenu: true,
+      iconType: 'games',
       submenu: [
-        { label: 'Juego de Estado', link: '/status-game' },
-        { label: 'Juego de Memoria', link: '/memory-game' }
+        { 
+          label: 'Estado', 
+          link: '/status-game',
+          iconType: 'status'
+        },
+        { 
+          label: 'Memoria', 
+          link: '/memory-game',
+          iconType: 'memory'
+        },
+        { 
+          label: 'Preguntas', 
+          link: '/questions-game',
+          iconType: 'questions'
+        }
       ]
     },
     {
       label: 'Perfil',
       link: '#',
       hasSubmenu: true,
+      iconType: 'profile',
       submenu: [
-        { label: 'Personajes', link: '/characters' },
-        { label: 'Acerca de', link: '/about' }
+        { 
+          label: 'Personajes', 
+          link: '/characters',
+          iconType: 'characters'
+        },
+        { 
+          label: 'Acerca de', 
+          link: '/about',
+          iconType: 'about'
+        }
       ]
     },
   ]);
