@@ -1,50 +1,52 @@
-
 @import "tailwindcss";
 
 @theme {
-    /* Colores */
-    --color-primary: #1F2937;
-    --color-secondary: #F59E0B;
-    --color-accent: #10B981;
-    --color-neutral: #374151;
-    --color-base-100: #F3F4F6;
+  /* Colores */
+  --color-primary: #1F2937;
+  --color-secondary: #F59E0B;
+  --color-accent: #10B981;
+  --color-neutral: #374151;
+  --color-base-100: #F3F4F6;
 
-    /* Fuentes */
-    --font-poppins: 'Poppins', sans-serif;
+  /* Fuentes */
+  --font-poppins: 'Poppins', sans-serif;
 }
 
 @layer utilities {
-    /* Animaciones de entrada unificadas */
-    @keyframes fade-in-up {
-        from {
-            opacity: 0;
-            transform: translateY(20px);
-        }
-        to {
-            opacity: 1;
-            transform: translateY(0);
-        }
+
+  /* Animaciones de entrada unificadas */
+  @keyframes fade-in-up {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
     }
 
-    .animate-fade-in-up {
-        animation: fade-in-up 0.6s ease-out both;
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .animate-fade-in-up {
+    animation: fade-in-up 0.6s ease-out both;
+  }
+
+  /* Fade-in con escala */
+  @keyframes fade-in-scale {
+    from {
+      opacity: 0;
+      transform: scale(0.95);
     }
 
-    /* Fade-in con escala */
-    @keyframes fade-in-scale {
-        from {
-            opacity: 0;
-            transform: scale(0.95);
-        }
-        to {
-            opacity: 1;
-            transform: scale(1);
-        }
+    to {
+      opacity: 1;
+      transform: scale(1);
     }
+  }
 
-    .animate-fade-in-scale {
-        animation: fade-in-scale 0.5s ease-out both;
-    }
+  .animate-fade-in-scale {
+    animation: fade-in-scale 0.5s ease-out both;
+  }
 }
 
 /* ========================================
@@ -53,35 +55,38 @@
 
 /* Estilos para Angular CDK Drag & Drop */
 .cdk-drag-preview {
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
-  transform: rotate(2deg);
-  z-index: 9999;
-  cursor: grabbing !important; /* Mano cerrada mientras arrastra */
-  /* Forzar dimensiones consistentes en mobile */
-  max-width: 230px !important;
-  width: 230px !important;
+  opacity: 0.8 !important;
+  box-shadow: 0 5px 10px -3px rgba(0, 0, 0, 0.25), 0 8px 16px 5px rgba(0, 0, 0, 0.15) !important;
+  z-index: 100 !important;
+  border-radius: 8px !important;
+  background-color: white !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  flex-direction: column !important;
 }
 
 /* Forzar dimensiones para todos los elementos dentro del preview */
 .cdk-drag-preview * {
-  max-width: 230px !important;
-}
-
-.cdk-drag-preview .mobile-compact-card {
-  max-width: 230px !important;
-  width: 230px !important;
-  transform: scale(0.9) !important;
+  max-width: 100% !important;
 }
 
 .cdk-drag-preview app-card-status {
-  max-width: 230px !important;
-  width: 230px !important;
+  max-width: 90px !important;
+  width: 90px !important;
+  height: 90px !important;
 }
 
 .cdk-drag-placeholder {
   opacity: 0.3 !important;
   filter: grayscale(100%) blur(2px) !important;
   background-color: rgba(229, 231, 235, 0.7) !important;
+  border-radius: 8px !important;
+  margin: 0.25rem auto !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  border: 2px dashed rgba(156, 163, 175, 0.5) !important;
 }
 
 .cdk-drop-list-dragging .cdk-drag:not(.cdk-drag-placeholder) {
@@ -90,61 +95,34 @@
 
 /* Cursor personalizado para elementos arrastrables */
 .cdk-drag {
-  cursor: grab; /* Mano abierta por defecto */
-  transition: transform 0.2s ease-out, box-shadow 0.2s ease-out;
-}
-
-.cdk-drag:hover {
-  cursor: grab; /* Mano abierta al hacer hover */
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  cursor: grab;
+  /* Mano abierta por defecto */
 }
 
 .cdk-drag:active {
-  cursor: grabbing !important; /* Mano cerrada al hacer clic */
+  cursor: grabbing !important;
+  /* Mano cerrada al hacer clic */
 }
 
 .cdk-drag.cdk-drag-dragging {
-  cursor: grabbing !important; /* Mano cerrada mientras arrastra */
-}
-
-/* Estilos adicionales para las cartas del status game */
-.status-card {
-  transition: all 0.2s ease-out;
-}
-
-.status-card:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
-}
-
-.status-card.dragging {
-  transform: rotate(5deg) scale(1.05);
-  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.25);
-  z-index: 1000;
+  cursor: grabbing !important;
+  /* Mano cerrada mientras arrastra */
 }
 
 /* Efectos para las zonas de drop */
 .drop-zone-hover {
   background-color: rgba(59, 130, 246, 0.05) !important;
-  border-color: rgba(59, 130, 246, 0.3) !important;
-  transform: scale(1.02);
-  transition: all 0.2s ease-out;
 }
 
 /* Mejoras para dispositivos táctiles - comportamiento nativo */
 @media (hover: none) and (pointer: coarse) {
   .cdk-drag {
-    cursor: default; /* En móviles no mostrar cursor de mano */
+    cursor: default;
+    /* En móviles no mostrar cursor de mano */
   }
-  
+
   .cdk-drag:active {
-    transform: scale(1.05);
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
-  }
-  
-  .status-card:active {
-    transform: scale(1.05) translateY(-2px);
+    cursor: grabbing;
   }
 }
 
@@ -159,109 +137,80 @@
    ======================================== */
 
 @media (max-width: 768px) {
-  /* Estilos específicos para tarjetas en mobile */
-  .status-card {
-    margin: 0.5rem 0 !important;
-    width: auto !important;
-    max-width: 230px !important;
-    min-height: 80px;
-    cursor: grab;
-    user-select: none;
-    -webkit-user-select: none;
-    -moz-user-select: none;
-    transform: translateZ(0);
-    -webkit-backface-visibility: hidden;
-    backface-visibility: hidden;
-    transition: opacity 0.1s ease;
-    touch-action: auto !important;
-  }
-  
-  .status-card:active {
-    cursor: grabbing;
-    will-change: transform;
-  }
-  
-  /* Hacer las tarjetas más compactas */
-  .mobile-compact-card {
-    max-width: 230px !important;
-    width: 100% !important;
-    transform: scale(0.9);
-    margin: 0.25rem auto !important;
-  }
-  
-  /* Dimensiones para drag preview */
-  .cdk-drag-preview {
-    max-width: 230px !important;
-    width: 230px !important;
-    box-sizing: border-box;
-    border-radius: 12px;
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
-    transform: rotate(-5deg) translateZ(0);
-    transition: transform 0.1s ease-out;
-    will-change: transform;
-    -webkit-backface-visibility: hidden;
-    backface-visibility: hidden;
-  }
-  
-  .cdk-drag-preview .status-card {
-    max-width: 230px !important;
-    width: 230px !important;
-  }
-  
-  .cdk-drag-preview .mobile-compact-card {
-    max-width: 230px !important;
-    width: 230px !important;
-    transform: scale(0.9) !important;
-  }
-  
-  .cdk-drag-placeholder {
-    max-width: 230px;
-    width: 230px;
-    transform: translateZ(0);
-    height: 60px !important;
-  }
-  
-  /* Layout optimizations */
+
+  /* Layout optimizations - Manteniendo el layout horizontal en móvil */
   .mobile-column {
-    padding: 0.75rem !important;
-    margin-bottom: 1rem;
+    padding: 0.5rem !important;
+    margin: 0 0.1rem !important;
+    width: 30% !important;
+    /* Ancho relativo para adaptarse al contenedor */
+    max-width: 120px !important;
+    /* Máximo ancho para evitar que sean demasiado grandes */
+    flex: 1 !important;
+    /* Distribuir el espacio disponible equitativamente */
+    flex-shrink: 0 !important;
+    /* Evita que las columnas se reduzcan */
   }
-  
+
   .mobile-drop-zone {
-    min-height: 120px !important;
-    padding: 0.75rem !important;
-    gap: 0.5rem !important;
+    min-height: 140px !important;
+    padding: 0.5rem !important;
+    gap: 0.15rem !important;
     scroll-snap-align: none;
     contain: layout;
     touch-action: auto !important;
+    width: 100% !important;
+    /* Asegurar que ocupe todo el ancho de la columna */
   }
-  
+
   .mobile-column-title {
     font-size: 1rem !important;
     margin-bottom: 0.5rem !important;
   }
-  
+
   .mobile-grid {
-    gap: 0.75rem !important;
-    padding: 0.5rem !important;
+    gap: 0.2rem !important;
+    padding: 0.25rem !important;
+    width: 100% !important;
+    /* Ocupar todo el ancho disponible */
+    max-width: 100% !important;
+    /* No exceder el ancho del contenedor */
+    margin: 0 auto !important;
+    /* Centra el contenedor */
+    display: flex !important;
+    flex-direction: row !important;
+    /* Fuerza las columnas en fila horizontal */
+    justify-content: space-between !important;
+    /* Distribuye el espacio entre columnas */
   }
-  
+
   .mobile-grid-container {
-    overscroll-behavior: auto !important;
-    scroll-behavior: auto !important;
+    overflow-x: auto !important;
+    scrollbar-width: none !important;
+    /* Oculta barras de desplazamiento en Firefox */
+    -ms-overflow-style: none !important;
+    /* Oculta barras de desplazamiento en IE/Edge */
+    overscroll-behavior-x: contain !important;
+    scroll-behavior: smooth !important;
     -webkit-overflow-scrolling: touch !important;
     contain: layout style;
     transform: translateZ(0);
     will-change: scroll-position;
-    touch-action: auto !important;
+    touch-action: pan-x !important;
+    /* Permite desplazamiento horizontal en táctil */
   }
-  
+
+  /* Oculta la barra de desplazamiento en Chrome, Safari y Opera */
+  .mobile-grid-container::-webkit-scrollbar {
+    display: none !important;
+  }
+
   .mobile-grid-container * {
     touch-action: inherit !important;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
   }
-  
+
   /* Drag elements optimization */
   .cdk-drag {
     cursor: default;
@@ -273,11 +222,11 @@
     perspective: 1000;
     touch-action: none;
   }
-  
+
   .cdk-drag:active {
     cursor: grabbing;
   }
-  
+
   /* Drop zones optimization */
   .cdk-drop-list {
     scroll-behavior: auto !important;
@@ -285,19 +234,17 @@
     overscroll-behavior: auto !important;
     touch-action: auto !important;
   }
-  
-  /* Visual feedback for disabled drag */
-  [data-drag-disabled="true"] .status-card {
-    opacity: 0.8;
-    cursor: default !important;
-  }
 
+  /* Visual feedback for disabled drag */
   [data-drag-disabled="true"] {
+    opacity: 0.8;
     pointer-events: none !important;
   }
-  
+
   /* Hardware acceleration for containers */
-  .mobile-grid, .mobile-column, .mobile-drop-zone {
+  .mobile-grid,
+  .mobile-column,
+  .mobile-drop-zone {
     transform: translateZ(0);
     will-change: scroll-position;
     contain: layout style;
@@ -305,13 +252,14 @@
     scroll-behavior: auto !important;
     overscroll-behavior: auto !important;
   }
-  
+
   .cdk-drag-animating {
     transition: none !important;
   }
-  
+
   /* Base mobile optimizations */
-  body, html {
+  body,
+  html {
     -webkit-overflow-scrolling: touch !important;
     overscroll-behavior: auto !important;
     touch-action: manipulation !important;
@@ -319,49 +267,8 @@
   }
 }
 
-/* Estilos ultra compactos para pantallas muy pequeñas */
-@media (max-width: 480px) {
-  .mobile-compact-card {
-    transform: scale(0.8);
-    max-width: 230px !important;
-  }
-  
-  .cdk-drag-preview {
-    max-width: 230px !important;
-    width: 230px !important;
-  }
-  
-  .cdk-drag-preview .mobile-compact-card {
-    max-width: 230px !important;
-    width: 230px !important;
-    transform: scale(0.8) !important;
-  }
-  
-  .cdk-drag-preview .status-card {
-    max-width: 230px !important;
-    width: 230px !important;
-  }
-  
-  .mobile-column {
-    padding: 0.5rem !important;
-  }
-  
-  .mobile-drop-zone {
-    min-height: 100px !important;
-    padding: 0.5rem !important;
-    gap: 0.25rem !important;
-  }
-  
-  .mobile-grid {
-    gap: 0.5rem !important;
-    padding: 0.25rem !important;
-  }
-  
-  .status-card {
-    max-width: 230px !important;
-    margin: 0.25rem 0 !important;
-  }
-}
+/* Estilos para todas las pantallas, incluyendo móviles */
+/* Se eliminan reglas específicas para pantallas muy pequeñas para mantener coherencia en todos los tamaños */
 
 /* Elementos 3D y animaciones de cartas */
 .backface-hidden {
@@ -406,6 +313,7 @@
   transform: translateY(0);
   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
 }
+
 /* ========================================
    ANIMACIONES DE PUNTUACIÓN Y ERRORES
    ======================================== */
@@ -415,11 +323,22 @@
   .score-animate {
     animation: scoreMobilePop 0.4s ease-out;
   }
-  
+
   @keyframes scoreMobilePop {
-    0% { transform: scale(1); color: inherit; }
-    50% { transform: scale(1.3); color: #10b981; }
-    100% { transform: scale(1); color: inherit; }
+    0% {
+      transform: scale(1);
+      color: inherit;
+    }
+
+    50% {
+      transform: scale(1.3);
+      color: #10b981;
+    }
+
+    100% {
+      transform: scale(1);
+      color: inherit;
+    }
   }
 }
 
@@ -427,19 +346,21 @@
   .score-animate {
     animation: scoreGlowDesktop 0.5s ease-out;
   }
-  
+
   @keyframes scoreGlowDesktop {
-    0% { 
+    0% {
       transform: scale(1);
       color: inherit;
       text-shadow: none;
     }
-    50% { 
+
+    50% {
       transform: scale(1.2);
       color: #10b981;
       text-shadow: 0 0 20px rgba(16, 185, 129, 0.5);
     }
-    100% { 
+
+    100% {
       transform: scale(1);
       color: inherit;
       text-shadow: none;
@@ -453,23 +374,27 @@
 }
 
 @keyframes errorShakeEnhanced {
-  0% { 
+  0% {
     transform: translateX(0) scale(1);
     color: inherit;
   }
-  25% { 
+
+  25% {
     transform: translateX(-5px) scale(1.1);
     color: #ef4444;
   }
-  50% { 
+
+  50% {
     transform: translateX(5px) scale(1.1);
     color: #ef4444;
   }
-  75% { 
+
+  75% {
     transform: translateX(-5px) scale(1.1);
     color: #ef4444;
   }
-  100% { 
+
+  100% {
     transform: translateX(0) scale(1);
     color: inherit;
   }
@@ -485,9 +410,17 @@
 }
 
 @keyframes matchedPulse {
-  0% { transform: scale(1); }
-  50% { transform: scale(1.05); }
-  100% { transform: scale(1); }
+  0% {
+    transform: scale(1);
+  }
+
+  50% {
+    transform: scale(1.05);
+  }
+
+  100% {
+    transform: scale(1);
+  }
 }
 
 /* Efectos de partículas para victoria */
@@ -503,15 +436,26 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background: radial-gradient(circle, rgba(255,255,255,0.3) 1px, transparent 1px);
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.3) 1px, transparent 1px);
   background-size: 20px 20px;
   animation: sparkle 2s linear infinite;
 }
 
 @keyframes sparkle {
-  0% { opacity: 0; transform: scale(0); }
-  50% { opacity: 1; transform: scale(1); }
-  100% { opacity: 0; transform: scale(0); }
+  0% {
+    opacity: 0;
+    transform: scale(0);
+  }
+
+  50% {
+    opacity: 1;
+    transform: scale(1);
+  }
+
+  100% {
+    opacity: 0;
+    transform: scale(0);
+  }
 }
 
 /* Gradientes animados para botones */
@@ -522,9 +466,17 @@
 }
 
 @keyframes gradientShift {
-  0% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
-  100% { background-position: 0% 50%; }
+  0% {
+    background-position: 0% 50%;
+  }
+
+  50% {
+    background-position: 100% 50%;
+  }
+
+  100% {
+    background-position: 0% 50%;
+  }
 }
 
 /* Efectos de texto brillante */
@@ -534,8 +486,13 @@
 }
 
 @keyframes textGlow {
-  from { text-shadow: 0 0 10px currentColor; }
-  to { text-shadow: 0 0 20px currentColor, 0 0 30px currentColor; }
+  from {
+    text-shadow: 0 0 10px currentColor;
+  }
+
+  to {
+    text-shadow: 0 0 20px currentColor, 0 0 30px currentColor;
+  }
 }
 
 /* Animación de aparición escalonada */
@@ -557,47 +514,32 @@
   animation-delay: 400ms;
 }
 
-.status-card-delay-0 { animation-delay: 600ms; }
-.status-card-delay-1 { animation-delay: 700ms; }
-.status-card-delay-2 { animation-delay: 800ms; }
-.status-card-delay-3 { animation-delay: 900ms; }
-.status-card-delay-4 { animation-delay: 1000ms; }
-.status-card-delay-5 { animation-delay: 1100ms; }
-.status-card-delay-6 { animation-delay: 1200ms; }
-.status-card-delay-7 { animation-delay: 1300ms; }
-.status-card-delay-8 { animation-delay: 1400ms; }
-.status-card-delay-9 { animation-delay: 1500ms; }
-
 .status-stats {
   animation-delay: 1600ms;
 }
 
 /* ========================================
    RESPONSIVE Y ACCESIBILIDAD
-   ======================================== */
+   ======================================== 
+*/
 
 /* Reducir animaciones para usuarios con preferencias de accesibilidad */
 @media (prefers-reduced-motion: reduce) {
+
   /* Solo afectar animaciones específicas que puedan causar mareos */
   .animate-spin,
   .animate-bounce,
   .animate-pulse {
     animation: none !important;
   }
-  
+
   .flip-card:hover {
     transform: none !important;
   }
-  
+
   /* Reducir duración de transiciones suaves */
   .flip-card,
   .card-inner {
     transition-duration: 0.1s !important;
   }
 }
-
-/* ========================================
-   MOBILE DRAG & DROP OPTIMIZATIONS
-   ======================================== */
-
-/* Las optimizaciones móviles ya están incluidas en la sección OPTIMIZACIONES PARA MOBILE */

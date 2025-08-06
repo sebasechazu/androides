@@ -49,8 +49,7 @@ export class NavbarComponent {
       hasSubmenu: true,
       submenu: [
         { label: 'Juego de Estado', link: '/status-game' },
-        { label: 'Juego de Memoria', link: '/memory-game' },
-        { label: 'Juego de Ajedrez', link: '/chess-game' }
+        { label: 'Juego de Memoria', link: '/memory-game' }
       ]
     },
     { label: 'Acerca de', link: '/about' },

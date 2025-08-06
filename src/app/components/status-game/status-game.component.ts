@@ -24,7 +24,6 @@ export class StatusGameComponent implements OnInit {
   gameElements = signal<Elemento[]>([]);
   isLoading = signal<boolean>(true);
   gameInitialized = signal<boolean>(false);
-  showInitialAnimations = signal<boolean>(false);
   
   // Variables para mejorar scroll en móviles
   private isDragging = false;
@@ -342,14 +341,6 @@ export class StatusGameComponent implements OnInit {
     this.isLoading.set(false);
     this.gameInitialized.set(true);
     
-    // Activar animaciones de entrada solo en la primera carga
-    this.showInitialAnimations.set(true);
-    
-    // Desactivar las animaciones después de que se ejecuten
-    setTimeout(() => {
-      this.showInitialAnimations.set(false);
-    }, 2000); // 2 segundos es suficiente para que terminen todas las animaciones
-    
     // Reset contadores
     this.totalMovements.set(0);
     this.correctMovements.set(0);
@@ -494,7 +485,7 @@ export class StatusGameComponent implements OnInit {
   }
 
   getElementBorderClass(elemento: Elemento, currentGroup: number): string {
-    const baseClasses = 'rounded-xl overflow-hidden';
+    const baseClasses = 'rounded-xl overflow-hidden w-full h-full';
     
     if (elemento.grupo === currentGroup) {
       return `${baseClasses} border-green-500 border-4`;
@@ -506,7 +497,6 @@ export class StatusGameComponent implements OnInit {
   resetGame(): void {
     this.gameInitialized.set(false);
     this.showVictoryModal.set(false);
-    this.showInitialAnimations.set(false); // Resetear animaciones
     this.initializeGame();
   }
 
@@ -516,26 +506,16 @@ export class StatusGameComponent implements OnInit {
 
   // Método para generar la clase CSS de delay para las cartas
   getCardDelayClass(columnIndex: number, cardIndex: number): string {
-    if (!this.showInitialAnimations()) {
-      return ''; // No aplicar animaciones después de la carga inicial
-    }
-    const totalDelay = columnIndex * 2 + cardIndex;
-    return `stagger-item status-card-delay-${Math.min(totalDelay, 9)}`;
+    return ''; // No aplicar animaciones
   }
 
   // Método para generar las clases de animación de columnas
   getColumnAnimationClass(columnIndex: number): string {
-    if (!this.showInitialAnimations()) {
-      return ''; // No aplicar animaciones después de la carga inicial
-    }
-    return `stagger-item status-column-${columnIndex}`;
+    return ''; // No aplicar animaciones
   }
 
   // Método para generar las clases de animación de estadísticas
   getStatsAnimationClass(): string {
-    if (!this.showInitialAnimations()) {
-      return ''; // No aplicar animaciones después de la carga inicial
-    }
-    return 'stagger-item status-stats';
+    return ''; // No aplicar animaciones
   }
 }

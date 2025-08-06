@@ -4,7 +4,6 @@ import { StatusGameComponent } from './components/status-game/status-game.compon
 import { AboutComponent } from './components/about/about.component';
 import { CharactersComponent } from './components/characters/characters.component';
 import { MemoryGameComponent } from './components/memory-game/memory-game.component';
-import { ChessGameComponent } from './components/chess-game/chess-game.component';
 
 export const routes: Routes = [
     { path: 'home', component: HomeComponent },
@@ -12,6 +11,5 @@ export const routes: Routes = [
     { path: 'characters', component: CharactersComponent },
     { path: 'status-game', component: StatusGameComponent },
     { path: 'memory-game', component: MemoryGameComponent },
-    { path: 'chess-game', component: ChessGameComponent },
     { path: '**', pathMatch: 'full', redirectTo: 'home' }
 ];
