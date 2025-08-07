@@ -4,8 +4,8 @@ import { trigger, state, style, transition, animate, query, stagger } from '@ang
 
 @Component({
     selector: 'app-home',
-    templateUrl: './home.component.html',
     imports: [RouterLink],
+    templateUrl: './home.component.html',
     animations: [
         // Animación para fade in con escala
         trigger('fadeInScale', [
@@ -15,7 +15,6 @@ import { trigger, state, style, transition, animate, query, stagger } from '@ang
                     style({ transform: 'scale(1)', opacity: 1 }))
             ])
         ]),
-        
         // Animación para slide in desde abajo
         trigger('slideInUp', [
             transition(':enter', [
@@ -28,22 +27,13 @@ import { trigger, state, style, transition, animate, query, stagger } from '@ang
         // Animación para el contenedor de juegos con stagger
         trigger('gamesContainer', [
             transition(':enter', [
-                query('.game-card', [
+                query('.group', [
                     style({ transform: 'translateY(50px) scale(0.9)', opacity: 0 }),
                     stagger(150, [
                         animate('700ms cubic-bezier(0.25, 0.46, 0.45, 0.94)', 
                             style({ transform: 'translateY(0) scale(1)', opacity: 1 }))
                     ])
                 ], { optional: true })
-            ])
-        ]),
-        
-        // Animación específica para cada card de juego
-        trigger('gameCard', [
-            transition(':enter', [
-                style({ transform: 'translateY(50px) scale(0.9)', opacity: 0 }),
-                animate('700ms cubic-bezier(0.25, 0.46, 0.45, 0.94)', 
-                    style({ transform: 'translateY(0) scale(1)', opacity: 1 }))
             ])
         ])
     ]

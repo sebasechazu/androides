@@ -1,6 +1,6 @@
 import { Component, inject, signal, computed, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
 import { trigger, state, style, transition, animate, query, stagger } from '@angular/animations';
+import { CommonModule, DecimalPipe } from '@angular/common';
 import { Character } from '../../interfaces/character';
 import { CharacterService } from '../../services/charater.service';
 
@@ -16,11 +16,9 @@ interface Question {
 @Component({
   selector: 'app-questions-game',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, DecimalPipe],
   templateUrl: './questions-game.component.html',
-  styleUrls: ['./questions-game.component.css'],
   animations: [
-    // Animación para la entrada de elementos
     trigger('slideInFromTop', [
       transition(':enter', [
         style({ transform: 'translateY(-100%)', opacity: 0 }),
@@ -28,7 +26,6 @@ interface Question {
       ])
     ]),
     
-    // Animación para la transición entre preguntas
     trigger('questionTransition', [
       transition(':enter', [
         style({ transform: 'scale(0.8) translateX(50px)', opacity: 0 }),
@@ -41,7 +38,6 @@ interface Question {
       ])
     ]),
     
-    // Animación para los botones de respuesta
     trigger('buttonAnimation', [
       transition(':enter', [
         style({ transform: 'scale(0)', opacity: 0 }),
@@ -50,7 +46,6 @@ interface Question {
       ])
     ]),
     
-    // Animación para el feedback de respuesta
     trigger('feedbackAnimation', [
       transition(':enter', [
         style({ transform: 'scale(0.5) rotateX(-90deg)', opacity: 0 }),
@@ -59,7 +54,6 @@ interface Question {
       ])
     ]),
     
-    // Animación para la barra de progreso
     trigger('progressAnimation', [
       transition(':enter', [
         style({ width: '0%', opacity: 0 }),
@@ -67,7 +61,6 @@ interface Question {
       ])
     ]),
     
-    // Animación para la pantalla de resultados
     trigger('resultsAnimation', [
       transition(':enter', [
         query('*', [
@@ -80,7 +73,6 @@ interface Question {
       ])
     ]),
     
-    // Animación de pulso para el loading
     trigger('pulseAnimation', [
       state('pulse', style({ transform: 'scale(1)' })),
       transition('* => pulse', [
@@ -93,17 +85,14 @@ interface Question {
 export class QuestionsGameComponent implements OnInit {
   private readonly characterService = inject(CharacterService);
 
-  // Estado del juego
   private readonly _questions = signal<Question[]>([]);
   private readonly _currentQuestionIndex = signal<number>(0);
   private readonly _gameStarted = signal<boolean>(false);
   private readonly _gameFinished = signal<boolean>(false);
   private readonly _isLoading = signal<boolean>(false);
   
-  // Estado para animaciones
   pulseState = 'pulse';
 
-  // Computed signals
   readonly questions = this._questions.asReadonly();
   readonly currentQuestionIndex = this._currentQuestionIndex.asReadonly();
   readonly gameStarted = this._gameStarted.asReadonly();
@@ -137,7 +126,6 @@ export class QuestionsGameComponent implements OnInit {
     this._gameFinished.set(false);
     this._currentQuestionIndex.set(0);
     
-    // Generar preguntas basadas en los personajes disponibles
     setTimeout(() => {
       this.generateQuestions();
       this._isLoading.set(false);
@@ -151,7 +139,6 @@ export class QuestionsGameComponent implements OnInit {
       return;
     }
 
-    // Seleccionar 10 personajes aleatorios
     const selectedCharacters = this.getRandomCharacters(characters, 10);
     const questions: Question[] = [];
 
@@ -161,27 +148,22 @@ export class QuestionsGameComponent implements OnInit {
       let correctAnswer: boolean;
 
       if (questionType < 0.2) {
-        // Pregunta sobre el estado (vivo/muerto)
         const isAlive = character.status === 'Alive';
         question = `¿${character.name} está vivo?`;
         correctAnswer = isAlive;
       } else if (questionType < 0.4) {
-        // Pregunta sobre el género
         const isMale = character.gender === 'Male';
         question = `¿${character.name} es de género masculino?`;
         correctAnswer = isMale;
       } else if (questionType < 0.6) {
-        // Pregunta sobre la especie
         const isHuman = character.species === 'Human';
         question = `¿${character.name} es humano?`;
         correctAnswer = isHuman;
       } else if (questionType < 0.8) {
-        // Pregunta sobre el origen
         const isFromEarth = character.origin.name.toLowerCase().includes('earth');
         question = `¿${character.name} es originario de la Tierra?`;
         correctAnswer = isFromEarth;
       } else {
-        // Pregunta sobre ubicación actual
         const isOnEarth = character.location.name.toLowerCase().includes('earth');
         question = `¿${character.name} se encuentra actualmente en la Tierra?`;
         correctAnswer = isOnEarth;
@@ -218,7 +200,6 @@ export class QuestionsGameComponent implements OnInit {
       
       this._questions.set(updatedQuestions);
       
-      // Avanzar a la siguiente pregunta después de un breve delay
       setTimeout(() => {
         if (currentIndex + 1 < questions.length) {
           this._currentQuestionIndex.set(currentIndex + 1);
