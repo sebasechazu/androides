@@ -1,28 +1,28 @@
-<nav class="bg-primary text-base-100 px-4 py-3 relative">
-    <div class="container mx-auto flex justify-between items-center min-h-[60px] relative">
+<nav class="bg-primary text-base-100 px-4 py-1.5 relative">
+    <div class="container mx-auto flex justify-between items-center min-h-[44px] relative">
         <!-- Logo a la izquierda -->
         <div class="flex items-center">
             <a [routerLink]="'/home'" class="flex items-center hover:opacity-80 transition-opacity duration-200">
-                <img src="assets/img/logo.png" alt="Elementos App" class="h-10 w-auto">
+                <img src="assets/img/logo.png" alt="Elementos App" class="h-8 w-auto">
             </a>
         </div>
 
         <!-- Título centrado (absolutamente posicionado en la versión de escritorio) -->
         <div class="absolute left-1/2 transform -translate-x-1/2 hidden md:block">
             @if (pageTitle) {
-                <h1 class="text-xl md:text-2xl font-bold text-white leading-none whitespace-nowrap">{{ pageTitle }}</h1>
+                <h1 class="text-lg md:text-xl font-bold text-white leading-none whitespace-nowrap">{{ pageTitle }}</h1>
             }
         </div>
 
         <!-- Título visible en móvil (después del logo) -->
         <div class="flex md:hidden ml-4">
             @if (pageTitle) {
-                <h1 class="text-xl font-bold text-white leading-none">{{ pageTitle }}</h1>
+                <h1 class="text-lg font-bold text-white leading-none">{{ pageTitle }}</h1>
             }
         </div>
 
         <!-- Botón hamburguesa -->
-        <button (click)="isOpen.set(!isOpen())" class="md:hidden text-base-100 focus:outline-none relative z-20 flex items-center justify-center w-10 h-10"
+        <button (click)="isOpen.set(!isOpen())" class="md:hidden text-base-100 focus:outline-none relative z-20 flex items-center justify-center w-8 h-8"
             aria-label="Toggle menu">
             @if (!isOpen()) {
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"
@@ -38,13 +38,13 @@
         </button>
 
         <!-- Menú desktop -->
-        <ul class="hidden md:flex gap-8 items-center">
+        <ul class="hidden md:flex gap-6 items-center">
             @for (item of items(); track item.label) {
             <li class="relative flex items-center">
                 @if (item.hasSubmenu) {
                 <div class="relative">
                     <button (click)="item.label === 'Juegos' ? toggleGamesMenu() : toggleProfileMenu()"
-                        class="px-3 py-2 rounded-lg font-medium text-white transition-colors duration-200 hover:text-accent hover:bg-white/10 flex items-center gap-2 h-10">
+                        class="px-2 py-1.5 rounded-lg font-medium text-white transition-colors duration-200 hover:text-accent hover:bg-white/10 flex items-center gap-2 h-8">
                         @switch (item.iconType) {
                             @case ('games') {
                                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -107,7 +107,7 @@
                 </div>
                 } @else {
                 <a [routerLink]="item.link"
-                    class="px-3 py-2 rounded-lg font-medium text-white transition-colors duration-200 hover:text-accent hover:bg-white/10 flex items-center h-10">
+                    class="px-2 py-1.5 rounded-lg font-medium text-white transition-colors duration-200 hover:text-accent hover:bg-white/10 flex items-center h-8">
                     {{ item.label }}
                 </a>
                 }
@@ -119,13 +119,13 @@
     <!-- Menú móvil dropdown -->
     <div class="absolute top-full left-0 right-0 md:hidden z-50 overflow-hidden"
          [@slideDown]="isOpen() ? 'open' : 'closed'">
-        <div class="bg-primary shadow-xl border-t border-blue-800">
-            <div class="px-4 py-2">
+    <div class="bg-primary shadow-xl border-t border-blue-800">
+            <div class="px-4 py-1">
                 @for (item of items(); track item.label) {
                 <div class="border-b border-blue-700/30 last:border-b-0">
                     @if (item.hasSubmenu) {
                     <button (click)="item.label === 'Juegos' ? toggleGamesMenu() : toggleProfileMenu()"
-                            class="w-full text-left px-4 py-4 text-white font-medium transition-colors duration-200 
+                            class="w-full text-left px-4 py-2 text-white font-medium transition-colors duration-200 
                                    hover:bg-white/10 hover:text-accent rounded-lg flex justify-between items-center"
                             [@fadeInOut]>
                         <div class="flex items-center gap-3">
@@ -151,11 +151,11 @@
                     </button>
                     
                     @if ((item.label === 'Juegos' && gamesOpen()) || (item.label === 'Perfil' && profileOpen())) {
-                    <div class="pl-4 pb-2" [@fadeInOut]>
+                    <div class="pl-4 pb-1" [@fadeInOut]>
                         @for (subitem of item.submenu; track subitem.label) {
                         <a [routerLink]="subitem.link" 
                            (click)="closeAllMenus()"
-                           class="flex items-center gap-3 px-4 py-3 text-gray-200 font-medium transition-colors duration-200 
+                           class="flex items-center gap-3 px-4 py-2 text-gray-200 font-medium transition-colors duration-200 
                                   hover:bg-white/10 hover:text-accent rounded-lg ml-4">
                             @switch (subitem.iconType) {
                                 @case ('status') {
@@ -192,7 +192,7 @@
                     } @else {
                     <a [routerLink]="item.link" 
                        (click)="closeAllMenus()"
-                       class="block px-4 py-4 text-white font-medium transition-colors duration-200 
+                       class="block px-4 py-2 text-white font-medium transition-colors duration-200 
                               hover:bg-white/10 hover:text-accent rounded-lg"
                        [@fadeInOut]>
                         {{ item.label }}
