@@ -1,3 +1,4 @@
+import { CronometroComponent } from '../shared/cronometro/cronometro.component';
 import { Component, OnInit, inject, signal, computed, HostListener, ElementRef } from '@angular/core';
 import { CardStatusComponent } from './card-elemento/card-status.component';
 import { CdkDragDrop, DragDropModule, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
@@ -12,9 +13,10 @@ import { ModalGameComponent } from '../shared/modal-game/modal-game.component';
   selector: 'app-status-game',
   templateUrl: './status-game.component.html',
   standalone: true,
-  imports: [CommonModule, CardStatusComponent, DragDropModule, ModalGameComponent]
+  imports: [CommonModule, CardStatusComponent, DragDropModule, ModalGameComponent, CronometroComponent]
 })
 export class StatusGameComponent implements OnInit {
+  isCronometroRunning = signal<boolean>(false);
   private characterService = inject(CharacterService);
   private navigationService = inject(NavigationService);
   private elementRef = inject(ElementRef);
@@ -42,6 +44,22 @@ export class StatusGameComponent implements OnInit {
 
   // Computed para obtener el título de la página
   pageTitle = this.navigationService.pageTitle;
+
+  // Datos del resultado de la partida para el modal
+  get gameResult() {
+    return {
+      totalMovements: this.totalMovements(),
+      correctMovements: this.correctMovements(),
+      incorrectMovements: this.incorrectMovements(),
+      accuracy: this.accuracy(),
+      score: this.accuracy() // Puedes cambiar la fórmula si lo deseas
+    };
+  }
+
+  // Método para obtener el mensaje del resultado para el modal
+  getVictoryMessage(): string {
+    return `¡Partida finalizada!\n\nMovimientos totales: ${this.totalMovements()}\nCorrectos: ${this.correctMovements()}\nIncorrectos: ${this.incorrectMovements()}\nPrecisión: ${this.accuracy()}%\nPuntuación: ${this.accuracy()}`;
+  }
 
   accuracy = computed(() => {
     const total = this.totalMovements();

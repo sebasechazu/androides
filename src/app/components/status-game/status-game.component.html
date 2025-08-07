@@ -9,9 +9,17 @@
   </div>
   } @else {
   @if (gameInitialized()) {
-  <div class="flex items-center justify-center gap-2 md:gap-6 mb-4 md:mb-6 px-2">
-    <div class="flex items-center gap-2 flex-shrink-0">
-      <!-- Botón Reiniciar Juego - Siempre visible, activado/desactivado según el estado -->
+  <!-- Barra superior de controles -->
+  <div class="bg-white/80 backdrop-blur-sm border-2 border-blue-300/50 rounded-2xl shadow-lg p-2 mb-3 max-w-xl mx-auto grid grid-cols-3 items-center gap-2">
+    <!-- Izquierda vacía -->
+    <div></div>
+    <!-- Cronómetro centrado -->
+    <div class="flex flex-col items-center justify-center">
+      <app-cronometro [running]="isCronometroRunning()" [initialTime]="0"></app-cronometro>
+  
+    </div>
+    <!-- Botón Reiniciar a la derecha -->
+    <div class="flex justify-end">
       <button 
         (click)="resetGame()" 
         [disabled]="totalMovements() === 0"
@@ -173,8 +181,14 @@
       <div class="text-6xl mb-4">🎉</div>
       <h3 class="text-2xl font-bold mb-3 text-gray-800">¡Felicitaciones!</h3>
       <div class="bg-gradient-to-r from-green-400 to-blue-500 text-white rounded-lg p-4 mb-4">
-        <p class="mb-2 text-lg">Completaste el juego con {{ incorrectMovements() }} errores</p>
-        <p class="text-sm opacity-90">Precisión: {{ accuracy() }}%</p>
+        <p class="mb-2 text-lg">Resumen de la partida:</p>
+        <ul class="text-left text-base md:text-lg mb-2">
+          <li><span class="font-semibold">Movimientos totales:</span> {{ gameResult.totalMovements }}</li>
+          <li><span class="font-semibold">Correctos:</span> {{ gameResult.correctMovements }}</li>
+          <li><span class="font-semibold">Incorrectos:</span> {{ gameResult.incorrectMovements }}</li>
+          <li><span class="font-semibold">Precisión:</span> {{ gameResult.accuracy }}%</li>
+          <li><span class="font-semibold">Puntuación:</span> {{ gameResult.score }}</li>
+        </ul>
       </div>
       <button (click)="resetGame()" class="bg-blue-500 hover:bg-blue-600 text-white px-6 py-3 rounded-lg flex items-center justify-center gap-2 mx-auto">
         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" 
