@@ -1,7 +1,6 @@
-import { Component, inject, signal, computed, OnInit } from '@angular/core';
+import { Component, inject, signal, computed, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { CharacterService } from '../../services/charater.service';
-import { TooltipComponent } from '../shared/tooltip/tooltip.component';
 import { ModalGameComponent } from '../shared/modal-game/modal-game.component';
 import { 
   trigger, 
@@ -25,7 +24,7 @@ interface GameCard {
   selector: 'app-memory-game',
   standalone: true,
   templateUrl: './memory-game.component.html',
-  imports: [CommonModule, TooltipComponent, ModalGameComponent],
+  imports: [CommonModule, ModalGameComponent],
   animations: [
     // Animación para cartas que coinciden
     trigger('matchSuccess', [
@@ -139,8 +138,9 @@ interface GameCard {
     ])
   ]
 })
-export class MemoryGameComponent implements OnInit {
+export class MemoryGameComponent implements OnInit, OnDestroy {
   private characterService = inject(CharacterService);
+  private timerInterval?: number;
 
   // Signals para el estado del juego
   cards = signal<GameCard[]>([]);
@@ -151,6 +151,11 @@ export class MemoryGameComponent implements OnInit {
   animateScore = signal<boolean>(false);
   animateErrors = signal<boolean>(false);
   showVictoryModal = signal<boolean>(false);
+  
+  // Signals para el cronómetro
+  gameStartTime = signal<number | null>(null);
+  currentTime = signal<number>(0);
+  isGameStarted = signal<boolean>(false);
   
   // Signals para animaciones
   showMatchSuccess = signal<string[]>([]);
@@ -170,6 +175,25 @@ export class MemoryGameComponent implements OnInit {
   });
   canFlipCards = computed(() => this.flippedCards().length < 2 && !this.isLoading());
   
+  // Computed para el cronómetro
+  formattedTime = computed(() => {
+    const totalSeconds = this.currentTime();
+    const minutes = Math.floor(totalSeconds / 60);
+    const seconds = totalSeconds % 60;
+    return `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+  });
+  
+  // Computed para la puntuación final
+  finalScore = computed(() => {
+    const baseScore = this.score() * 100; // 100 puntos por acierto
+    const errorPenalty = this.errors() * 25; // -25 puntos por error
+    const timePenalty = Math.floor(this.currentTime() / 10); // -1 punto cada 10 segundos
+    const accuracyBonus = Math.floor(this.gameStats().accuracy / 10) * 50; // Bonus por precisión
+    const speedBonus = this.currentTime() < 60 ? 200 : this.currentTime() < 120 ? 100 : 0; // Bonus por velocidad
+    
+    return Math.max(0, baseScore - errorPenalty - timePenalty + accuracyBonus + speedBonus);
+  });
+  
   // Estadísticas del juego
   gameStats = computed(() => ({
     pairs: this.matchedPairs(),
@@ -184,6 +208,10 @@ export class MemoryGameComponent implements OnInit {
 
   ngOnInit(): void {
     this.initializeGame();
+  }
+
+  ngOnDestroy(): void {
+    this.stopTimer();
   }
 
   private initializeGame(): void {
@@ -264,6 +292,11 @@ export class MemoryGameComponent implements OnInit {
 
   flipCard(card: GameCard): void {
     if (card.flipped || card.matched || !this.canFlipCards() || this.isLoading()) return;
+    
+    // Iniciar el cronómetro en el primer movimiento
+    if (!this.isGameStarted()) {
+      this.startTimer();
+    }
     
     // Actualizar el estado de la carta
     this.cards.update(cards => 
@@ -355,6 +388,8 @@ export class MemoryGameComponent implements OnInit {
     this.showMatchSuccess.set([]);
     this.showMatchError.set([]);
     this.showVictoryModal.set(false);
+    this.stopTimer();
+    this.resetTimer();
     this.loadCharacters();
   }
 
@@ -367,9 +402,39 @@ export class MemoryGameComponent implements OnInit {
     setTimeout(() => {
       if (this.isGameComplete() && !this.showVictoryModal()) {
         console.log('Game completed! Opening victory modal');
+        this.stopTimer();
         this.showVictoryModal.set(true);
       }
     }, 100);
+  }
+
+  // Métodos para el cronómetro
+  private startTimer(): void {
+    if (this.timerInterval) return;
+    
+    this.gameStartTime.set(Date.now());
+    this.isGameStarted.set(true);
+    
+    this.timerInterval = window.setInterval(() => {
+      const startTime = this.gameStartTime();
+      if (startTime) {
+        const elapsed = Math.floor((Date.now() - startTime) / 1000);
+        this.currentTime.set(elapsed);
+      }
+    }, 1000);
+  }
+
+  private stopTimer(): void {
+    if (this.timerInterval) {
+      clearInterval(this.timerInterval);
+      this.timerInterval = undefined;
+    }
+  }
+
+  private resetTimer(): void {
+    this.gameStartTime.set(null);
+    this.currentTime.set(0);
+    this.isGameStarted.set(false);
   }
 
   // Métodos para animaciones
@@ -384,4 +449,7 @@ export class MemoryGameComponent implements OnInit {
   getCardAnimationDelay(index: number): number {
     return index * 100; // 100ms delay entre cada carta
   }
+
+  // Métodos para acceder a Math desde el template
+  Math = Math;
 }

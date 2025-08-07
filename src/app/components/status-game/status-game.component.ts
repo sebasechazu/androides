@@ -6,14 +6,13 @@ import { CharacterService } from '../../services/charater.service';
 import { NavigationService } from '../../services/navigation.service';
 import { Character } from '../../interfaces/character';
 import { Elemento } from '../../interfaces/elemento';
-import { TooltipComponent } from '../shared/tooltip/tooltip.component';
 import { ModalGameComponent } from '../shared/modal-game/modal-game.component';
 
 @Component({
   selector: 'app-status-game',
   templateUrl: './status-game.component.html',
   standalone: true,
-  imports: [CommonModule, CardStatusComponent, DragDropModule, TooltipComponent, ModalGameComponent]
+  imports: [CommonModule, CardStatusComponent, DragDropModule, ModalGameComponent]
 })
 export class StatusGameComponent implements OnInit {
   private characterService = inject(CharacterService);

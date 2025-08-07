@@ -9,59 +9,27 @@
   </div>
   } @else {
   @if (gameInitialized()) {
-  <!-- Botón de reiniciar con tooltip -->
   <div class="flex items-center justify-center gap-2 md:gap-6 mb-4 md:mb-6 px-2">
     <div class="flex items-center gap-2 flex-shrink-0">
-      <!-- Tooltip de información -->
-      <app-tooltip width="20rem">
-        <div class="space-y-3">
-          <h4 class="font-bold text-center text-blue-600 text-sm sm:text-base">Cómo jugar</h4>
-          
-          <div class="bg-blue-50 rounded-lg p-2 sm:p-3">
-            <p class="text-sm sm:text-base font-medium text-blue-800 text-center">Arrastra cada personaje a la columna correcta según su estado</p>
-          </div>
-          
-          <div class="grid grid-cols-1 gap-2">
-            <div class="flex items-center gap-2 sm:gap-3 bg-green-50 p-2 sm:p-3 rounded-lg">
-              <span class="text-lg sm:text-xl">🟢</span>
-              <span class="text-xs sm:text-sm md:text-base font-medium text-green-800">Vivos a la columna verde</span>
-            </div>
-            
-            <div class="flex items-center gap-2 sm:gap-3 bg-red-50 p-2 sm:p-3 rounded-lg">
-              <span class="text-lg sm:text-xl">🔴</span>
-              <span class="text-xs sm:text-sm md:text-base font-medium text-red-800">Muertos a la columna roja</span>
-            </div>
-            
-            <div class="flex items-center gap-2 sm:gap-3 bg-gray-50 p-2 sm:p-3 rounded-lg">
-              <span class="text-lg sm:text-xl">⚪</span>
-              <span class="text-xs sm:text-sm md:text-base font-medium text-gray-800">Desconocidos a la columna gris</span>
-            </div>
-          </div>
-          
-          <div class="flex justify-center flex-wrap gap-2 sm:gap-4 bg-purple-50 p-2 sm:p-3 rounded-lg">
-            <div class="flex items-center gap-1 sm:gap-2">
-              <span class="text-green-500 font-bold text-base sm:text-lg">✅</span>
-              <span class="text-xs sm:text-sm font-medium text-green-800">Borde verde = Correcto</span>
-            </div>
-            <div class="flex items-center gap-1 sm:gap-2">
-              <span class="text-red-500 font-bold text-base sm:text-lg">❌</span>
-              <span class="text-xs sm:text-sm font-medium text-red-800">Borde rojo = Incorrecto</span>
-            </div>
-          </div>
-        </div>
-      </app-tooltip>
-
-      <!-- Botón Reiniciar Juego - Solo visible después del primer movimiento -->
-      @if (totalMovements() > 0) {
-      <button (click)="resetGame()" title="Reiniciar Juego"
-        class="bg-green-500 hover:bg-green-600 text-white p-2 md:p-3 rounded-lg flex items-center justify-center">
+      <!-- Botón Reiniciar Juego - Siempre visible, activado/desactivado según el estado -->
+      <button 
+        (click)="resetGame()" 
+        [disabled]="totalMovements() === 0"
+        title="Reiniciar Juego"
+        class="p-2 md:p-3 rounded-lg flex items-center justify-center transition-all duration-200"
+        [class.bg-green-500]="totalMovements() > 0"
+        [class.hover:bg-green-600]="totalMovements() > 0"
+        [class.text-white]="totalMovements() > 0"
+        [class.bg-gray-300]="totalMovements() === 0"
+        [class.text-gray-500]="totalMovements() === 0"
+        [class.cursor-not-allowed]="totalMovements() === 0"
+        [class.cursor-pointer]="totalMovements() > 0">
         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" 
           class="w-5 h-5 md:w-6 md:h-6">
           <path stroke-linecap="round" stroke-linejoin="round" 
             d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0l3.181 3.183a8.25 8.25 0 0013.803-3.7M4.031 9.865a8.25 8.25 0 0113.803-3.7l3.181 3.182m0-4.991v4.99" />
         </svg>
       </button>
-      }
     </div>
   </div>
 

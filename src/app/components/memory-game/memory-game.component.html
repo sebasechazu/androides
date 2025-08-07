@@ -15,61 +15,54 @@
       }
     </div>
 
-    <div class="flex items-center justify-center gap-2 md:gap-6 mb-6 px-2">
-      <div class="flex items-center gap-2 flex-shrink-0">
-        <!-- Tooltip de información -->
-        <app-tooltip triggerText="?" width="18rem">
-          <div class="space-y-3">
-            <h4 class="font-bold text-center text-blue-600 text-sm sm:text-base">Cómo jugar</h4>
-          
-            <div class="bg-blue-50 rounded-lg p-2 sm:p-3">
-              <p class="text-sm sm:text-base font-medium text-blue-800 text-center">Haz clic en las cartas para encontrar parejas idénticas</p>
-            </div>
-          
-            <div class="grid grid-cols-1 gap-2">
-              <div class="flex items-center gap-2 sm:gap-3 bg-green-50 p-2 sm:p-3 rounded-lg">
-                <span class="text-lg sm:text-xl">🎮</span>
-                <span class="text-xs sm:text-sm md:text-base font-medium text-green-800">Voltea las cartas para revelar personajes</span>
-              </div>
-              
-              <div class="flex items-center gap-2 sm:gap-3 bg-purple-50 p-2 sm:p-3 rounded-lg">
-                <span class="text-lg sm:text-xl">👥</span>
-                <span class="text-xs sm:text-sm md:text-base font-medium text-purple-800">Encuentra parejas de personajes idénticos</span>
-              </div>
-              
-              <div class="flex items-center gap-2 sm:gap-3 bg-red-50 p-2 sm:p-3 rounded-lg">
-                <span class="text-lg sm:text-xl">⚠️</span>
-                <span class="text-xs sm:text-sm md:text-base font-medium text-red-800">Solo puedes voltear 2 cartas a la vez</span>
-              </div>
-            </div>
-          
-            <div class="flex justify-center gap-2 sm:gap-4 bg-blue-50 p-2 sm:p-3 rounded-lg">
-              <div class="flex items-center gap-1 sm:gap-2">
-                <span class="text-green-500 font-bold text-base sm:text-lg">✓</span>
-                <span class="text-xs sm:text-sm font-medium text-blue-800">Minimiza los errores para mejor puntuación</span>
-              </div>
-            </div>
-          </div>
-        </app-tooltip>
+    <!-- Área de controles demarcada -->
+    <div class="bg-white/80 backdrop-blur-sm border-2 border-blue-300/50 rounded-2xl shadow-lg p-4 mb-6 max-w-2xl mx-auto">
+      <div class="grid grid-cols-3 gap-4 items-center">
+        <!-- Espacio vacío - Izquierda -->
+        <div class="flex justify-start">
+          <div class="w-10 h-10"></div>
+        </div>
         
-        <!-- Botón Nuevo Juego - Solo visible después del primer movimiento -->
-        @if (errors() > 0 || score() > 0) {
-        <button 
-          (click)="resetGame()" 
-          title="Nuevo Juego"
-          class="bg-green-500 hover:bg-green-600 text-white p-2 md:p-3 rounded-lg flex items-center justify-center transition duration-200">
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" 
-            class="w-5 h-5 md:w-6 md:h-6">
-            <path stroke-linecap="round" stroke-linejoin="round" 
-              d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0l3.181 3.183a8.25 8.25 0 0013.803-3.7M4.031 9.865a8.25 8.25 0 0113.803-3.7l3.181 3.182m0-4.991v4.99" />
-          </svg>
-        </button>
-        }
+        <!-- Cronómetro - Centro -->
+        <div class="flex justify-center">
+          <div class="bg-blue-500 text-white px-3 py-2 rounded-lg flex items-center gap-2 font-mono text-lg font-bold min-w-[80px] justify-center">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" 
+              class="w-5 h-5">
+              <path stroke-linecap="round" stroke-linejoin="round" 
+                d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+            {{formattedTime()}}
+          </div>
+        </div>
+        
+        <!-- Botón Nuevo Juego - Derecha -->
+        <div class="flex justify-end">
+          <button 
+            (click)="resetGame()" 
+            [disabled]="errors() === 0 && score() === 0"
+            title="Nuevo Juego"
+            class="p-2 md:p-3 rounded-lg flex items-center justify-center transition-all duration-200"
+            [class.bg-green-500]="errors() > 0 || score() > 0"
+            [class.hover:bg-green-600]="errors() > 0 || score() > 0"
+            [class.text-white]="errors() > 0 || score() > 0"
+            [class.bg-gray-300]="errors() === 0 && score() === 0"
+            [class.text-gray-500]="errors() === 0 && score() === 0"
+            [class.cursor-not-allowed]="errors() === 0 && score() === 0"
+            [class.cursor-pointer]="errors() > 0 || score() > 0">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" 
+              class="w-5 h-5 md:w-6 md:h-6">
+              <path stroke-linecap="round" stroke-linejoin="round" 
+                d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0l3.181 3.183a8.25 8.25 0 0013.803-3.7M4.031 9.865a8.25 8.25 0 0113.803-3.7l3.181 3.182m0-4.991v4.99" />
+            </svg>
+          </button>
+        </div>
       </div>
     </div>
     
-    <!-- Tablero del juego -->
-    <div class="grid grid-cols-4 md:grid-cols-5 gap-3 max-w-2xl mx-auto mb-6" [@cardsGrid]>
+    <!-- Área de juego demarcada -->
+    <div class="bg-white/80 backdrop-blur-sm border-2 border-blue-300/50 rounded-2xl shadow-lg p-4 md:p-6 mb-6 max-w-2xl mx-auto">
+      <!-- Tablero del juego -->
+      <div class="grid grid-cols-4 md:grid-cols-5 gap-3" [@cardsGrid]>
       @for (card of cards(); track card.key; let i = $index) {
         <div 
           class="relative aspect-square rounded-lg shadow-lg cursor-pointer transition-all duration-300 hover:shadow-xl"
@@ -112,6 +105,7 @@
           }
         </div>
       }
+      </div>
     </div>
 
     <!-- Estadísticas del juego -->
@@ -164,10 +158,56 @@
       <div class="text-center">
         <div class="text-6xl mb-4 animate-bounce">🎉</div>
         <h3 class="text-2xl font-bold mb-3 text-gray-800 animate-pulse">¡Felicitaciones!</h3>
+        
+        <!-- Puntuación Final Destacada -->
+        <div class="bg-gradient-to-r from-yellow-400 to-orange-500 text-white rounded-lg p-6 mb-6 shadow-lg">
+          <div class="text-4xl font-bold mb-2">{{finalScore()}}</div>
+          <div class="text-lg opacity-90">Puntuación Final</div>
+        </div>
+        
+        <!-- Estadísticas del Juego -->
         <div class="bg-gradient-to-r from-green-400 to-blue-500 text-white rounded-lg p-4 mb-4">
-          <p class="mb-2 text-lg">Completaste el juego con {{errors()}} errores</p>
+          <div class="grid grid-cols-2 gap-4 mb-3">
+            <div>
+              <div class="text-2xl font-bold">{{formattedTime()}}</div>
+              <div class="text-sm opacity-90">Tiempo Total</div>
+            </div>
+            <div>
+              <div class="text-2xl font-bold">{{errors()}}</div>
+              <div class="text-sm opacity-90">Errores</div>
+            </div>
+          </div>
           <p class="text-sm opacity-90">Precisión: {{gameStats().accuracy}}%</p>
           <p class="text-sm opacity-90">{{matchedPairs()}} de {{totalPairs()}} pares encontrados</p>
+        </div>
+        
+        <!-- Desglose de Puntuación -->
+        <div class="bg-gray-50 rounded-lg p-4 mb-4">
+          <h4 class="text-lg font-semibold mb-3 text-gray-700">Desglose de Puntuación</h4>
+          <div class="space-y-2 text-sm">
+            <div class="flex justify-between items-center">
+              <span class="text-green-600">+ Aciertos ({{score()}} × 100)</span>
+              <span class="font-bold text-green-600">+{{score() * 100}}</span>
+            </div>
+            <div class="flex justify-between items-center">
+              <span class="text-red-600">- Errores ({{errors()}} × 25)</span>
+              <span class="font-bold text-red-600">-{{errors() * 25}}</span>
+            </div>
+            <div class="flex justify-between items-center">
+              <span class="text-orange-600">- Tiempo ({{Math.floor(currentTime() / 10)}} × 1)</span>
+              <span class="font-bold text-orange-600">-{{Math.floor(currentTime() / 10)}}</span>
+            </div>
+            <div class="flex justify-between items-center">
+              <span class="text-purple-600">+ Bonus Precisión</span>
+              <span class="font-bold text-purple-600">+{{Math.floor(gameStats().accuracy / 10) * 50}}</span>
+            </div>
+            @if (currentTime() < 120) {
+            <div class="flex justify-between items-center">
+              <span class="text-blue-600">+ Bonus Velocidad</span>
+              <span class="font-bold text-blue-600">+{{currentTime() < 60 ? 200 : 100}}</span>
+            </div>
+            }
+          </div>
         </div>
         
         <div class="grid grid-cols-2 gap-4 mb-4 text-sm">
