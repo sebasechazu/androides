@@ -1,7 +1,8 @@
-import { Component, inject, signal, computed, OnInit, OnDestroy } from '@angular/core';
+import { Component, inject, signal, computed, ChangeDetectionStrategy, DestroyRef, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { CharacterService } from '../../services/charater.service';
 import { ModalGameComponent } from '../shared/modal-game/modal-game.component';
+import { CronometroComponent } from '../shared/cronometro/cronometro.component';
 import { 
   trigger, 
   style, 
@@ -24,9 +25,10 @@ interface GameCard {
   selector: 'app-memory-game',
   standalone: true,
   templateUrl: './memory-game.component.html',
-  imports: [CommonModule, ModalGameComponent],
+  imports: [CommonModule, ModalGameComponent, CronometroComponent],
+  changeDetection: ChangeDetectionStrategy.OnPush,
   animations: [
-    // Animación para cartas que coinciden
+  
     trigger('matchSuccess', [
       transition(':enter', [
         animate('800ms ease-out', keyframes([
@@ -39,7 +41,7 @@ interface GameCard {
       ])
     ]),
 
-    // Animación para cartas que no coinciden
+    
     trigger('matchError', [
       transition(':enter', [
         animate('600ms ease-in-out', keyframes([
@@ -53,7 +55,7 @@ interface GameCard {
       ])
     ]),
 
-    // Animación para mostrar las cartas inicialmente
+    
     trigger('cardEntrance', [
       transition(':enter', [
         style({ 
@@ -69,7 +71,7 @@ interface GameCard {
       ])
     ]),
 
-    // Animación para las estadísticas
+    
     trigger('scoreAnimation', [
       transition(':increment', [
         animate('500ms ease-out', keyframes([
@@ -92,14 +94,14 @@ interface GameCard {
       ])
     ]),
 
-    // Animación para la barra de progreso
+    
     trigger('progressBar', [
       transition('* => *', [
         animate('800ms ease-out')
       ])
     ]),
 
-    // Animación para el mensaje de victoria
+    
     trigger('victoryMessage', [
       transition(':enter', [
         style({ 
@@ -123,7 +125,7 @@ interface GameCard {
       ])
     ]),
 
-    // Animación para cuando se cargan las cartas
+    
     trigger('cardsGrid', [
       transition(':enter', [
         query(':enter', [
@@ -138,11 +140,17 @@ interface GameCard {
     ])
   ]
 })
-export class MemoryGameComponent implements OnInit, OnDestroy {
+export class MemoryGameComponent implements OnInit {
+  isCronometroRunning = signal<boolean>(false);
+  currentTime = signal<number>(0);
   private characterService = inject(CharacterService);
-  private timerInterval?: number;
+  private destroyRef = inject(DestroyRef);
 
-  // Signals para el estado del juego
+  onTimeChange(time: number) {
+    this.currentTime.set(time);
+  }
+
+  
   cards = signal<GameCard[]>([]);
   flippedCards = signal<GameCard[]>([]);
   score = signal<number>(0);
@@ -152,16 +160,12 @@ export class MemoryGameComponent implements OnInit, OnDestroy {
   animateErrors = signal<boolean>(false);
   showVictoryModal = signal<boolean>(false);
   
-  // Signals para el cronómetro
-  gameStartTime = signal<number | null>(null);
-  currentTime = signal<number>(0);
-  isGameStarted = signal<boolean>(false);
   
-  // Signals para animaciones
+  
   showMatchSuccess = signal<string[]>([]);
   showMatchError = signal<string[]>([]);
 
-  // Computed signals
+  
   totalPairs = computed(() => this.cards().length / 2);
   matchedPairs = computed(() => this.cards().filter(card => card.matched).length / 2);
   isGameComplete = computed(() => {
@@ -174,27 +178,17 @@ export class MemoryGameComponent implements OnInit, OnDestroy {
     return complete;
   });
   canFlipCards = computed(() => this.flippedCards().length < 2 && !this.isLoading());
-  
-  // Computed para el cronómetro
-  formattedTime = computed(() => {
-    const totalSeconds = this.currentTime();
-    const minutes = Math.floor(totalSeconds / 60);
-    const seconds = totalSeconds % 60;
-    return `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
-  });
-  
-  // Computed para la puntuación final
+
   finalScore = computed(() => {
     const baseScore = this.score() * 100; // 100 puntos por acierto
     const errorPenalty = this.errors() * 25; // -25 puntos por error
     const timePenalty = Math.floor(this.currentTime() / 10); // -1 punto cada 10 segundos
     const accuracyBonus = Math.floor(this.gameStats().accuracy / 10) * 50; // Bonus por precisión
     const speedBonus = this.currentTime() < 60 ? 200 : this.currentTime() < 120 ? 100 : 0; // Bonus por velocidad
-    
     return Math.max(0, baseScore - errorPenalty - timePenalty + accuracyBonus + speedBonus);
   });
   
-  // Estadísticas del juego
+  
   gameStats = computed(() => ({
     pairs: this.matchedPairs(),
     total: this.totalPairs(),
@@ -211,7 +205,7 @@ export class MemoryGameComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.stopTimer();
+    
   }
 
   private initializeGame(): void {
@@ -222,20 +216,20 @@ export class MemoryGameComponent implements OnInit, OnDestroy {
   private loadCharacters(): void {
     this.isLoading.set(true);
     
-    // Generar página aleatoria y cargar personajes
+    
     const randomPage = Math.floor(Math.random() * 41) + 1;
     this.characterService.setPage(randomPage);
     
-    // Esperar un momento para que se carguen los datos
+    
     setTimeout(() => {
       const characters = this.characterService.characters();
       
       if (characters.length > 0) {
-        // Seleccionar 10 personajes aleatorios
+        
         const shuffledCharacters = this.shuffleArray([...characters]);
         const selectedCharacters = shuffledCharacters.slice(0, 10);
         
-        // Crear cartas duplicadas para el juego de memoria
+        
         const gameCards: GameCard[] = [
           ...selectedCharacters.map((c, idx) => ({
             id: c.id,
@@ -253,10 +247,10 @@ export class MemoryGameComponent implements OnInit, OnDestroy {
           }))
         ];
         
-        // Mezclar las cartas
+        
         this.cards.set(this.shuffleArray(gameCards));
       } else {
-        // Si no hay personajes, crear cartas de ejemplo
+        
         this.createFallbackCards();
       }
       
@@ -292,20 +286,20 @@ export class MemoryGameComponent implements OnInit, OnDestroy {
 
   flipCard(card: GameCard): void {
     if (card.flipped || card.matched || !this.canFlipCards() || this.isLoading()) return;
-    
+
     // Iniciar el cronómetro en el primer movimiento
-    if (!this.isGameStarted()) {
-      this.startTimer();
+    if (!this.isCronometroRunning()) {
+      this.isCronometroRunning.set(true);
     }
-    
+
     // Actualizar el estado de la carta
     this.cards.update(cards => 
       cards.map(c => c.key === card.key ? { ...c, flipped: true } : c)
     );
-    
+
     // Agregar carta a las cartas volteadas
     this.flippedCards.update(flipped => [...flipped, { ...card, flipped: true }]);
-    
+
     // Si hay 2 cartas volteadas, verificar coincidencia después de un delay
     if (this.flippedCards().length === 2) {
       setTimeout(() => this.checkMatch(), 700);
@@ -388,8 +382,7 @@ export class MemoryGameComponent implements OnInit, OnDestroy {
     this.showMatchSuccess.set([]);
     this.showMatchError.set([]);
     this.showVictoryModal.set(false);
-    this.stopTimer();
-    this.resetTimer();
+    this.isCronometroRunning.set(false);
     this.loadCharacters();
   }
 
@@ -402,42 +395,15 @@ export class MemoryGameComponent implements OnInit, OnDestroy {
     setTimeout(() => {
       if (this.isGameComplete() && !this.showVictoryModal()) {
         console.log('Game completed! Opening victory modal');
-        this.stopTimer();
         this.showVictoryModal.set(true);
+        this.isCronometroRunning.set(false); // Detener el cronómetro
       }
     }, 100);
   }
 
-  // Métodos para el cronómetro
-  private startTimer(): void {
-    if (this.timerInterval) return;
     
-    this.gameStartTime.set(Date.now());
-    this.isGameStarted.set(true);
+
     
-    this.timerInterval = window.setInterval(() => {
-      const startTime = this.gameStartTime();
-      if (startTime) {
-        const elapsed = Math.floor((Date.now() - startTime) / 1000);
-        this.currentTime.set(elapsed);
-      }
-    }, 1000);
-  }
-
-  private stopTimer(): void {
-    if (this.timerInterval) {
-      clearInterval(this.timerInterval);
-      this.timerInterval = undefined;
-    }
-  }
-
-  private resetTimer(): void {
-    this.gameStartTime.set(null);
-    this.currentTime.set(0);
-    this.isGameStarted.set(false);
-  }
-
-  // Métodos para animaciones
   isCardShowingMatchSuccess(cardKey: number): boolean {
     return this.showMatchSuccess().includes(cardKey.toString());
   }
@@ -450,6 +416,6 @@ export class MemoryGameComponent implements OnInit, OnDestroy {
     return index * 100; // 100ms delay entre cada carta
   }
 
-  // Métodos para acceder a Math desde el template
+    
   Math = Math;
 }

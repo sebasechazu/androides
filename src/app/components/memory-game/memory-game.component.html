@@ -25,14 +25,7 @@
         
         <!-- Cronómetro - Centro -->
         <div class="flex justify-center">
-          <div class="bg-blue-500 text-white px-3 py-2 rounded-lg flex items-center gap-2 font-mono text-lg font-bold min-w-[80px] justify-center">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" 
-              class="w-5 h-5">
-              <path stroke-linecap="round" stroke-linejoin="round" 
-                d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" />
-            </svg>
-            {{formattedTime()}}
-          </div>
+          <app-cronometro [running]="isCronometroRunning()" [initialTime]="0"></app-cronometro>
         </div>
         
         <!-- Botón Nuevo Juego - Derecha -->
@@ -155,36 +148,36 @@
       [showCloseButton]="true"
       (closeModal)="closeVictoryModal()">
       
-      <div class="text-center">
-        <div class="text-6xl mb-4 animate-bounce">🎉</div>
-        <h3 class="text-2xl font-bold mb-3 text-gray-800 animate-pulse">¡Felicitaciones!</h3>
-        
+      <div class="text-center max-w-md mx-auto p-2 md:p-4 overflow-y-auto">
+        <div class="text-5xl mb-2 animate-bounce">🎉</div>
+        <h3 class="text-xl font-bold mb-2 text-gray-800 animate-pulse">¡Felicitaciones!</h3>
+
         <!-- Puntuación Final Destacada -->
-        <div class="bg-gradient-to-r from-yellow-400 to-orange-500 text-white rounded-lg p-6 mb-6 shadow-lg">
-          <div class="text-4xl font-bold mb-2">{{finalScore()}}</div>
-          <div class="text-lg opacity-90">Puntuación Final</div>
+        <div class="bg-gradient-to-r from-yellow-400 to-orange-500 text-white rounded-lg p-4 mb-4 shadow-lg">
+          <div class="text-3xl font-bold mb-1">{{finalScore()}}</div>
+          <div class="text-base opacity-90">Puntuación Final</div>
         </div>
-        
+
         <!-- Estadísticas del Juego -->
-        <div class="bg-gradient-to-r from-green-400 to-blue-500 text-white rounded-lg p-4 mb-4">
-          <div class="grid grid-cols-2 gap-4 mb-3">
+        <div class="bg-gradient-to-r from-green-400 to-blue-500 text-white rounded-lg p-2 mb-2">
+          <div class="grid grid-cols-2 gap-2 mb-2">
             <div>
-              <div class="text-2xl font-bold">{{formattedTime()}}</div>
-              <div class="text-sm opacity-90">Tiempo Total</div>
+              <div class="text-xl font-bold">{{(currentTime() / 60) | number:'2.0-0'}}:{{(currentTime() % 60) | number:'2.0-0'}}</div>
+              <div class="text-xs opacity-90">Tiempo Total</div>
             </div>
             <div>
-              <div class="text-2xl font-bold">{{errors()}}</div>
-              <div class="text-sm opacity-90">Errores</div>
+              <div class="text-xl font-bold">{{errors()}}</div>
+              <div class="text-xs opacity-90">Errores</div>
             </div>
           </div>
-          <p class="text-sm opacity-90">Precisión: {{gameStats().accuracy}}%</p>
-          <p class="text-sm opacity-90">{{matchedPairs()}} de {{totalPairs()}} pares encontrados</p>
+          <p class="text-xs opacity-90">Precisión: {{gameStats().accuracy}}%</p>
+          <p class="text-xs opacity-90">{{matchedPairs()}} de {{totalPairs()}} pares encontrados</p>
         </div>
-        
+
         <!-- Desglose de Puntuación -->
-        <div class="bg-gray-50 rounded-lg p-4 mb-4">
-          <h4 class="text-lg font-semibold mb-3 text-gray-700">Desglose de Puntuación</h4>
-          <div class="space-y-2 text-sm">
+        <div class="bg-gray-50 rounded-lg p-2 mb-2">
+          <h4 class="text-base font-semibold mb-2 text-gray-700">Desglose de Puntuación</h4>
+          <div class="space-y-1 text-xs">
             <div class="flex justify-between items-center">
               <span class="text-green-600">+ Aciertos ({{score()}} × 100)</span>
               <span class="font-bold text-green-600">+{{score() * 100}}</span>
@@ -209,29 +202,23 @@
             }
           </div>
         </div>
-        
-        <div class="grid grid-cols-2 gap-4 mb-4 text-sm">
-          <div class="bg-green-50 rounded-lg p-3">
-            <div class="text-2xl font-bold text-green-600">{{score()}}</div>
+
+        <div class="grid grid-cols-2 gap-2 mb-2 text-xs">
+          <div class="bg-green-50 rounded-lg p-2">
+            <div class="text-xl font-bold text-green-600">{{score()}}</div>
             <div class="text-green-700">Aciertos</div>
           </div>
-          <div class="bg-purple-50 rounded-lg p-3">
-            <div class="text-2xl font-bold text-purple-600">{{gameStats().progress}}%</div>
+          <div class="bg-purple-50 rounded-lg p-2">
+            <div class="text-xl font-bold text-purple-600">{{gameStats().progress}}%</div>
             <div class="text-purple-700">Progreso</div>
           </div>
         </div>
-        
-        <div class="flex justify-center space-x-2 mb-4">
-          <span class="animate-spin text-2xl">⭐</span>
-          <span class="animate-pulse text-2xl">🌟</span>
-          <span class="animate-bounce text-2xl">✨</span>
-        </div>
-        
+
         <button 
           (click)="resetGame()" 
-          class="bg-green-500 hover:bg-green-600 text-white px-6 py-3 rounded-lg flex items-center justify-center gap-2 mx-auto transition duration-200">
+          class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg flex items-center justify-center gap-2 mx-auto transition duration-200">
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" 
-            class="w-6 h-6">
+            class="w-5 h-5">
             <path stroke-linecap="round" stroke-linejoin="round" 
               d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0l3.181 3.183a8.25 8.25 0 0013.803-3.7M4.031 9.865a8.25 8.25 0 0113.803-3.7l3.181 3.182m0-4.991v4.99" />
           </svg>

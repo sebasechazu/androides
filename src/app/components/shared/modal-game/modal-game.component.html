@@ -8,28 +8,23 @@
   <div class="absolute inset-0 bg-black/50 backdrop-blur-sm"></div>
   
   <!-- Contenido del modal -->
-  <div class="relative bg-white rounded-2xl shadow-2xl max-w-md w-full max-h-[90vh] overflow-y-auto"
+  <div class="relative bg-gray-50 rounded-2xl shadow-2xl w-full max-w-sm max-h-[70vh] overflow-y-auto px-0 py-3"
        [@modalContent]="isOpen() ? 'open' : 'closed'">
     
-    <!-- Header opcional -->
-    @if (title || showCloseButton) {
-    <div class="flex items-center justify-between p-6 border-b border-gray-200">
-      @if (title) {
-      <h2 class="text-xl font-bold text-gray-900">{{ title }}</h2>
-      }
+    <!-- Botón de cierre en la esquina superior derecha -->
+    <div class="absolute top-2 right-2 z-10">
       @if (showCloseButton) {
-      <button (click)="close()"
-              class="text-gray-400 hover:text-gray-600 transition-colors duration-200 p-1 rounded-full hover:bg-gray-100">
-        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="w-6 h-6">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-        </svg>
-      </button>
+        <button (click)="close()"
+                class="bg-gray-200 text-gray-500 hover:bg-gray-300 hover:text-gray-700 transition-colors duration-200 p-2 rounded-full focus:outline-none">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="w-6 h-6">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
       }
     </div>
-    }
-    
-    <!-- Contenido del modal -->
-    <div class="p-6">
+
+    <!-- Contenido del modal centrado -->
+    <div class="px-4 md:px-8 flex flex-col items-center justify-center w-full">
       @if (content) {
         <p class="text-center text-lg font-medium mb-4">{{ content }}</p>
       }
