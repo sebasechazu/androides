@@ -1,85 +1,46 @@
-# 📱 Androides — Angular App
+# Juegos Angular
 
-Este es un ejemplo de una aplicación construida con **Angular 20 standalone** y **TailwindCSS 4.1**, sin dependencias externas como PrimeNG o Angular Material. Muestra una lista de androides y permite ver detalles, buscar, y navegar entre vistas.
-
----
-
-## 🚀 Tecnologías usadas
-
-* [Node.js](https://nodejs.org/en/) (>= 18 recomendado)
-* [Angular 20](https://angular.dev/)
-* [TailwindCSS 4.1](https://tailwindcss.com/)
-* [Visual Studio Code](https://code.visualstudio.com/)
+Una colección de **juegos interactivos** basados en el universo de **Rick y Morty**. La aplicación incluye tres emocionantes juegos que utilizan datos actualizados de la serie para poner a prueba tu conocimiento sobre los personajes.
 
 ---
 
-## 📋 Características
+## 🎯 Juegos Disponibles
 
-✅ Angular 20 con standalone components y signals
-✅ TailwindCSS para estilos 100% responsivos
-✅ Sin PrimeNG ni Angular Material
-✅ Componentes modernos y limpios
-✅ Servicios con datos separados en archivo propio
-✅ Enrutamiento con Angular Router
+### 🎲 Juego de Status
+Clasifica a los personajes de Rick y Morty según su estado: **vivos**, **muertos** o **desconocidos**. ¡Demuestra cuánto sabes sobre el destino de tus personajes favoritos!
 
----
+### 🧠 Juego de Memoria
+Un clásico juego de encontrar pares de cartas con tus personajes favoritos de Rick y Morty. Perfecto para poner a prueba tu memoria y concentración.
 
-## 📦 Instalación
+### ❓ Juego de Preguntas
+Responde **verdadero o falso** a 10 preguntas aleatorias sobre los personajes de la serie. ¿Qué tan bien conoces el multiverso de Rick y Morty?
 
-```bash
-git clone https://github.com/SebastianEchazu/androides.git
-cd androides
-npm install
-```
+### 👥 Explorador de Personajes
+Navega por todos los personajes de la serie con filtros avanzados por **estado**, **especie** y **género**. Descubre información detallada de cada personaje.
 
 ---
 
-## ▶️ Ejecución local
+## 🎮 Características
 
-```bash
-ng serve
-```
+✅ **3 juegos interactivos** basados en Rick y Morty
 
-Visita [http://localhost:4200](http://localhost:4200) en tu navegador.
+✅ **Datos actualizados** desde la API oficial
 
----
+✅ **Interfaz moderna** y animaciones suaves
 
-## 📄 Estructura principal
+✅ **Sistema de filtros** avanzado para personajes
 
-```
-src/
-├── app/
-│   ├── components/
-│   │   ├── about/
-│   │   ├── androides/
-│   │   ├── androide/
-│   │   ├── buscador/
-│   │   ├── footer/
-│   │   ├── home/
-│   │   └── navbar/
-│   ├── service/
-│   │   └── androides.service.ts
-│   ├── data/
-│   │   └── androides.data.ts
-│   └── interface/
-│       └── androide.ts
-```
+✅ **Completamente responsivo** para todos los dispositivos
 
 ---
 
-## 🚀 Despliegue en GitHub Pages
+## 🎮 ¿Cómo Jugar?
 
-Este proyecto está configurado para desplegarse fácilmente en [GitHub Pages](https://pages.github.com/).
+Visita [la aplicación](https://sebasechazu.github.io/androides/) y:
 
-### 📋 Pasos para desplegar
-
-1️⃣ Asegúrate de que tus cambios estén `commiteados` y `pusheados` en la rama principal (`main` o `master`).
-
-2️⃣ Ejecuta el comando de despliegue, indicando el `base-href` correcto (normalmente `/nombre-del-repo/`):
-
-```bash
-npx ng deploy --base-href=/androides/
-
+1. **Selecciona** el juego que más te guste desde la página principal
+2. **Lee las instrucciones** que aparecen antes de comenzar
+3. **¡Disfruta jugando** y pon a prueba tu conocimiento sobre Rick y Morty!
 
 ---
 
@@ -91,7 +52,11 @@ npx ng deploy --base-href=/androides/
 
 ---
 
-Siéntete libre de usar, mejorar o inspirarte en este proyecto. ✨
+Siéntete libre de usar, mejorar o inspirarte en este proyecto para crear tus propios juegos con Angular. ¡Las contribuciones son bienvenidas! 🚀✨
+
+---
+
+🎯 **¡Que comience la diversión en el multiverso de Rick y Morty!** 🛸
 
 ---
 
